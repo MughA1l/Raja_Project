@@ -18,7 +18,6 @@ const Signup = () => {
         };
         try {
             if (isChecked) {
-                // check then send the api call
                 console.log('Sending to backend:', signupData);
             }
         } catch (error) {
@@ -27,29 +26,29 @@ const Signup = () => {
     };
 
     return (
-        <div className='min-h-screen w-full flex items-center lg:p-10'>
+        <div className='md:min-h-screen max-md:h-fit w-full max-md:flex-col md:flex items-center lg:p-10 relative overflow-visible'>
             {/* first container to show the image */}
-            <div className='h-full overflow-hidden w-1/2'>
-                <img src="../../public/logo.png" className='h-full w-full object-cover rounded-3xl' alt="logoImage" />
+            <div className='max-md:fixed max-md:top-0 max-md:z-0 h-fit overflow-hidden md:w-1/2 max-md:w-full'>
+                <img src="../../public/logo.png" className='h-full w-full object-cover md:rounded-3xl' alt="logoImage" />
             </div>
 
-            <div className='h-full w-1/2 flex items-center justify-center'>
-                <div className='w-10/12 h-fit flex flex-col items-center p-2'>
+            <div className='max-md:absolute max-md:top-24 max-md:z-10 max-md:min-h-full md:h-full md:w-1/2 max-md:w-full flex items-center justify-center max-md:bg-white max-md:rounded-tr-4xl max-md:rounded-tl-4xl sm:max-md:pt-14'>
+                <div className='w-10/12 md:h-fit flex flex-col items-center max-sm:pt-8 p-2'>
                     {/* logo */}
                     <div className='mx-auto'>
                         <img src="../../public/logo.png" className='size-11 rounded-md shadow-xl' alt="logoImage" />
                     </div>
 
                     {/* heading */}
-                    <h3 className='font-semibold text-2xl pt-3 text-[#121217]'>
+                    <h3 className='font-semibold max-sm:text-xl lg:text-2xl pt-3 text-[#121217]'>
                         Create your account
                     </h3>
-                    <p className='text-[#6c6c89] pt-2 font-medium'>
+                    <p className='text-[#6c6c89] max-sm:text-sm sm:text-base pt-2 font-medium'>
                         Get started! Please enter your details.
                     </p>
 
                     {/* form to get the user details and send to the backend */}
-                    <form className='pt-6 w-9/12 space-y-4' onSubmit={handleSubmit}>
+                    <form className='pt-6 max-[500px]:w-full [500px]:max-md:w-11/12 md:w-9/12 space-y-4' onSubmit={handleSubmit}>
                         {/* input username */}
                         <div className='flex flex-col items-start'>
                             <label htmlFor="username" className='pb-2 text-sm font-medium text-[#121217]'>Username</label>
@@ -103,14 +102,15 @@ const Signup = () => {
                         <div className="flex items-center w-full pt-3">
                             <div>
                                 <input
+                                    id="checkbox"
                                     type="checkbox"
                                     className="checkbox checkbox-neutral size-5"
                                     checked={isChecked}
                                     onChange={() => { setIsChecked(!isChecked) }}
                                 />
-                                <span className='text-[#121217] text-sm pl-3 relative font-medium'>
+                                <label className='text-[#121217] text-sm pl-3 relative font-medium' htmlFor='checkbox'>
                                     I agree to the Terms and Conditions
-                                </span>
+                                </label>
                             </div>
                         </div>
 
@@ -122,17 +122,16 @@ const Signup = () => {
                         <div className="divider">OR</div>
 
                         {/* login */}
-                        <Link className='flex items-center gap-2 w-10/12 mx-auto'
+                        <Link className='flex items-center max-md:justify-between max-md:gap-4 md:gap-2 max-md:w-full md:w-10/12 md:mx-auto'
                         to={'/login'}
                         >
-                            <span className='text-[#6c6c89] text-sm '>
+                            <span className='text-[#6c6c89] max-sm:text-xs sm:text-sm text-nowrap'>
                                 Already have an account?
                             </span>
                             <span className='flex items-start justify-center gap-1 cursor-pointer pt-1'>
-                                <span className='font-medium text-[#121217] underline'>
+                                <span className='font-medium max-sm:text-sm sm:text-base text-[#121217] underline'>
                                     Sign in
                                 </span>
-                                {/* icon here */}
                                 <ArrowUpRight className='size-5' />
                             </span>
                         </Link>
