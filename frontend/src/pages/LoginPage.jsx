@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { ArrowUpRight, Eye, EyeOff } from 'lucide-react'
+import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
 
@@ -103,7 +104,9 @@ const LoginPage = () => {
                             </span>
                         </div>
 
-                        <button className='h-[36px] w-full rounded-md text-sm font-medium bg-[#121217] hover:bg-[#121217]/85 duration-300 text-white mt-2'>
+                        <button className='h-[36px] w-full rounded-md text-sm font-medium bg-[#121217] hover:bg-[#121217]/85 duration-300 text-white mt-2'
+                        
+                        >
                             Sign in
                         </button>
 
@@ -111,18 +114,20 @@ const LoginPage = () => {
                         <div className="divider">OR</div>
 
                         {/* login */}
-                        <div className='flex items-center gap-2 w-8/12 mx-auto'>
+                        <Link className='flex items-center gap-2 w-10/12 mx-auto'
+                        to={'/signup'}
+                        >
                             <span className='text-[#6c6c89] text-sm '>
                                 Don't have any account?
                             </span>
                             <span className='flex items-start justify-center gap-1 cursor-pointer pt-1'>
                                 <span className='font-medium text-[#121217] underline'>
-                                    Login
+                                    Signup
                                 </span>
                                 {/* icon here */}
                                 <ArrowUpRight className='size-5' />
                             </span>
-                        </div>
+                        </Link>
 
                     </form>
 
