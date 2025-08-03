@@ -1,4 +1,5 @@
-import { registerUser } from '../services/user.services.js';
+
+import { loginUser, registerUser,logoutUser } from '../services/user.services.js';
 import ApiError from '../utils ( reusables )/ApiError.js'
 import successResponse from '../utils ( reusables )/responseHandler.js';
 
@@ -22,7 +23,7 @@ export const register = async (req, res, next) => {
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         });
 
-        return successResponse(res, { user: user, accessToken: tokens?.accessToken }, 201);
+        return successResponse(res, { user, accessToken: tokens?.accessToken }, 201);
 
     } catch (error) {
         if (error instanceof ApiError) {
@@ -40,8 +41,71 @@ export const register = async (req, res, next) => {
 
 }
 
-export const login = () => {
-    res.send('login done');
+export const login = async (req, res, next) => {
+
+    let { email, password } = req.body;
+    try {
+        if (!email || !password) {
+            throw new ApiError(400, "Email and Password are required", "MISSING_CREDENTIALS")
+        }
+
+        let { user, tokens } = await loginUser(email, password);
+
+        res.cookie('refreshToken', tokens.refreshToken, {
+            httpOnly: true,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        });
+
+        return successResponse(res, { user, accessToken: tokens?.accessToken }, 200);
+
+    }
+    catch (error) {
+        if (error instanceof ApiError) {
+            return next(error);
+        }
+        return next(
+            new ApiError(
+                500,
+                "User Login failed",
+                "LOGIN_ERROR",
+            )
+        );
+
+    }
+}
+
+export const logout = async (req, res, next) => {
+    try {
+        let { id } = req.body;
+        let refreshToken = req.cookies?.refreshToken;
+        if (!refreshToken) {
+            throw new ApiError(401, "No refresh token found", "UNAUTHORIZED");
+        }
+        if (!id) {
+            throw new ApiError(400, "Missing Id", "MISSING_DETAILS")
+        }
+
+        let response = await logoutUser(id, refreshToken);
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            sameSite: 'strict',
+        });
+        return successResponse(res, response, 200);
+    }
+    catch (error) {
+        console.log(error);
+        if (error instanceof ApiError) {
+            return next(error);
+        }
+        return next(
+            new ApiError(
+                500,
+                "Logout Failed",
+                "LOGOUT_ERROR",
+            )
+        );
+    }
 }
 
 export const getCode = () => {

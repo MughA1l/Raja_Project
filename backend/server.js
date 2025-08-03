@@ -6,8 +6,10 @@ const port = process.env.PORT || 3000;
 import errorHandler from './middleware/errorHandler.js'
 import connectDB from './config (db connect)/connection.db.js';
 import userRoutes from './routes/User.route.js'
+import cookieParser from 'cookie-parser';
 
 app.use(express.json());
+app.use(cookieParser());
 
 // connect to mongodb
 const startServer = async () => {

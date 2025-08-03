@@ -26,3 +26,22 @@ export const findUserByEmailOrUsername = async (email, username) => {
         throw new ApiError(500, "Database: Query failed", "DATABASE_ERROR", error);
     }
 };
+
+export const findUserByEmail = async (email) => {
+    try {
+        return await User.findOne({ email }).select('+password');
+    }
+    catch (error) {
+        throw new ApiError(500, "Database: Query failed", "DATABASE_ERROR", error)
+    }
+}
+
+export const findUserById = async (id) => {
+    try {
+        let user = await User.findOne({ _id: id });
+        return user;
+    }
+    catch (error) {
+        throw new ApiError(500, "Database: Query failed", "DATABASE_ERROR", error)
+    }
+}

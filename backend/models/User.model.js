@@ -46,8 +46,16 @@ userSchema.method('addRefreshToken', async function (token) {
 });
 
 userSchema.method('removeRefreshToken', async function (token) {
+    const initialLength = this.refreshTokens.length;
+
     this.refreshTokens = this.refreshTokens.filter(t => t.token !== token);
-    return this.save();
+
+    if (this.refreshTokens.length === initialLength) {
+        return false; // Or return false
+    }
+
+    await this.save();
+    return true; // Explicit success feedback
 });
 
 userSchema.pre('save', async function (next) {
@@ -58,7 +66,6 @@ userSchema.pre('save', async function (next) {
         next();
     }
     catch (error) {
-        console.log(error);
         next(err);
     }
 });
