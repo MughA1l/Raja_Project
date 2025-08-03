@@ -12,11 +12,9 @@ export const register = async (req, res, next) => {
         const payload = { username, email, password };
         // service call
         const createUser = await registerUser(payload);
-        console.log('created User');
 
         // send the access and set the refresh-token
         let { user, tokens } = createUser;
-        console.log(tokens)
 
         res.cookie('refreshToken', tokens.refreshToken, {
             httpOnly: true,

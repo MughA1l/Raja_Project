@@ -34,7 +34,6 @@ export const registerUser = async ({ username, email, password }) => {
         }
 
     } catch (error) {
-        console.log(error)
         if (!(error instanceof ApiError)) {
             throw new ApiError(500, "User registration failed", "REGISTRATION_ERROR", error);
         }
