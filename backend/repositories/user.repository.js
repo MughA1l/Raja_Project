@@ -59,3 +59,29 @@ export const SaveCodeInDb = async (email, generateCode) => {
         throw new ApiError(500, "Code saving failed", "DATABASE_ERROR", error)
     }
 }
+
+export const FindSavedCode = async (email, code) => {
+    try {
+        const codeDoc = await Code.findOne({
+            email,
+            code
+        });
+        if (!codeDoc) {
+            return false;
+        }
+        return codeDoc;
+
+    } catch (error) {
+        throw new ApiError(500, "Failed to fetch the code", "DATABASE_ERROR", error)
+    }
+};
+
+export const updateUserPasswordByEmail = async (email, newPassword) => {
+    try {
+        let process = await User.updatePasswordByEmail(email, newPassword);
+        if (!process) return false;
+        return true;
+    } catch (error) {
+        throw new ApiError(500, "Failed to update password using email", "DATABASE_ERROR", error)
+    }
+} 

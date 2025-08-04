@@ -14,6 +14,6 @@ const codeLimiter = rateLimit({
 });
 router.post('/send-code', codeLimiter, userController.getCode);
 
-router.post('/reset-password', userController.resetPassword);
+router.patch('/reset-password', userController.resetPassword);
 
 export default router;

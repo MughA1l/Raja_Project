@@ -70,9 +70,21 @@ userSchema.pre('save', async function (next) {
     }
 });
 
+userSchema.statics.updatePasswordByEmail = async function (email, newPassword) {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    return this.findOneAndUpdate(
+        { email }, // Find by email
+        {
+            $set: { password: hashedPassword },
+        },
+        { new: true }
+    );
+};
+
 userSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
+
 
 const User = mongoose.model("User", userSchema);
 

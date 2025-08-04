@@ -1,163 +1,154 @@
 import { generateTokens } from "./auth.services.js";
 import ApiError from "../utils ( reusables )/ApiError.js";
-import { createUser, findUserByEmail, findUserByEmailOrUsername, findUserById, SaveCodeInDb } from "../repositories/user.repository.js";
+import { createUser, FindSavedCode, findUserByEmail, findUserByEmailOrUsername, findUserById, SaveCodeInDb, updateUserPasswordByEmail } from "../repositories/user.repository.js";
 import mongoose from "mongoose";
 import jwtConfig from "../config (db connect)/jwt.config.js";
 import { generateFourDigitCode } from "../utils ( reusables )/generateFourDigitCode.js";
 import { sendCodeOnGmail } from "../utils ( reusables )/GmailCodeSend.js";
 
 export const registerUser = async ({ username, email, password }) => {
-    try {
-        const existingUser = await findUserByEmailOrUsername(email, username);
-        if (existingUser) {
-            throw new ApiError(409, "Email or username already exists", "CONFLICT_ERROR");
-        }
 
-        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-            throw new ApiError(400, "Invalid email format", "VALIDATION_ERROR");
-        }
+    const existingUser = await findUserByEmailOrUsername(email, username);
+    if (existingUser) {
+        throw new ApiError(409, "Email or username already exists", "CONFLICT_ERROR");
+    }
 
-        let user = await createUser({
-            username,
-            email,
-            password
-        });
-        let token = await generateTokens(user);
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        throw new ApiError(400, "Invalid email format", "VALIDATION_ERROR");
+    }
 
-        return {
-            user: {
-                username: user?.username,
-                email: user?.email,
-                profileImage: user?.profileImage,
-                createdAt: user?.createdAt
-            },
-            tokens: {
-                accessToken: token.accessToken,
-                refreshToken: token.refreshToken
-            }
-        }
+    let user = await createUser({
+        username,
+        email,
+        password
+    });
+    let token = await generateTokens(user);
 
-    } catch (error) {
-        if (!(error instanceof ApiError)) {
-            throw new ApiError(500, "User registration failed", "REGISTRATION_ERROR", error);
+    return {
+        user: {
+            username: user?.username,
+            email: user?.email,
+            profileImage: user?.profileImage,
+            createdAt: user?.createdAt
+        },
+        tokens: {
+            accessToken: token.accessToken,
+            refreshToken: token.refreshToken
         }
-        throw (error);
     }
 }
 
 export const loginUser = async (email, password) => {
-    try {
-        if (email.trim() === "" || password.trim() === "") {
-            throw new ApiError(422, "Email and password cannot be empty", "INVALID_CREDENTIALS");
-        }
 
-        // check that if the user with this email exists or not
-        let user = await findUserByEmail(email);
-        if (!user) {
-            throw new ApiError(401, "Email doest not exists", "AUTH_ERROR");
-        }
-
-        let isMatch = await user.comparePassword(password);
-        if (!isMatch) {
-            throw new ApiError(401, "Invalid Password", "AUTH_ERROR");
-        }
-
-        // confirmed that the user exists
-        let tokens = await generateTokens(user);
-
-        let userWithoutPassword = user.toObject();
-        delete userWithoutPassword.password;
-        delete userWithoutPassword.refreshTokens;
-
-        return {
-            user: userWithoutPassword,
-            tokens
-        }
-
+    if (email.trim() === "" || password.trim() === "") {
+        throw new ApiError(422, "Email and password cannot be empty", "INVALID_CREDENTIALS");
     }
-    catch (error) {
-        if (error instanceof ApiError) {
-            throw error;
-        }
-        throw new ApiError(500, "Login failed. Please try again later", "INTERNAL_ERROR");
+
+    // check that if the user with this email exists or not
+    let user = await findUserByEmail(email);
+    if (!user) {
+        throw new ApiError(401, "Email doest not exists", "AUTH_ERROR");
     }
+
+    let isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+        throw new ApiError(401, "Invalid Password", "AUTH_ERROR");
+    }
+
+    // confirmed that the user exists
+    let tokens = await generateTokens(user);
+
+    let userWithoutPassword = user.toObject();
+    delete userWithoutPassword.password;
+    delete userWithoutPassword.refreshTokens;
+
+    return {
+        user: userWithoutPassword,
+        tokens
+    }
+
 }
 
 export const logoutUser = async (id, refreshToken) => {
-    try {
-        const isValidId = mongoose.Types.ObjectId.isValid(id);
-        if (!isValidId) {
-            throw new ApiError(400, "Invalid ID format", "INVALID_ID");
-        }
-        if (id.length !== 24) {
-            throw new ApiError(400, "ID must be 24 characters", "INVALID_ID_LENGTH");
-        }
-        if (!jwtConfig.verifyToken(refreshToken)) {
-            throw new ApiError(401, "Invalid or expired refresh token", "INVALID_TOKEN");
-        }
 
-        let user = await findUserById(id);
-        if (!user) {
-            throw new ApiError(404, "No user to logout found", "NO_DATA_FOUND");
-        }
-
-        let dbResult = await user.removeRefreshToken(refreshToken);
-        if (dbResult) {
-            return { message: "logged out successfully" };
-        }
-        throw new ApiError(400, "In-valid Token", "UN-AUTHORIZED");
+    const isValidId = mongoose.Types.ObjectId.isValid(id);
+    if (!isValidId) {
+        throw new ApiError(400, "Invalid ID format", "INVALID_ID");
     }
-    catch (error) {
-        if (error instanceof ApiError) {
-            throw error;
-        }
-        if (error.name === 'JsonWebTokenError') {
-            return next(new ApiError(401, "Invalid token", "JWT_ERROR"));
-        }
-
-        if (error.name === 'TokenExpiredError') {
-            return next(new ApiError(401, "Token expired", "TOKEN_EXPIRED"));
-        }
-        throw new ApiError(500, "Logout failed. Please try again later", "INTERNAL_ERROR");
+    if (id.length !== 24) {
+        throw new ApiError(400, "ID must be 24 characters", "INVALID_ID_LENGTH");
     }
+    if (!jwtConfig.verifyToken(refreshToken)) {
+        throw new ApiError(401, "Invalid or expired refresh token", "INVALID_TOKEN");
+    }
+
+    let user = await findUserById(id);
+    if (!user) {
+        throw new ApiError(404, "No user to logout found", "NO_DATA_FOUND");
+    }
+
+    let dbResult = await user.removeRefreshToken(refreshToken);
+    if (dbResult) {
+        return { message: "logged out successfully" };
+    }
+    throw new ApiError(400, "In-valid Token", "UN-AUTHORIZED");
 }
 
+
 export const UserCode = async (email) => {
-    try {
-        if (email.trim() === "") {
-            throw new ApiError(422, "Email cannot be empty", "INVALID_CREDENTIALS");
-        }
 
-        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-            throw new ApiError(400, "Invalid email format", "VALIDATION_ERROR");
-        }
+    if (email.trim() === "") {
+        throw new ApiError(422, "Email cannot be empty", "INVALID_CREDENTIALS");
+    }
 
-        let user = await findUserByEmail(email);
-        if (!user) {
-            throw new ApiError(404, "user not found", "NO_USER_FOUND");
-        }
-        let generateCode = generateFourDigitCode();
-        if (!generateCode) {
-            throw new ApiError(500, "Failed to generate code", "CODE_GENERATE_ERROR");
-        }
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        throw new ApiError(400, "Invalid email format", "VALIDATION_ERROR");
+    }
 
-        // save the code in the db and send it on the gmail.
-        const saveCode = await SaveCodeInDb(email, generateCode);
-        if (!saveCode) {
-            throw new ApiError(500, "Failed to save code", "DB_ERROR");
-        }
-        // call the send code on gmail using this saveCode information
-        let codeSent = await sendCodeOnGmail(saveCode?.email, saveCode?.code);
-        if (!codeSent) {
-            throw new ApiError(500, "Failed to send code to gmail", "GMAIL_SEND_ERROR");
-        }
-        return { message: "Code sent to gmail" };
+    let user = await findUserByEmail(email);
+    if (!user) {
+        throw new ApiError(404, "user not found", "NO_USER_FOUND");
+    }
+    let generateCode = generateFourDigitCode();
+    if (!generateCode) {
+        throw new ApiError(500, "Failed to generate code", "CODE_GENERATE_ERROR");
+    }
 
-    } catch (error) {
-        console.log(error);
-        if (error instanceof ApiError) {
-            throw error;
-        }
-        throw new ApiError(500, "Error failed to send code. Please try again later", "INTERNAL_ERROR");
+    // save the code in the db and send it on the gmail.
+    const saveCode = await SaveCodeInDb(email, generateCode);
+    if (!saveCode) {
+        throw new ApiError(500, "Failed to save code", "DB_ERROR");
+    }
+    // call the send code on gmail using this saveCode information
+    let codeSent = await sendCodeOnGmail(saveCode?.email, saveCode?.code);
+    if (!codeSent) {
+        throw new ApiError(500, "Failed to send code to gmail", "GMAIL_SEND_ERROR");
+    }
+    return { message: "Code sent to gmail" };
+}
+
+export const userPasswordReset = async (email, code, newPassword) => {
+
+    if (email.trim() === "" || newPassword.trim() === "") {
+        throw new ApiError(422, "Email and Password cannot be empty", "INVALID_CREDENTIALS");
+    }
+
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        throw new ApiError(400, "Invalid email format", "VALIDATION_ERROR");
+    }
+
+    // find the code saved if available then reset password
+    let codeDoc = await FindSavedCode(email, code);
+    if (!codeDoc) {
+        throw new ApiError(400, "Un-authorized attempt", "UN-AUTHORIZED");
+    }
+
+    // update the password
+    let updation = await updateUserPasswordByEmail(email, newPassword);
+    if (!updation) {
+        throw new ApiError(500, "Failed to update the password using email", "Internal Error");
+    }
+    return {
+        message: "Updated user successfully"
     }
 }

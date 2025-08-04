@@ -1,5 +1,5 @@
 
-import { loginUser, registerUser, logoutUser, UserCode } from '../services/user.services.js';
+import { loginUser, registerUser, logoutUser, UserCode, userPasswordReset } from '../services/user.services.js';
 import ApiError from '../utils ( reusables )/ApiError.js'
 import successResponse from '../utils ( reusables )/responseHandler.js';
 
@@ -123,6 +123,18 @@ export const getCode = async (req, res, next) => {
     }
 }
 
-export const resetPassword = () => {
-    res.send('Reset password successfully');
+export const resetPassword = async (req, res, next) => {
+    let { email, code, newPassword } = req.body || {};
+    try {
+        if (!email || !code || !newPassword) {
+            throw new ApiError(400, "All fields are required", "MISSING_DATA");
+        }
+
+        let message = await userPasswordReset(email, code, newPassword);
+
+        return successResponse(res, message, 201)
+
+    } catch (error) {
+        return next(error);
+    }
 }
