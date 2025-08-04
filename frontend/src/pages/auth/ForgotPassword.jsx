@@ -1,17 +1,24 @@
 import { ArrowUpRight } from 'lucide-react'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { getCodeByEmail } from '../../api/services/authService';
+import { showSuccess } from '../../utils/toast';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         console.log('Email submitted:', email)
         try {
-            // send to the backend to verify that either an account exists with this email or not?
-            navigate('/verify-code', { state: { email } })
+            // email sent to send a code on the user gmail
+            const res = await getCodeByEmail({ email });
+            console.log(res);
+            if (res.success) {
+                showSuccess("4 digit code sent on your gmail");
+                navigate('/verify-code', { state: { email } })
+            }
         }
         catch (e) {
             console.log(e.message);

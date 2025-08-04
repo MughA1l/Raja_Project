@@ -1,32 +1,40 @@
 import React, { useState } from 'react'
 import { ArrowUpRight, Eye, EyeOff } from 'lucide-react'
-import { Link } from 'react-router-dom';
-import { loginUser } from '../api/services/authService.js';
-import useAuthStore from '../context/useAuthStore.js';
+import { Link, useNavigate } from 'react-router-dom';
+import { registerUser } from '../../api/services/authService';
+import useAuthStore from '../../context/useAuthStore';
+import { showSuccess } from '../../utils/toast';
 
-const LoginPage = () => {
+const Signup = () => {
     const [isChecked, setIsChecked] = useState(false);
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
-      const { login } = useAuthStore();
+    const { login } = useAuthStore();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const loginData = {
+        const signupData = {
+            username,
             email,
             password,
         };
         try {
             if (isChecked) {
-                // sending the data to the backend to login user
-                const res = await loginUser(loginData);
-                // save the access Token in the localStorage
-                login(res?.data?.accessToken);
+                
+                const res = await registerUser(signupData);
+                if (res.success) {
+                    // set the token in the localStorage
+                    login(res?.data?.accessToken);
+                    showSuccess('Welcome to Dashboard');
+                    navigate('/');
+                }
             }
         } catch (error) {
-            console.error('Login failed:', error.message);
+            console.error('Signup failed:', error.message);
         }
     };
 
@@ -46,14 +54,27 @@ const LoginPage = () => {
 
                     {/* heading */}
                     <h3 className='font-semibold max-sm:text-xl lg:text-2xl pt-3 text-[#121217]'>
-                        Sign in to your account
+                        Create your account
                     </h3>
                     <p className='text-[#6c6c89] max-sm:text-sm sm:text-base pt-2 font-medium'>
-                        Welcome back! Please enter your details.
+                        Get started! Please enter your details.
                     </p>
 
-                    {/* form to get the user details and send to the backend for verification */}
+                    {/* form to get the user details and send to the backend */}
                     <form className='pt-6 max-[500px]:w-full [500px]:max-md:w-11/12 md:w-9/12 space-y-4' onSubmit={handleSubmit}>
+                        {/* input username */}
+                        <div className='flex flex-col items-start'>
+                            <label htmlFor="username" className='pb-2 text-sm font-medium text-[#121217]'>Username</label>
+                            <input
+                                type="text"
+                                id='username'
+                                className='w-full border-[1px] border-[#d9d9e2] h-9 rounded-md px-2 shadow-sm focus-within:outline-2 focus-within:outline-black/20 placeholder:text-sm duration-100'
+                                placeholder='enter username'
+                                onChange={(e) => setUsername(e.target.value)}
+                                value={username}
+                            />
+                        </div>
+
                         {/* input email */}
                         <div className='flex flex-col items-start'>
                             <label htmlFor="email" className='pb-2 text-sm font-medium text-[#121217]'>Email</label>
@@ -90,45 +111,39 @@ const LoginPage = () => {
                             </div>
                         </div>
 
-                        {/* remember and forgot password */}
-                        <div className="flex items-center w-full justify-between pt-3">
-                            <div className='max-md:w-1/2 max-md:text-start'>
+                        {/* terms and conditions */}
+                        <div className="flex items-center w-full pt-3">
+                            <div>
                                 <input
-                                    id='checkbox'
+                                    id="checkbox"
                                     type="checkbox"
                                     className="checkbox checkbox-neutral size-5"
                                     checked={isChecked}
                                     onChange={() => { setIsChecked(!isChecked) }}
                                 />
-                                <label htmlFor='checkbox' className='text-[#121217] text-sm pl-3 relative font-medium'>
-                                    Remember me for 30 days
+                                <label className='text-[#121217] text-sm pl-3 relative font-medium' htmlFor='checkbox'>
+                                    I agree to the Terms and Conditions
                                 </label>
                             </div>
-                            <Link
-                                to={'/forgot-password'}
-                                className='underline cursor-pointer font-medium text-sm relative -top-1'>
-                                Forgot password?
-                            </Link>
                         </div>
 
                         <button className='h-[36px] w-full rounded-md text-sm font-medium bg-[#121217] hover:bg-[#121217]/85 duration-300 text-white mt-2'>
-                            Sign in
+                            Sign up
                         </button>
 
                         {/* divider */}
                         <div className="divider">OR</div>
 
-                        {/* signup link */}
-                        <Link
-                            className='flex items-center max-md:justify-between max-md:gap-4 md:gap-2 max-md:w-full md:w-10/12 md:mx-auto'
-                            to={'/signup'}
+                        {/* login */}
+                        <Link className='flex items-center max-md:justify-between max-md:gap-4 md:gap-2 max-md:w-full md:w-10/12 md:mx-auto'
+                            to={'/login'}
                         >
                             <span className='text-[#6c6c89] max-sm:text-xs sm:text-sm text-nowrap'>
-                                Don't have any account?
+                                Already have an account?
                             </span>
                             <span className='flex items-start justify-center gap-1 cursor-pointer pt-1'>
                                 <span className='font-medium max-sm:text-sm sm:text-base text-[#121217] underline'>
-                                    Signup
+                                    Sign in
                                 </span>
                                 <ArrowUpRight className='size-5' />
                             </span>
@@ -140,4 +155,4 @@ const LoginPage = () => {
     )
 }
 
-export default LoginPage;
+export default Signup

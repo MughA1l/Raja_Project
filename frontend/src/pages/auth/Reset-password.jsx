@@ -19,7 +19,8 @@ const ResetPassword = () => {
             return
         }
         
-        console.log('Password reset for:', email)
+        console.log('Password reset for:', email);
+        
         console.log('New password:', password)
         
         // Here you would typically send the new password to your backend
