@@ -7,7 +7,15 @@ import errorHandler from './middleware/errorHandler.js'
 import connectDB from './config (db connect)/connection.db.js';
 import userRoutes from './routes/User.route.js'
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
+const options = {
+    origin: 'http://localhost:5173',
+    credentials: true,
+    optionsSuccessStatus: 200
+}
+
+app.use(cors(options))
 app.use(express.json());
 app.use(cookieParser());
 

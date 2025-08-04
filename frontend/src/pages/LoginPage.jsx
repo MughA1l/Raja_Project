@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import { ArrowUpRight, Eye, EyeOff } from 'lucide-react'
 import { Link } from 'react-router-dom';
+import { loginUser } from '../api/services/authService.js';
+import useAuthStore from '../context/useAuthStore.js';
 
 const LoginPage = () => {
     const [isChecked, setIsChecked] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+
+      const { login } = useAuthStore();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,7 +20,10 @@ const LoginPage = () => {
         };
         try {
             if (isChecked) {
-                console.log('Sending to backend:', loginData);
+                // sending the data to the backend to login user
+                const res = await loginUser(loginData);
+                // save the access Token in the localStorage
+                login(res?.data?.accessToken);
             }
         } catch (error) {
             console.error('Login failed:', error.message);
@@ -50,10 +57,10 @@ const LoginPage = () => {
                         {/* input email */}
                         <div className='flex flex-col items-start'>
                             <label htmlFor="email" className='pb-2 text-sm font-medium text-[#121217]'>Email</label>
-                            <input 
-                                type="text" 
-                                id='email' 
-                                className='w-full border-[1px] border-[#d9d9e2] h-9 rounded-md px-2 shadow-sm focus-within:outline-2 focus-within:outline-black/20 placeholder:text-sm duration-100' 
+                            <input
+                                type="text"
+                                id='email'
+                                className='w-full border-[1px] border-[#d9d9e2] h-9 rounded-md px-2 shadow-sm focus-within:outline-2 focus-within:outline-black/20 placeholder:text-sm duration-100'
                                 placeholder='enter email'
                                 onChange={(e) => setEmail(e.target.value)}
                                 value={email}
@@ -86,9 +93,9 @@ const LoginPage = () => {
                         {/* remember and forgot password */}
                         <div className="flex items-center w-full justify-between pt-3">
                             <div className='max-md:w-1/2 max-md:text-start'>
-                                <input 
+                                <input
                                     id='checkbox'
-                                    type="checkbox" 
+                                    type="checkbox"
                                     className="checkbox checkbox-neutral size-5"
                                     checked={isChecked}
                                     onChange={() => { setIsChecked(!isChecked) }}
@@ -98,8 +105,8 @@ const LoginPage = () => {
                                 </label>
                             </div>
                             <Link
-                            to={'/forgot-password'}
-                            className='underline cursor-pointer font-medium text-sm relative -top-1'>
+                                to={'/forgot-password'}
+                                className='underline cursor-pointer font-medium text-sm relative -top-1'>
                                 Forgot password?
                             </Link>
                         </div>
@@ -112,7 +119,7 @@ const LoginPage = () => {
                         <div className="divider">OR</div>
 
                         {/* signup link */}
-                        <Link 
+                        <Link
                             className='flex items-center max-md:justify-between max-md:gap-4 md:gap-2 max-md:w-full md:w-10/12 md:mx-auto'
                             to={'/signup'}
                         >
