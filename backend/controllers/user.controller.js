@@ -1,12 +1,12 @@
 
-import { loginUser, registerUser,logoutUser } from '../services/user.services.js';
+import { loginUser, registerUser, logoutUser, UserCode } from '../services/user.services.js';
 import ApiError from '../utils ( reusables )/ApiError.js'
 import successResponse from '../utils ( reusables )/responseHandler.js';
 
 export const register = async (req, res, next) => {
     try {
         // validate input data
-        let { username, email, password } = req.body;
+        let { username, email, password } = req.body || {};
         if (!username || !email || !password) {
             throw new ApiError(400, "All fields are required", "MISSING_DATA");
         }
@@ -43,7 +43,7 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
 
-    let { email, password } = req.body;
+    let { email, password } = req.body || {};
     try {
         if (!email || !password) {
             throw new ApiError(400, "Email and Password are required", "MISSING_CREDENTIALS")
@@ -77,7 +77,7 @@ export const login = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
     try {
-        let { id } = req.body;
+        let { id } = req.body || {};
         let refreshToken = req.cookies?.refreshToken;
         if (!refreshToken) {
             throw new ApiError(401, "No refresh token found", "UNAUTHORIZED");
@@ -94,7 +94,6 @@ export const logout = async (req, res, next) => {
         return successResponse(res, response, 200);
     }
     catch (error) {
-        console.log(error);
         if (error instanceof ApiError) {
             return next(error);
         }
@@ -108,8 +107,20 @@ export const logout = async (req, res, next) => {
     }
 }
 
-export const getCode = () => {
-    res.send('your code is 493');
+export const getCode = async (req, res, next) => {
+    try {
+        const { email } = req.body || {};
+        if (!email) {
+            throw new ApiError(400, "Email is Missing", "MISSING_DATA");
+        }
+
+        const message = await UserCode(email);
+
+        return successResponse(res, message, 200);
+
+    } catch (error) {
+        return next(error);
+    }
 }
 
 export const resetPassword = () => {

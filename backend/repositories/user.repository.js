@@ -1,3 +1,4 @@
+import Code from "../models/resetCode.model.js";
 import User from "../models/User.model.js";
 import ApiError from "../utils ( reusables )/ApiError.js"
 
@@ -43,5 +44,18 @@ export const findUserById = async (id) => {
     }
     catch (error) {
         throw new ApiError(500, "Database: Query failed", "DATABASE_ERROR", error)
+    }
+}
+
+export const SaveCodeInDb = async (email, generateCode) => {
+    try {
+        const saveCode = await Code.findOneAndUpdate(
+            { email },
+            { $set: { code: generateCode, createdAt: new Date() } },
+            { upsert: true, new: true }
+        );
+        if (saveCode) return saveCode;
+    } catch (error) {
+        throw new ApiError(500, "Code saving failed", "DATABASE_ERROR", error)
     }
 }

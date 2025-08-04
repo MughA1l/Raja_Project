@@ -1,8 +1,10 @@
 import { generateTokens } from "./auth.services.js";
 import ApiError from "../utils ( reusables )/ApiError.js";
-import { createUser, findUserByEmail, findUserByEmailOrUsername, findUserById } from "../repositories/user.repository.js";
+import { createUser, findUserByEmail, findUserByEmailOrUsername, findUserById, SaveCodeInDb } from "../repositories/user.repository.js";
 import mongoose from "mongoose";
 import jwtConfig from "../config (db connect)/jwt.config.js";
+import { generateFourDigitCode } from "../utils ( reusables )/generateFourDigitCode.js";
+import { sendCodeOnGmail } from "../utils ( reusables )/GmailCodeSend.js";
 
 export const registerUser = async ({ username, email, password }) => {
     try {
@@ -117,5 +119,45 @@ export const logoutUser = async (id, refreshToken) => {
             return next(new ApiError(401, "Token expired", "TOKEN_EXPIRED"));
         }
         throw new ApiError(500, "Logout failed. Please try again later", "INTERNAL_ERROR");
+    }
+}
+
+export const UserCode = async (email) => {
+    try {
+        if (email.trim() === "") {
+            throw new ApiError(422, "Email cannot be empty", "INVALID_CREDENTIALS");
+        }
+
+        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+            throw new ApiError(400, "Invalid email format", "VALIDATION_ERROR");
+        }
+
+        let user = await findUserByEmail(email);
+        if (!user) {
+            throw new ApiError(404, "user not found", "NO_USER_FOUND");
+        }
+        let generateCode = generateFourDigitCode();
+        if (!generateCode) {
+            throw new ApiError(500, "Failed to generate code", "CODE_GENERATE_ERROR");
+        }
+
+        // save the code in the db and send it on the gmail.
+        const saveCode = await SaveCodeInDb(email, generateCode);
+        if (!saveCode) {
+            throw new ApiError(500, "Failed to save code", "DB_ERROR");
+        }
+        // call the send code on gmail using this saveCode information
+        let codeSent = await sendCodeOnGmail(saveCode?.email, saveCode?.code);
+        if (!codeSent) {
+            throw new ApiError(500, "Failed to send code to gmail", "GMAIL_SEND_ERROR");
+        }
+        return { message: "Code sent to gmail" };
+
+    } catch (error) {
+        console.log(error);
+        if (error instanceof ApiError) {
+            throw error;
+        }
+        throw new ApiError(500, "Error failed to send code. Please try again later", "INTERNAL_ERROR");
     }
 }

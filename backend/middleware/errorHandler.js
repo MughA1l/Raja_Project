@@ -1,17 +1,28 @@
+import ApiError from "../utils ( reusables )/ApiError.js";
 
 
 function errorHandler(err, req, res, next) {
-    // 500 for internal server error
-  const statusCode = err.statusCode || 500;
+  // Check if the error is a custom ApiError
+  if (err instanceof ApiError) {
+    return res.status(err.statusCode).json({
+      success: false,
+      message: err.message,
+      error: {
+        code: err.statusCode,
+        type: err.type,
+      },
+    });
+  }
+  // It's good practice to log the full error for debugging in development.
+  console.error(err);
 
-  return res.status(statusCode).json({
+  return res.status(500).json({
     success: false,
-    message: err.message || 'Internal Server Error',
+    message: 'Internal Server Error',
     error: {
-      code: statusCode,
-      type: err.type || 'SERVER_ERROR',
+      code: 500,
+      type: 'SERVER_ERROR',
     },
   });
 }
-
 export default errorHandler;
