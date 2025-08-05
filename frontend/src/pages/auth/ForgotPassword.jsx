@@ -6,10 +6,13 @@ import { showSuccess } from '../../utils/toast';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+        setIsLoading(true);
         try {
             // email sent to send a code on the user gmail
             const res = await getCodeByEmail({ email });
@@ -20,6 +23,9 @@ const ForgotPassword = () => {
         }
         catch (e) {
             console.log(e.message);
+        }
+        finally {
+            setIsLoading(false); // Deactivate button loader
         }
     }
 
@@ -77,9 +83,18 @@ const ForgotPassword = () => {
 
                         <button
                             type='submit'
-                            className='h-[36px] w-full rounded-md text-sm font-medium bg-[#121217] hover:bg-[#121217]/85 duration-300 text-white mt-2'
+                            className={`h-[36px] w-full rounded-md text-sm font-medium bg-[#121217] hover:bg-[#121217]/85 duration-300 text-white mt-2 flex items-center justify-center gap-3 ${isLoading ? "opacity-85" : ""
+                                }`}
+                            disabled={isLoading}
                         >
-                            Get Code
+                            {isLoading ? (
+                                <>
+                                    <span className="loading loading-dots loading-md text-white"></span>
+                                    Sending...
+                                </>
+                            ) : (
+                                "Get Code"
+                            )}
                         </button>
 
                         {/* divider */}

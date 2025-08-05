@@ -13,6 +13,8 @@ const CodeVerify = () => {
     const [code, setCode] = useState(['', '', '', '']);
     const [isCodeComplete, setIsCodeComplete] = useState(false);
 
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
         if (!email) navigate('/forgot-password');
         setUserEmail(email);
@@ -45,6 +47,7 @@ const CodeVerify = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         const verificationCode = code.join('');
         const dataToSend = {
             code: verificationCode,
@@ -58,6 +61,9 @@ const CodeVerify = () => {
             }
         } catch (error) {
             console.log(error.message);
+        }
+        finally {
+            setIsLoading(false);
         }
     };
 
@@ -121,12 +127,25 @@ const CodeVerify = () => {
                             </div>
                         </div>
 
+
                         <button
                             type='submit'
-                            disabled={!isCodeComplete}
-                            className={`h-[36px] w-full rounded-md text-sm font-medium ${isCodeComplete ? 'bg-[#121217] hover:bg-[#121217]/85' : 'bg-gray-400 cursor-not-allowed'} duration-300 text-white mt-2`}
+                            disabled={!isCodeComplete || isLoading}
+                            className={`h-[36px] w-full rounded-md text-sm font-medium flex items-center justify-center gap-2 ${isCodeComplete
+                                ? isLoading
+                                    ? 'bg-[#121217]/90'
+                                    : 'bg-[#121217] hover:bg-[#121217]/85'
+                                : 'bg-gray-400 cursor-not-allowed'
+                                } duration-300 text-white mt-2`}
                         >
-                            Verify Code
+                            {isLoading ? (
+                                <>
+                                    <span className="loading loading-dots loading-md text-white"></span>
+                                    Verifying...
+                                </>
+                            ) : (
+                                'Verify Code'
+                            )}
                         </button>
 
                         {/* divider */}

@@ -7,6 +7,7 @@ import { showSuccess } from '../../utils/toast'
 const ResetPassword = () => {
     const location = useLocation()
     const navigate = useNavigate()
+    const [isLoading, setIsLoading] = useState(false)
     const { email } = location.state || {}
 
     const [password, setPassword] = useState('')
@@ -19,6 +20,7 @@ const ResetPassword = () => {
             setPasswordsMatch(false)
             return
         }
+        setIsLoading(true);
         const dataToSend = {
             email,
             newPassword: password
@@ -31,6 +33,9 @@ const ResetPassword = () => {
             }
         } catch (error) {
             console.log(error);
+        }
+        finally {
+            setIsLoading(false)
         }
     }
 
@@ -86,7 +91,7 @@ const ResetPassword = () => {
                                     setPasswordsMatch(true)
                                 }}
                                 required
-                                minLength={8}
+                                minLength={3}
                             />
                         </div>
 
@@ -104,7 +109,7 @@ const ResetPassword = () => {
                                     setPasswordsMatch(true)
                                 }}
                                 required
-                                minLength={8}
+                                minLength={3}
                             />
                             {!passwordsMatch && (
                                 <p className='text-red-500 text-xs pt-1'>Passwords do not match</p>
@@ -113,9 +118,18 @@ const ResetPassword = () => {
 
                         <button
                             type='submit'
-                            className='h-[36px] w-full rounded-md text-sm font-medium bg-[#121217] hover:bg-[#121217]/85 duration-300 text-white mt-2'
+                            disabled={isLoading}
+                            className={`h-[36px] w-full rounded-md text-sm font-medium flex items-center justify-center gap-2 ${isLoading ? 'bg-[#121217]/90' : 'bg-[#121217] hover:bg-[#121217]/85'
+                                } duration-300 text-white mt-2`}
                         >
-                            Reset Password
+                            {isLoading ? (
+                                <>
+                                    <span className="loading loading-dots loading-md text-white"></span>
+                                    Resetting...
+                                </>
+                            ) : (
+                                'Reset Password'
+                            )}
                         </button>
 
                         {/* divider */}

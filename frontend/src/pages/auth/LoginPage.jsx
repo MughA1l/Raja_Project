@@ -10,6 +10,7 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const { login } = useAuthStore();
 
@@ -17,13 +18,13 @@ const LoginPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         const loginData = {
             email,
             password,
         };
         try {
             if (isChecked) {
-                // sending the data to the backend to login user
                 const res = await loginUser(loginData);
 
                 if (res.success) {
@@ -35,6 +36,9 @@ const LoginPage = () => {
             }
         } catch (error) {
             console.error('Login failed:', error.message);
+        }
+        finally {
+            setIsLoading(false);
         }
     };
 
@@ -119,8 +123,20 @@ const LoginPage = () => {
                             </Link>
                         </div>
 
-                        <button className='h-[36px] w-full rounded-md text-sm font-medium bg-[#121217] hover:bg-[#121217]/85 duration-300 text-white mt-2'>
-                            Sign in
+                        <button
+                            type='submit'
+                            disabled={!isChecked || isLoading}
+                            className={`h-[36px] w-full rounded-md text-sm font-medium flex items-center justify-center gap-2 ${isLoading ? 'bg-[#121217]/90' : 'bg-[#121217] hover:bg-[#121217]/85'
+                                } duration-300 text-white mt-2`}
+                        >
+                            {isLoading ? (
+                                <>
+                                    <span className="loading loading-dots loading-md text-white"></span>
+                                    Signing in...
+                                </>
+                            ) : (
+                                'Sign in'
+                            )}
                         </button>
 
                         {/* divider */}

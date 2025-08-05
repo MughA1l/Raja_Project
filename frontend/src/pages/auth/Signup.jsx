@@ -11,12 +11,14 @@ const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const { login } = useAuthStore();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         const signupData = {
             username,
             email,
@@ -24,7 +26,7 @@ const Signup = () => {
         };
         try {
             if (isChecked) {
-                
+
                 const res = await registerUser(signupData);
                 if (res.success) {
                     // set the token in the localStorage
@@ -35,6 +37,9 @@ const Signup = () => {
             }
         } catch (error) {
             console.error('Signup failed:', error.message);
+        }
+        finally {
+            setIsLoading(false);
         }
     };
 
@@ -127,8 +132,20 @@ const Signup = () => {
                             </div>
                         </div>
 
-                        <button className='h-[36px] w-full rounded-md text-sm font-medium bg-[#121217] hover:bg-[#121217]/85 duration-300 text-white mt-2'>
-                            Sign up
+                        <button
+                            type='submit'
+                            disabled={!isChecked || isLoading}
+                            className={`h-[36px] w-full rounded-md text-sm font-medium flex items-center justify-center gap-2 ${isLoading ? 'bg-[#121217]/90' : 'bg-[#121217] hover:bg-[#121217]/85'
+                                } duration-300 text-white mt-2`}
+                        >
+                            {isLoading ? (
+                                <>
+                                    <span className="loading loading-spinner text-white"></span>
+                                    Creating account...
+                                </>
+                            ) : (
+                                'Sign up'
+                            )}
                         </button>
 
                         {/* divider */}
