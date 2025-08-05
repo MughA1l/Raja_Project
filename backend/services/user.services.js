@@ -1,6 +1,6 @@
 import { generateTokens } from "./auth.services.js";
 import ApiError from "../utils ( reusables )/ApiError.js";
-import { createUser, FindSavedCode, findUserByEmail, findUserByEmailOrUsername, findUserById, SaveCodeInDb, updateUserPasswordByEmail } from "../repositories/user.repository.js";
+import { createUser, FindSavedCode, findUserByEmail, findUserByEmailOrUsername, findUserById, findVerifiedCodeByEmail, SaveCodeInDb, updateCodeIsVerified, updateUserPasswordByEmail } from "../repositories/user.repository.js";
 import mongoose from "mongoose";
 import jwtConfig from "../config (db connect)/jwt.config.js";
 import { generateFourDigitCode } from "../utils ( reusables )/generateFourDigitCode.js";
@@ -94,7 +94,7 @@ export const logoutUser = async (id, refreshToken) => {
     throw new ApiError(400, "In-valid Token", "UN-AUTHORIZED");
 }
 
-
+// to send code on gmail
 export const UserCode = async (email) => {
 
     if (email.trim() === "") {
@@ -127,8 +127,58 @@ export const UserCode = async (email) => {
     return { message: "Code sent to gmail" };
 }
 
-export const userPasswordReset = async (email, code, newPassword) => {
+// verify the code and update the isVerified field
+export const userCodeVerify = async (email, code) => {
+    if (email.trim() === "" || code.trim() === "") {
+        throw new ApiError(422, "Email and Code cannot be empty", "INVALID_CREDENTIALS");
+    }
 
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+        throw new ApiError(400, "Invalid email format", "VALIDATION_ERROR");
+    }
+
+    // find the code saved if available then mark the isVerified.
+    let codeDoc = await FindSavedCode(email, code);
+    if (!codeDoc) {
+        throw new ApiError(400, "No verified code found for this email", "CODE_NOT_FOUND");
+    }
+
+    // update the isVerified state of user code doc.
+    let res = await updateCodeIsVerified(email, code);
+    if (!res) {
+        throw new ApiError(500, "Failed to verify the code", "CODE_VERIFY_ERROR");
+    }
+    return { message: "Verified code" };
+}
+
+// export const userPasswordReset = async (email, code, newPassword) => {
+
+//     if (email.trim() === "" || newPassword.trim() === "") {
+//         throw new ApiError(422, "Email and Password cannot be empty", "INVALID_CREDENTIALS");
+//     }
+
+//     if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+//         throw new ApiError(400, "Invalid email format", "VALIDATION_ERROR");
+//     }
+
+//     // find the code saved if available then reset password
+//     let codeDoc = await FindSavedCode(email, code);
+//     if (!codeDoc) {
+//         throw new ApiError(400, "Un-authorized attempt", "UN-AUTHORIZED");
+//     }
+
+//     // update the password
+//     let updation = await updateUserPasswordByEmail(email, newPassword);
+//     if (!updation) {
+//         throw new ApiError(500, "Failed to update the password using email", "Internal Error");
+//     }
+//     return {
+//         message: "Updated user successfully"
+//     }
+// }
+
+export const userPasswordReset = async (email, newPassword) => {
+    // Input validation
     if (email.trim() === "" || newPassword.trim() === "") {
         throw new ApiError(422, "Email and Password cannot be empty", "INVALID_CREDENTIALS");
     }
@@ -137,18 +187,17 @@ export const userPasswordReset = async (email, code, newPassword) => {
         throw new ApiError(400, "Invalid email format", "VALIDATION_ERROR");
     }
 
-    // find the code saved if available then reset password
-    let codeDoc = await FindSavedCode(email, code);
-    if (!codeDoc) {
-        throw new ApiError(400, "Un-authorized attempt", "UN-AUTHORIZED");
+    // Check if a verified code exists for the email
+    const verifiedCode = await findVerifiedCodeByEmail(email);
+    if (!verifiedCode) {
+        throw new ApiError(400, "Time expired to update password", "UN-AUTHORIZED");
     }
 
-    // update the password
-    let updation = await updateUserPasswordByEmail(email, newPassword);
+    // Update the password (only if code is verified)
+    const updation = await updateUserPasswordByEmail(email, newPassword);
     if (!updation) {
-        throw new ApiError(500, "Failed to update the password using email", "Internal Error");
+        throw new ApiError(500, "Failed to update password", "INTERNAL_ERROR");
     }
-    return {
-        message: "Updated user successfully"
-    }
-}
+
+    return { message: "Password updated successfully" };
+};

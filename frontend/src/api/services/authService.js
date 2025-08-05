@@ -15,9 +15,14 @@ const getCodeByEmail = async (email) => {
     return res.data;
 }
 
-const resetPassword = async () => {
-    const res = await axios.post();
+const verfiyCode = async (userData) => {
+    const res = await axios.post('/users/verify-code', userData);
     return res.data;
 }
 
-export { registerUser, loginUser, getCodeByEmail };
+const resetPassword = async (userData) => {
+    const res = await axios.patch('/users/reset-password', userData);
+    return res.data;
+}
+
+export { registerUser, loginUser, getCodeByEmail, verfiyCode, resetPassword };

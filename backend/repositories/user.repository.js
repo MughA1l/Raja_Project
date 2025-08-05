@@ -51,7 +51,7 @@ export const SaveCodeInDb = async (email, generateCode) => {
     try {
         const saveCode = await Code.findOneAndUpdate(
             { email },
-            { $set: { code: generateCode, createdAt: new Date() } },
+            { $set: { code: generateCode, createdAt: new Date(), isVerified: false } },
             { upsert: true, new: true }
         );
         if (saveCode) return saveCode;
@@ -84,4 +84,28 @@ export const updateUserPasswordByEmail = async (email, newPassword) => {
     } catch (error) {
         throw new ApiError(500, "Failed to update password using email", "DATABASE_ERROR", error)
     }
-} 
+}
+
+// update state by email
+export const updateCodeIsVerified = async (email, code) => {
+    try {
+        const updating = await Code.findOneAndUpdate(
+            { email, code },
+            { $set: { isVerified: true } },
+            { new: true }
+        )
+        if (!updating) return false;
+        return true;
+
+    } catch (error) {
+        throw new ApiError(500, "Failed to update the verify state.", "DATABASE_ERROR", error)
+    }
+}
+
+// check that if the user already verified the code.
+export const findVerifiedCodeByEmail = async (email) => {
+    return await Code.findOne({ 
+        email, 
+        isVerified: true
+    });
+};

@@ -1,6 +1,8 @@
 import { ArrowUpRight } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { verfiyCode } from '../../api/services/authService';
+import { showSuccess } from '../../utils/toast';
 
 const CodeVerify = () => {
     const location = useLocation();
@@ -41,13 +43,22 @@ const CodeVerify = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const verificationCode = code.join('');
-        console.log('Verification code:', verificationCode);
-        // Here you would typically verify the code with your backend
-        // If successful, navigate to reset password page
-        navigate('/reset-password', { state: { email: userEmail, code: verificationCode } });
+        const dataToSend = {
+            code: verificationCode,
+            email: userEmail,
+        }
+        try {
+            let res = await verfiyCode(dataToSend);
+            if (res.success) {
+                showSuccess('Code Verified! Enter new password.')
+                navigate('/reset-password', { state: { email: userEmail } });
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
     };
 
     return (

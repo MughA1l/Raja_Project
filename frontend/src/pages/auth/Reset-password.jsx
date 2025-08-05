@@ -1,31 +1,37 @@
 import { ArrowUpRight } from 'lucide-react'
 import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { resetPassword } from '../../api/services/authService'
+import { showSuccess } from '../../utils/toast'
 
 const ResetPassword = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const { email } = location.state || {}
-    
+
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [passwordsMatch, setPasswordsMatch] = useState(true)
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        
         if (password !== confirmPassword) {
             setPasswordsMatch(false)
             return
         }
-        
-        console.log('Password reset for:', email);
-        
-        console.log('New password:', password)
-        
-        // Here you would typically send the new password to your backend
-        // Then redirect to login page after successful reset
-        navigate('/login')
+        const dataToSend = {
+            email,
+            newPassword: password
+        }
+        try {
+            const res = await resetPassword(dataToSend);
+            if (res.success) {
+                showSuccess("Updated password Successfully");
+                navigate('/login');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (

@@ -10,11 +10,9 @@ const ForgotPassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log('Email submitted:', email)
         try {
             // email sent to send a code on the user gmail
             const res = await getCodeByEmail({ email });
-            console.log(res);
             if (res.success) {
                 showSuccess("4 digit code sent on your gmail");
                 navigate('/verify-code', { state: { email } })

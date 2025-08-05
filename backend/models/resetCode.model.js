@@ -11,6 +11,10 @@ const codeSchema = new mongoose.Schema({
         require: true,
         maxLength: 4,
     },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
     createdAt: { type: Date, default: Date.now, expires: '5m' }
 });
 

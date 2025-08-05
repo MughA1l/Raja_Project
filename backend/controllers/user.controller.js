@@ -1,5 +1,5 @@
 
-import { loginUser, registerUser, logoutUser, UserCode, userPasswordReset } from '../services/user.services.js';
+import { loginUser, registerUser, logoutUser, UserCode, userPasswordReset, userCodeVerify } from '../services/user.services.js';
 import ApiError from '../utils ( reusables )/ApiError.js'
 import successResponse from '../utils ( reusables )/responseHandler.js';
 
@@ -8,7 +8,7 @@ export const register = async (req, res, next) => {
         // validate input data
         let { username, email, password } = req.body || {};
         if (!username || !email || !password) {
-            throw new ApiError(400, "All fields are required", "MISSING_DATA");
+            throw new ApiError(422, "All fields are required", "MISSING_DATA");
         }
         const payload = { username, email, password };
         // service call
@@ -46,7 +46,7 @@ export const login = async (req, res, next) => {
     let { email, password } = req.body || {};
     try {
         if (!email || !password) {
-            throw new ApiError(400, "Email and Password are required", "MISSING_CREDENTIALS")
+            throw new ApiError(422, "Email and Password are required", "MISSING_CREDENTIALS")
         }
 
         let { user, tokens } = await loginUser(email, password);
@@ -111,7 +111,7 @@ export const getCode = async (req, res, next) => {
     try {
         const { email } = req.body || {};
         if (!email) {
-            throw new ApiError(400, "Email is Missing", "MISSING_DATA");
+            throw new ApiError(422, "Email is Missing", "MISSING_DATA");
         }
 
         const message = await UserCode(email);
@@ -123,18 +123,51 @@ export const getCode = async (req, res, next) => {
     }
 }
 
-export const resetPassword = async (req, res, next) => {
-    let { email, code, newPassword } = req.body || {};
+// verify code
+export const verifyCode = async (req, res, next) => {
+    let { code, email } = req.body || {};
     try {
-        if (!email || !code || !newPassword) {
-            throw new ApiError(400, "All fields are required", "MISSING_DATA");
+        if (!code || !email) {
+            throw new ApiError(422, "All fields are required", "MISSING_DATA");
         }
+        let message = await userCodeVerify(email, code);
 
-        let message = await userPasswordReset(email, code, newPassword);
-
-        return successResponse(res, message, 201)
+        return successResponse(res, message, 201);
 
     } catch (error) {
         return next(error);
     }
 }
+
+// export const resetPassword = async (req, res, next) => {
+//     let { email, code, newPassword } = req.body || {};
+//     try {
+//         if (!email || !code || !newPassword) {
+//             throw new ApiError(400, "All fields are required", "MISSING_DATA");
+//         }
+
+//         let message = await userPasswordReset(email, code, newPassword);
+
+//         return successResponse(res, message, 201);
+
+//     } catch (error) {
+//         return next(error);
+//     }
+// }
+
+
+export const resetPassword = async (req, res, next) => {
+    let { email, newPassword } = req.body || {};
+    try {
+        if (!email || !newPassword) {
+            throw new ApiError(422, "Email and newPassword are required", "MISSING_DATA");
+        }
+
+        let message = await userPasswordReset(email, newPassword);
+        return successResponse(res, message, 200);
+    } catch (error) {
+        return next(error);
+    }
+};
+
+
