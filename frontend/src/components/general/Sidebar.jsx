@@ -6,13 +6,13 @@ const Sidebar = () => {
     const [selected, setSelected] = useState('Dashboard');
 
     return (
-        <div className="h-screen bg-[#121927] border-r border-white flex flex-col justify-between py-4 px-3 fixed left-0 top-0 w-60 z-50">
+        <div className="h-screen bg-[#121927] border-r border-white flex flex-col justify-between py-4 px-3  left-0 top-0 w-60 z-50">
             {/* Top section */}
             <div>
                 {/* Logo */}
                 <div className="flex items-start justify-center mb-6 w-full relative">
                     <div className='h-16 w-46 absolute -left-1'>
-                        <img src="../../../public/logo-dashboard.png" alt="logo"
+                        <img src="/logo-dashboard.png" alt="logo"
                             className="w-full h-full object-contain"
                         />
                     </div>

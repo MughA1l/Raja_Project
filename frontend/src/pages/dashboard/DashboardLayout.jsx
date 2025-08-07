@@ -5,16 +5,16 @@ import { Outlet } from 'react-router-dom';
 
 const DashboardLayout = () => {
     return (
-        <div className='grid grid-cols-18'>
+        <div className='flex md:flex-row h-screen'>
 
             {/* Sidebar */}
-            <div className='col-span-3 relative'>
+            <div className='w-fit relative md:visible max-md:hidden'>
                 <Sidebar />
             </div>
 
-            <div className='col-span-15 relative'>
+            <div className='pr-4 pl-4 pb-6 overflow-y-auto w-full'>
                 <Header />
-                <div className='p-5 px-10 h-fit mt-16 bg-white'>
+                <div className='h-fit w-full bg-white'>
                     <Outlet />
                 </div>
             </div>
