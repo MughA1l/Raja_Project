@@ -1,11 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Heart, ListEnd, PencilLine } from 'lucide-react';
 
-const Card = ({ book }) => {
+const Card = ({ book, showOptions, onClick }) => {
+    const [isFav, setIsFav] = useState(book?.isFavourite);
 
-    const [showOptions, setShowOptions] = useState(false);
-
-    // to show in proper format
     function formatDate(dateString) {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US', {
@@ -15,27 +13,27 @@ const Card = ({ book }) => {
         });
     }
 
-    if (!book) return
+    if (!book) return null;
 
     return (
-        <div className='bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 cursor-pointer hover:scale-105 ease-in-out duration-300 mb-3 relative'>
-
+        <div className={`bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 cursor-pointer ${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} ease-in-out duration-300 mb-3 relative`}>
             {/* image */}
             <div className='h-7/12 w-full rounded-2xl overflow-hidden relative'>
                 <img src={book.image} className='object-cover h-full w-full' alt="chapter Image" />
-
                 <span className='absolute top-2 right-3'>
-                    <Heart className={`text-light-pink/80 duration-200 ${book.isFavourite ? 'fill-light-pink' : ' hover:fill-light-pink/30'}`} size={26} />
+                    <Heart
+                        className={`text-light-pink/80 duration-200 ${isFav ? 'fill-light-pink' : ' hover:fill-light-pink/30'}`}
+                        size={26}
+                        onClick={() => setIsFav(!isFav)}
+                    />
                 </span>
             </div>
 
             {/* content section */}
             <div className='pt-5 px-2 pb-2'>
                 {/* to show the creation date */}
-                <div className='text-[11px] text-black/40'>
-                    {
-                        formatDate(book.createdAt)
-                    }
+                <div className='text-[11px] text-black/40 font-medium'>
+                    {formatDate(book.createdAt)}
                 </div>
                 {/* show the title */}
                 <div className='font-semibold pt-1 line-clamp-1 w-full break-all'>
@@ -47,9 +45,7 @@ const Card = ({ book }) => {
                     <ListEnd className='text-black/60' size={16} />
                     <div className='text-xs'>
                         {book.chaptersCount}&nbsp;
-                        <span>
-                            Chapters
-                        </span>
+                        <span>Chapters</span>
                     </div>
                 </div>
             </div>
@@ -63,32 +59,25 @@ const Card = ({ book }) => {
             </div>
 
             {/* edit/delete options */}
-            <div className="flex items-center justify-center absolute bottom-4 right-3 rounded-xl p-[9px] bg-dark-blue/90 hover:bg-dark-blue duration-100 z-50"
-                onClick={() => { setShowOptions(!showOptions) }}
+            <div
+                className="flex items-center justify-center absolute bottom-4 right-3 rounded-xl p-[9px] bg-dark-blue/90 hover:bg-dark-blue duration-100 z-50"
+                onClick={onClick}
             >
                 <PencilLine size={16} color='white' />
-
-                {
-                    showOptions && <div className='absolute z-50 top-2 w-fit -left-3 shadow-sm bg-white text-sm rounded-xl flex flex-col items-start justify-start'>
-                        <span className='px-6 py-2 border-b border-black/10 hover:opacity-60 duration-100'>
-                            Edit
-                        </span>
-                        <span className='px-6 py-2 border-b border-black/10 hover:opacity-60 duration-100'>
-                            Delete
-                        </span>
+                {showOptions && (
+                    <div className='absolute z-50 -top-16 w-fit -left-20 shadow-md border border-black/10 bg-white text-sm rounded-xl flex flex-col items-start justify-start font-medium text-dark-blue'>
+                        <span className='w-full px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'>Edit</span>
+                        <span className='px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'>Delete</span>
                     </div>
-                }
-
+                )}
             </div>
 
             {/* to show complete/ incomplete */}
             <div className='absolute top-5 left-4 px-2 py-1 rounded-xl bg-[#f5f5f5] text-[12px] font-medium'>
-                {
-                    book.isCompleted ? 'Complete' : 'InComplete'
-                }
+                {book.isCompleted ? 'Complete' : 'InComplete'}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Card;

@@ -36,6 +36,8 @@ function App() {
             <Route path='/Books' element={<Books />} />
             <Route path='/Images' element={<Images />} />
             <Route path='/Settings' element={<Settings />} />
+            {/* route from book to chapter */}
+            
           </Route>
 
           <Route path="*" element={<NotFound />} />
