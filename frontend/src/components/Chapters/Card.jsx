@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { FileText, Heart, ImageDown, ScanText } from 'lucide-react';
+import { FileText, Heart, ImageDown, PencilLine, ScanText } from 'lucide-react';
 
-const Card = ({ chapter }) => {
+const Card = ({ chapter, showOptions, onClick }) => {
     const [isFav, setIsFav] = useState(chapter?.isFavourite);
 
     if (!chapter) return null;
@@ -15,13 +15,13 @@ const Card = ({ chapter }) => {
         });
     }
     return (
-        <div className='col-span-1 h-80 mb-14 p-2 pb-3 bg-white shadow-md shadow-black/5 rounded-2xl relative cursor-pointer'>
+        <div className={`${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} col-span-1 h-72 mb-14 p-2 pb-3 bg-white shadow-md shadow-black/5 rounded-2xl relative cursor-pointer`}>
 
             {/* div to show the image */}
             <div className='absolute left-1/2 -translate-x-1/2 -top-9 inset-x-0 h-40 w-11/12 rounded-2xl overflow-hidden shadow-md'>
                 <img src={chapter?.image} className='h-full w-full object-cover' alt="chapter-image" />
                 {/* to show complete/ incomplete */}
-                <div className='absolute bottom-3 left-3 px-3 py-1 rounded-xl bg-dark-blue text-[12px] font-medium text-white'>
+                <div className='absolute bottom-3 left-3 px-3 py-1 rounded-xl bg-white text-[12px] font-medium '>
                     {chapter?.isMids ? 'mids' : 'finals'}
                 </div>
 
@@ -72,7 +72,7 @@ const Card = ({ chapter }) => {
                             <ScanText size={18} />
                             <span className='text-sm font-medium'>
                                 {
-                                    chapter?.ocrCount
+                                    chapter?.enhancedTextCount
                                 }
                             </span>
                         </span>
@@ -80,10 +80,26 @@ const Card = ({ chapter }) => {
                     </div>
 
                     {/* start and progress */}
-                    <div className="flex justify-between items-center pt-2 w-full">
-                        <progress className="progress progress-secondary w-56" value="10" max="100"></progress>
-
+                    <div className='w-full px-2 flex items-center gap-3'>
+                        <progress className="progress progress-secondary w-11/12" value={chapter.completionPercentage} max="100"></progress>
+                        <span className='text-sm font-semibold'>
+                            {chapter.completionPercentage}%
+                        </span>
                     </div>
+                </div>
+
+                {/* edit/delete options */}
+                <div
+                    className="flex items-center justify-center absolute top-20 right-5 rounded-lg p-[9px] bg-white hover:opacity-90 duration-100 z-50"
+                    onClick={onClick}
+                >
+                    <PencilLine size={15} color='black' />
+                    {showOptions && (
+                        <div className='absolute z-50 -top-16 w-fit -left-20 shadow-md border border-black/10 bg-white text-sm rounded-xl flex flex-col items-start justify-start font-medium text-dark-blue'>
+                            <span className='w-full px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'>Edit</span>
+                            <span className='px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'>Delete</span>
+                        </div>
+                    )}
                 </div>
 
             </div>
