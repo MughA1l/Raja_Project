@@ -1,5 +1,6 @@
 export const books = [
   {
+    _id: "65a8f1c3e4b5672e8c456789",
     Name: "Introduction to React",
     chaptersCount: 10,
     image: "/card-img-2.jpg",
@@ -11,6 +12,7 @@ export const books = [
     completionPercentage: 100,
   },
   {
+    _id: "65a8f1c3e4b5672e8c45678a",
     Name: "Advanced JavaScript",
     chaptersCount: 15,
     image: "/card-img.jpg",
@@ -22,6 +24,7 @@ export const books = [
     completionPercentage: 65,
   },
   {
+    _id: "65a8f1c3e4b5672e8c45678b",
     Name: "CSS Mastery",
     chaptersCount: 8,
     image: "/card-img-3.jpg",
@@ -33,6 +36,7 @@ export const books = [
     completionPercentage: 30,
   },
   {
+    _id: "65a8f1c3e4b5672e8c45678c",
     Name: "Node.js Fundamentals",
     chaptersCount: 12,
     image: "/card-4.jpg",
@@ -44,6 +48,7 @@ export const books = [
     completionPercentage: 100,
   },
   {
+    _id: "65a8f1c3e4b5672e8c45678d",
     Name: "Database Design",
     chaptersCount: 7,
     image: "/card-5.jpg",
@@ -55,6 +60,7 @@ export const books = [
     completionPercentage: 45,
   },
   {
+    _id: "65a8f1c3e4b5672e8c45678e",
     Name: "Python for Beginners",
     chaptersCount: 10,
     image: "/card-6.jpg",
@@ -66,6 +72,7 @@ export const books = [
     completionPercentage: 20,
   },
   {
+    _id: "65a8f1c3e4b5672e8c45678f",
     Name: "DevOps Essentials",
     chaptersCount: 9,
     image: "card-img.jpg",
@@ -77,6 +84,7 @@ export const books = [
     completionPercentage: 100,
   },
   {
+    _id: "65a8f1c3e4b5672e8c456790",
     Name: "UI/UX Principles",
     chaptersCount: 6,
     image: "card-img-2.jpg",
@@ -88,6 +96,7 @@ export const books = [
     completionPercentage: 10,
   },
   {
+    _id: "65a8f1c3e4b5672e8c456791",
     Name: "Mobile App Development",
     chaptersCount: 14,
     image: "card-img-3.jpg",
@@ -99,6 +108,7 @@ export const books = [
     completionPercentage: 55,
   },
   {
+    _id: "65a8f1c3e4b5672e8c456792",
     Name: "Cloud Computing Basics",
     chaptersCount: 5,
     image: "card-img.jpg",
@@ -110,6 +120,7 @@ export const books = [
     completionPercentage: 100,
   },
   {
+    _id: "65a8f1c3e4b5672e8c456793",
     Name: "Data Structures & Algorithms",
     chaptersCount: 12,
     image: "card-4.jpg",
@@ -121,6 +132,7 @@ export const books = [
     completionPercentage: 40,
   },
   {
+    _id: "65a8f1c3e4b5672e8c456794",
     Name: "Machine Learning Intro",
     chaptersCount: 8,
     image: "card-5.jpg",
@@ -132,6 +144,7 @@ export const books = [
     completionPercentage: 15,
   },
   {
+    _id: "65a8f1c3e4b5672e8c456795",
     Name: "Cybersecurity Fundamentals",
     chaptersCount: 7,
     image: "card-6.jpg",
@@ -143,6 +156,7 @@ export const books = [
     completionPercentage: 100,
   },
   {
+    _id: "65a8f1c3e4b5672e8c456796",
     Name: "Blockchain Basics",
     chaptersCount: 6,
     image: "card-img.jpg",
@@ -154,6 +168,7 @@ export const books = [
     completionPercentage: 25,
   },
   {
+    _id: "65a8f1c3e4b5672e8c456797",
     Name: "GraphQL API Development",
     chaptersCount: 9,
     image: "card-img.jpg",
@@ -165,6 +180,7 @@ export const books = [
     completionPercentage: 35,
   },
   {
+    _id: "65a8f1c3e4b5672e8c456798",
     Name: "Docker & Kubernetes",
     chaptersCount: 11,
     image: "card-img-3.jpg",
@@ -176,6 +192,7 @@ export const books = [
     completionPercentage: 100,
   },
   {
+    _id: "65a8f1c3e4b5672e8c456799",
     Name: "TypeScript Deep Dive",
     chaptersCount: 10,
     image: "card-6.jpg",
@@ -187,6 +204,7 @@ export const books = [
     completionPercentage: 50,
   },
   {
+    _id: "65a8f1c3e4b5672e8c45679a",
     Name: "RESTful API Design",
     chaptersCount: 7,
     image: "card-img.jpg",
@@ -198,6 +216,7 @@ export const books = [
     completionPercentage: 100,
   },
   {
+    _id: "65a8f1c3e4b5672e8c45679b",
     Name: "Agile & Scrum Methodology",
     chaptersCount: 5,
     image: "card-4.jpg",
@@ -209,6 +228,7 @@ export const books = [
     completionPercentage: 20,
   },
   {
+    _id: "65a8f1c3e4b5672e8c45679c",
     Name: "Web Performance Optimization",
     chaptersCount: 8,
     image: "card-5.jpg",

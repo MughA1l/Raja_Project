@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { FileText, Heart, ImageDown, PencilLine, ScanText } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Card = ({ chapter, showOptions, onClick }) => {
     const [isFav, setIsFav] = useState(chapter?.isFavourite);
@@ -15,7 +16,9 @@ const Card = ({ chapter, showOptions, onClick }) => {
         });
     }
     return (
-        <div className={`${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} col-span-1 h-72 mb-14 p-2 pb-3 bg-white shadow-md shadow-black/5 rounded-2xl relative cursor-pointer`}>
+        <Link className={`${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} col-span-1 h-72 mb-14 p-2 pb-3 bg-white shadow-md shadow-black/5 rounded-2xl relative cursor-pointer`}
+            to={`/Chapters/:${chapter?._id}`}
+        >
 
             {/* div to show the image */}
             <div className='absolute left-1/2 -translate-x-1/2 -top-9 inset-x-0 h-40 w-11/12 rounded-2xl overflow-hidden shadow-md'>
@@ -104,7 +107,7 @@ const Card = ({ chapter, showOptions, onClick }) => {
 
             </div>
 
-        </div>
+        </Link>
     )
 }
 

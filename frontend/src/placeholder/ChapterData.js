@@ -1,5 +1,6 @@
 export const chapters = [
   {
+    _id: "65a8f1c3e4b5672e8c4567a1",
     "Name": "Introduction to React",
     "image": "/card-5.jpg",
     "isCompleted": true,
@@ -13,6 +14,7 @@ export const chapters = [
     "enhancedTextCount": 20
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567a2",
     "Name": "Advanced JavaScript",
     "image": "/card-img.jpg",
     "isCompleted": false,
@@ -26,6 +28,7 @@ export const chapters = [
     "enhancedTextCount": 15
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567a3",
     "Name": "CSS Mastery",
     "image": "/card-img-3.jpg",
     "isCompleted": false,
@@ -39,6 +42,7 @@ export const chapters = [
     "enhancedTextCount": 18
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567a4",
     "Name": "Node.js Fundamentals",
     "image": "/card-img-2.jpg",
     "isCompleted": true,
@@ -52,6 +56,7 @@ export const chapters = [
     "enhancedTextCount": 10
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567a5",
     "Name": "Database Design",
     "image": "/card-img.jpg",
     "isCompleted": false,
@@ -65,6 +70,7 @@ export const chapters = [
     "enhancedTextCount": 30
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567a6",
     "Name": "Python for Beginners",
     "image": "/card-6.jpg",
     "isCompleted": false,
@@ -78,6 +84,7 @@ export const chapters = [
     "enhancedTextCount": 8
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567a7",
     "Name": "DevOps Essentials",
     "image": "/card-4.jpg",
     "isCompleted": true,
@@ -91,6 +98,7 @@ export const chapters = [
     "enhancedTextCount": 25
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567a8",
     "Name": "UI/UX Principles",
     "image": "/card-5.jpg",
     "isCompleted": false,
@@ -104,6 +112,7 @@ export const chapters = [
     "enhancedTextCount": 16
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567a9",
     "Name": "Mobile App Development",
     "image": "/card-img-3.jpg",
     "isCompleted": false,
@@ -117,6 +126,7 @@ export const chapters = [
     "enhancedTextCount": 40
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567aa",
     "Name": "Cloud Computing Basics",
     "image": "/card-img.jpg",
     "isCompleted": true,
@@ -130,6 +140,7 @@ export const chapters = [
     "enhancedTextCount": 22
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567ab",
     "Name": "Data Structures & Algorithms",
     "image": "/card-4.jpg",
     "isCompleted": false,
@@ -143,6 +154,7 @@ export const chapters = [
     "enhancedTextCount": 28
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567ac",
     "Name": "Machine Learning Intro",
     "image": "/card-img-2.jpg",
     "isCompleted": false,
@@ -156,6 +168,7 @@ export const chapters = [
     "enhancedTextCount": 32
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567ad",
     "Name": "Cybersecurity Fundamentals",
     "image": "/card-6.jpg",
     "isCompleted": true,
@@ -169,6 +182,7 @@ export const chapters = [
     "enhancedTextCount": 20
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567ae",
     "Name": "Blockchain Basics",
     "image": "/card-img.jpg",
     "isCompleted": false,
@@ -182,6 +196,7 @@ export const chapters = [
     "enhancedTextCount": 35
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567af",
     "Name": "GraphQL API Development",
     "image": "/card-img-3.jpg",
     "isCompleted": false,
@@ -195,6 +210,7 @@ export const chapters = [
     "enhancedTextCount": 26
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567b0",
     "Name": "Docker & Kubernetes",
     "image": "/card-6.jpg",
     "isCompleted": true,
@@ -208,6 +224,7 @@ export const chapters = [
     "enhancedTextCount": 45
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567b1",
     "Name": "TypeScript Deep Dive",
     "image": "/card-4.jpg",
     "isCompleted": false,
@@ -221,6 +238,7 @@ export const chapters = [
     "enhancedTextCount": 30
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567b2",
     "Name": "RESTful API Design",
     "image": "/card-5.jpg",
     "isCompleted": true,
@@ -234,6 +252,7 @@ export const chapters = [
     "enhancedTextCount": 33
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567b3",
     "Name": "Agile & Scrum Methodology",
     "image": "/card-img-2.jpg",
     "isCompleted": false,
@@ -247,6 +266,7 @@ export const chapters = [
     "enhancedTextCount": 12
   },
   {
+    _id: "65a8f1c3e4b5672e8c4567b4",
     "Name": "Web Performance Optimization",
     "image": "/card-img.jpg",
     "isCompleted": false,

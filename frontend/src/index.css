@@ -24,7 +24,7 @@ body {
 /* Universal scrollbar style */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #101A27 transparent;
+  scrollbar-color:"rgba(255, 255, 255, 0.1)" transparent;
 }
 
 *::-webkit-scrollbar {

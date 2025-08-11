@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Heart, ListEnd, PencilLine } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Card = ({ book, showOptions, onClick }) => {
+    const navigate = useNavigate();
     const [isFav, setIsFav] = useState(book?.isFavourite);
 
     function formatDate(dateString) {
@@ -16,7 +18,9 @@ const Card = ({ book, showOptions, onClick }) => {
     if (!book) return null;
 
     return (
-        <div className={`bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 cursor-pointer ${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} ease-in-out duration-300 mb-3 relative`}>
+        <Link className={`bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 cursor-pointer ${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} ease-in-out duration-300 mb-3 relative`}
+            to={`/Books/${book?._id}/Chapters`}
+        >
             {/* image */}
             <div className='h-7/12 w-full rounded-2xl overflow-hidden relative'>
                 <img src={book.image} className='object-cover h-full w-full' alt="chapter Image" />
@@ -76,7 +80,7 @@ const Card = ({ book, showOptions, onClick }) => {
             <div className='absolute top-5 left-4 px-2 py-1 rounded-xl bg-[#f5f5f5] text-[12px] font-medium'>
                 {book.isCompleted ? 'Complete' : 'InComplete'}
             </div>
-        </div>
+        </Link>
     );
 };
 

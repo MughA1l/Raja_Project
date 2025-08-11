@@ -16,6 +16,7 @@ import Books from './pages/dashboard/Books.jsx';
 import Chapters from './pages/dashboard/Chapters.jsx';
 import Images from './pages/dashboard/Images.jsx';
 import Settings from './pages/dashboard/Settings.jsx';
+import PreviewChapter from './pages/dashboard/PreviewChapter.jsx';
 
 function App() {
   return (
@@ -36,8 +37,12 @@ function App() {
             <Route path='/Books' element={<Books />} />
             <Route path='/Images' element={<Images />} />
             <Route path='/Settings' element={<Settings />} />
+
             {/* route from book to chapter */}
-            
+            <Route path='/Books/:bookId/Chapters' element={<Chapters />} />
+            {/* for book -> chapter -> preview single chapter */}
+            <Route path='/Chapters/:chapterId' element={<PreviewChapter />} />
+
           </Route>
 
           <Route path="*" element={<NotFound />} />
