@@ -41,7 +41,7 @@ const TextContainer = ({ image, selectedImage, totalImages }) => {
             {/* divs to show the containers based on the selection */}
             <div className='p-4 pt-8'>
                 {
-                    selected == 0 ? <OCR /> : selected == 1 ? <ENHANCED /> : <Videos />
+                    selected == 0 ? <OCR ocr={image['ocr']}/> : selected == 1 ? <ENHANCED enhancedText={image['enhancedText']}/> : <Videos videosArr={image['videos']}/>
                 }
             </div>
 

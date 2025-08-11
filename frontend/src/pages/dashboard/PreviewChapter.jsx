@@ -23,14 +23,14 @@ const PreviewChapter = () => {
           <SingleImageContainer
             setSelectedImage={setSelectedImage}
             selectedImage={selectedImage}
-            image={images[selectedImage-1]}
+            image={images[selectedImage - 1]}
             totalImages={images?.length}
           />
           {/* ocr,youtube-suggestions container */}
-          <TextContainer 
-          image={images[selectedImage]}
-          selectedImage={selectedImage}
-          totalImages={images?.length}
+          <TextContainer
+            image={images[selectedImage - 1]}
+            selectedImage={selectedImage}
+            totalImages={images?.length}
           />
         </div>
 

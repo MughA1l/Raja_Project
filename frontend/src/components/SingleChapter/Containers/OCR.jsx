@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { ocrData } from '../../../placeholder/ActualResult.data'
 
-const OCR = () => {
-  const [copied, setCopied] = useState(ocrData[0]["ocr"]);
+const OCR = ({ ocr }) => {
+  const [copied, setCopied] = useState(ocr);
 
   if (!copied) return
   return (
