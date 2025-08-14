@@ -28,6 +28,7 @@ const PreviewChapter = () => {
           />
           {/* ocr,youtube-suggestions container */}
           <TextContainer
+            key={selectedImage}
             image={images[selectedImage - 1]}
             selectedImage={selectedImage}
             totalImages={images?.length}
@@ -35,7 +36,11 @@ const PreviewChapter = () => {
         </div>
 
         {/* to show all images */}
-        <AllImagesContainer allImages={images} />
+        <AllImagesContainer
+          allImages={images}
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
+        />
 
       </div>
     </div>

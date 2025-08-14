@@ -12,7 +12,7 @@ const TextContainer = ({ image, selectedImage, totalImages }) => {
     return (
         <div className='min-h-80 rounded-xl p-2 relative'>
             {/* number to show the images count */}
-            <div className='flex items-center justify-center gap-1 bg-black/5 w-fit mx-auto text-sm p-1 px-3 rounded-md font-medium  absolute left-1/2 -translate-x-1/2'>
+            {/* <div className='flex items-center justify-center gap-1 bg-black/5 w-fit mx-auto text-sm p-1 px-3 rounded-md font-medium  absolute left-1/2 -translate-x-1/2'>
                 <span>
                     {selectedImage}
                 </span>
@@ -20,7 +20,7 @@ const TextContainer = ({ image, selectedImage, totalImages }) => {
                 <span>
                     {totalImages}
                 </span>
-            </div>
+            </div> */}
 
             {/* header */}
             <div className='w-full flex items-center px-3 justify-between pt-4'>
