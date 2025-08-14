@@ -25,4 +25,13 @@ const resetPassword = async (userData) => {
     return res.data;
 }
 
-export { registerUser, loginUser, getCodeByEmail, verfiyCode, resetPassword };
+const logoutUser = async () => {
+  try {
+    await axios.post('/users/logout');
+    removeToken(); // clear access token
+  } catch (err) {
+    console.error("Logout failed", err);
+  }
+};
+
+export { registerUser, loginUser, getCodeByEmail, verfiyCode, resetPassword,logoutUser };

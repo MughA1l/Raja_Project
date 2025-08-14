@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Plus, Search } from 'lucide-react';
 
-const Header = () => {
+const Header = ({ onCreateClick }) => {
   const [selected, setSelected] = useState(0);
   const [underlineStyle, setUnderlineStyle] = useState({});
   const tabRefs = useRef([]);
@@ -43,7 +43,9 @@ const Header = () => {
             <Search className='text-black/50 absolute right-2' size={20} />
           </div>
 
-          <button className='flex items-center justify-center gap-1 text-white bg-light-blue/95 hover:bg-light-blue/75 duration-200 cursor-pointer rounded-full shadow-sm px-3 py-[10px] text-sm font-medium'>
+          <button className='flex items-center justify-center gap-1 text-white bg-light-blue/95 hover:bg-light-blue/75 duration-200 cursor-pointer rounded-full shadow-sm px-3 py-[10px] text-sm font-medium'
+            onClick={onCreateClick}
+          >
             <Plus size={16} color='white' />
             <span>Create Chapter</span>
           </button>
@@ -58,8 +60,8 @@ const Header = () => {
               key={index}
               ref={el => tabRefs.current[index] = el}
               className={`px-4 py-3 text-sm font-medium relative cursor-pointer ${selected === index
-                  ? 'text-light-pink'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-white/40'
+                ? 'text-light-pink'
+                : 'text-gray-500 hover:text-gray-700 hover:bg-white/40'
                 }`}
               onClick={() => setSelected(index)}
             >

@@ -77,26 +77,36 @@ export const login = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
     try {
-        let { id } = req.body || {};
-        let refreshToken = req.cookies?.refreshToken;
+        const refreshToken = req.cookies?.refreshToken;
+
         if (!refreshToken) {
             throw new ApiError(401, "No refresh token found", "UNAUTHORIZED");
         }
-        if (!id) {
-            throw new ApiError(400, "Missing Id", "MISSING_DETAILS")
+
+        const userId = req.user?.userId;
+        if (!userId) {
+            throw new ApiError(401, "Unauthorized", "UNAUTHORIZED");
         }
 
-        let response = await logoutUser(id, refreshToken);
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new ApiError(404, "User not found", "USER_NOT_FOUND");
+        }
+
+        const response = await logoutUser(user, refreshToken);
+
         res.clearCookie('refreshToken', {
             httpOnly: true,
             sameSite: 'strict',
         });
+
         return successResponse(res, response, 200);
     }
     catch (error) {
         if (error instanceof ApiError) {
             return next(error);
         }
+
         return next(
             new ApiError(
                 500,
@@ -105,7 +115,8 @@ export const logout = async (req, res, next) => {
             )
         );
     }
-}
+};
+
 
 export const getCode = async (req, res, next) => {
     try {

@@ -6,6 +6,7 @@ const port = process.env.PORT || 3000;
 import errorHandler from './middleware/errorHandler.js'
 import connectDB from './config (db connect)/connection.db.js';
 import userRoutes from './routes/User.route.js'
+import bookRoutes from './routes/Book.route.js'
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -27,6 +28,7 @@ const startServer = async () => {
 
         // Routes
         app.use('/api/users', userRoutes);
+        app.use('/api/books', bookRoutes);
 
         app.get('/', (req, res) => {
             res.send('Home route');
