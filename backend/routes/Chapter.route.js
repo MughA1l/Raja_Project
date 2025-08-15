@@ -16,4 +16,12 @@ router.post(
     chapterController.createChapter
 );
 
+router.get('/getAllChapters', chapterController.getUserChapters);
+
+router.get('/getSingleChapter/:id', chapterController.getChapterById);
+
+router.put('/updateChapter/:id', chapterController.updateChapter);
+
+router.delete('/deleteChapter/:id', chapterController.deleteChapter);
+
 export default router;

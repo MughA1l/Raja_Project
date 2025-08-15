@@ -1,7 +1,7 @@
 
 import mongoose from 'mongoose'
 import { Schema } from 'mongoose';
-import Chapter from './chapter.model.js';
+import Chapter from './Chapter.model.js'
 
 const bookSchema = new Schema(
     {
@@ -45,12 +45,18 @@ bookSchema.index({ userId: 1, name: 1 }, { unique: true });
 bookSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
     try {
         const bookId = this._id;
-        await Chapter.deleteMany({ bookId });
+        const chapters = await Chapter.find({ bookId });
+
+        for (const chapter of chapters) {
+            await chapter.deleteOne(); // This will trigger Chapter's pre hook
+        }
+
         next();
     } catch (err) {
         next(err);
     }
 });
+
 
 const Book = mongoose.model('Book', bookSchema);
 

@@ -1,7 +1,7 @@
 
 import mongoose from 'mongoose';
 import { Schema } from 'mongoose';
-import Image from './image.model.js';
+import Image from './Image.model.js'
 
 const chapterSchema = new Schema(
   {

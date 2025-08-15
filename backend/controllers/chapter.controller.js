@@ -34,3 +34,31 @@ export const createChapter = async (req, res, next) => {
         next(error);
     }
 };
+
+export const getUserChapters = async (req, res, next) => {
+    try {
+        const userId = req.user?.userId;
+
+        // Validate userId
+        if (!userId) {
+            throw new ApiError(400, "User ID is required", "VALIDATION_ERROR");
+        }
+        const chapters = await chapterService.getUserChapters(userId);
+
+        return successResponse(res, { chapters });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getChapterById = () => {
+
+}
+
+export const updateChapter = () => {
+
+}
+
+export const deleteChapter = () => {
+
+}

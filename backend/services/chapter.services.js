@@ -50,3 +50,15 @@ export const createChapter = async ({ userId, name, bookId, isMids, imageFile, i
 
     return initialChapter;
 };
+
+
+export const getUserChapters = async (userId) => {
+    const chapters = await chapterRepo.findByUserId(userId);
+
+    if (!chapters || chapters.length === 0) {
+        throw new ApiError(404, "No chapters found for this user", "NOT_FOUND");
+    }
+    return chapters;
+};
+
+
