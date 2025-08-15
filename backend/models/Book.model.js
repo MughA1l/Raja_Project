@@ -1,6 +1,7 @@
 
 import mongoose from 'mongoose'
 import { Schema } from 'mongoose';
+import Chapter from './chapter.model.js';
 
 const bookSchema = new Schema(
     {
@@ -40,6 +41,18 @@ const bookSchema = new Schema(
 // one user cannot have the same named book again
 bookSchema.index({ userId: 1, name: 1 }, { unique: true });
 
+// delete all the chapters that are in that book
+bookSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
+    try {
+        const bookId = this._id;
+        await Chapter.deleteMany({ bookId });
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
+
 const Book = mongoose.model('Book', bookSchema);
+
 
 export default Book;

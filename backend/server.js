@@ -7,8 +7,11 @@ import errorHandler from './middleware/errorHandler.js'
 import connectDB from './config (db connect)/connection.db.js';
 import userRoutes from './routes/User.route.js'
 import bookRoutes from './routes/Book.route.js'
+import chapterRoutes from './routes/Chapter.route.js'
+import imageRoutes from './routes/Image.route.js'
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import { cloudinaryConnect } from './config (db connect)/cloudinary.config.js';
 
 const options = {
     origin: 'http://localhost:5173',
@@ -26,9 +29,14 @@ const startServer = async () => {
         // Connect to MongoDB first
         await connectDB();
 
+        // cloudinary configurations
+        await cloudinaryConnect();
+
         // Routes
         app.use('/api/users', userRoutes);
         app.use('/api/books', bookRoutes);
+        app.use('/api/chapters', chapterRoutes)
+        app.use('/api/images', imageRoutes)
 
         app.get('/', (req, res) => {
             res.send('Home route');

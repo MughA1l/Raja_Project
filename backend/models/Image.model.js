@@ -41,9 +41,11 @@ const imageSchema = new Schema(
     },
     ocr: {
       type: String,
+      default: null
     },
     enhancedText: {
       type: String,
+      default: null
     },
     videos: [videoSchema],
   },
@@ -52,7 +54,7 @@ const imageSchema = new Schema(
   }
 );
 
-// 🔐 Compound index to enforce unique name per user per chapter
+
 imageSchema.index({ userId: 1, chapterId: 1, name: 1 }, { unique: true });
 
 const Image = mongoose.model('Image', imageSchema);

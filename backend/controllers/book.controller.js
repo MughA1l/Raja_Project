@@ -1,27 +1,54 @@
+import mongoose from 'mongoose';
 import * as bookService from '../services/book.services.js';
 import successResponse from '../utils ( reusables )/responseHandler.js';
-
+import ApiError from '../utils ( reusables )/ApiError.js';
 
 export const createBook = async (req, res, next) => {
     try {
-        // Placeholder logic
-        return successResponse(res, { message: 'createBook controller hit' });
+        const { name } = req.body;
+        const imageFile = req.file;
+        const userId = req.user?.userId;
+
+        if (!imageFile) {
+            return res.status(400).json({ message: 'Image is required.' });
+        }
+
+        // service layer
+        const newBook = await bookService.createBook({ userId, name, imageFile });
+        return successResponse(res, {
+            message: 'Book created successfully!',
+            book: newBook
+        }, 201);
+
     } catch (error) {
+        if (error.code === 11000) {
+            return res.status(409).json({ message: 'A book with this name already exists for this user.' });
+        }
         next(error);
     }
 };
 
+
 export const getUserBooks = async (req, res, next) => {
+
     try {
-        return successResponse(res, { message: 'getUserBooks controller hit' });
+        const userId = req.user?.userId;
+        const books = await bookService.getUserBooks(userId);
+        return successResponse(res, books, 200);
     } catch (error) {
         next(error);
     }
+
 };
 
 export const getBookById = async (req, res, next) => {
     try {
-        return successResponse(res, { message: 'getBookById controller hit' });
+        const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            throw new ApiError(400, 'Invalid book ID format');
+        }
+        const book = await bookService.getBookById(id);
+        return successResponse(res, { data: book });
     } catch (error) {
         next(error);
     }
@@ -29,15 +56,29 @@ export const getBookById = async (req, res, next) => {
 
 export const updateBook = async (req, res, next) => {
     try {
-        return successResponse(res, { message: 'updateBook controller hit' });
+        const { id } = req.params;
+        const updateData = req.body;
+
+        const updatedBook = await bookService.updateBook(id, updateData);
+
+        return successResponse(res, {
+            message: 'Book updated successfully',
+            data: updatedBook
+        });
     } catch (error) {
         next(error);
     }
 };
 
+
 export const deleteBook = async (req, res, next) => {
     try {
-        return successResponse(res, { message: 'deleteBook controller hit' });
+        const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            throw new ApiError(400, 'Invalid book ID format');
+        }
+        const deletedBook = await bookService.deleteBook(id);
+        return successResponse(res, { message: 'Book deleted successfully', data: deletedBook });
     } catch (error) {
         next(error);
     }
