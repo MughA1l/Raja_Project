@@ -4,8 +4,16 @@ import * as chapterRepo from '../repositories/chapter.repository.js'
 import { addChapterToBook } from './book.services.js';
 import ApiError from '../utils ( reusables )/ApiError.js';
 import * as imageRepo from '../repositories/image.repository.js'
+// book repository function
+import { findBookById } from '../repositories/book.repository.js';
 
 export const createChapter = async ({ userId, name, bookId, isMids, imageFile, imageFilesArray }) => {
+
+    // create a chapter when book exists.
+    const bookExists = await findBookById(bookId);
+    if (!bookExists) {
+        throw new ApiError(404, 'No Book found with the given ID', 'BOOK_NOT_FOUND');
+    }
 
     // Card Image
     const coverImageUpload = await getCloudinaryUrl(imageFile.path);
@@ -51,7 +59,6 @@ export const createChapter = async ({ userId, name, bookId, isMids, imageFile, i
     return initialChapter;
 };
 
-
 export const getUserChapters = async (userId) => {
     const chapters = await chapterRepo.findByUserId(userId);
 
@@ -60,5 +67,36 @@ export const getUserChapters = async (userId) => {
     }
     return chapters;
 };
+
+export const getChapterById = async (userId, chapterId) => {
+    const chapter = await chapterRepo.findByIdAndUser(userId, chapterId);
+
+    if (!chapter) {
+        throw new ApiError(404, "Chapter not found", "NOT_FOUND");
+    }
+
+    return chapter;
+};
+
+export const updateChapter = async (userId, chapterId, updateData) => {
+    const chapter = await chapterRepo.updateChapterById(userId, chapterId, updateData);
+
+    if (!chapter) {
+        throw new ApiError(404, "Chapter not found or you do not have permission to update it", "NOT_FOUND");
+    }
+
+    return chapter;
+};
+
+export const deleteChapter = async (userId, chapterId) => {
+    const deletedChapter = await chapterRepo.deleteChapterById(userId, chapterId);
+
+    if (!deletedChapter) {
+        throw new ApiError(404, "Chapter not found or you do not have permission to delete it", "NOT_FOUND");
+    }
+
+    return deletedChapter;
+};
+
 
 

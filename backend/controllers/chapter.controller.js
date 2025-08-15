@@ -51,14 +51,68 @@ export const getUserChapters = async (req, res, next) => {
     }
 };
 
-export const getChapterById = () => {
+export const getChapterById = async (req, res, next) => {
+    try {
+        const userId = req.user?.userId;
+        const chapterId = req.params.id;
 
-}
+        // Validation
+        if (!userId) {
+            throw new ApiError(400, "User ID is required", "VALIDATION_ERROR");
+        }
+        if (!chapterId) {
+            throw new ApiError(400, "Chapter ID is required", "VALIDATION_ERROR");
+        }
 
-export const updateChapter = () => {
+        const chapter = await chapterService.getChapterById(userId, chapterId);
 
-}
+        return successResponse(res, { chapter });
+    } catch (error) {
+        next(error);
+    }
+};
 
-export const deleteChapter = () => {
+export const updateChapter = async (req, res, next) => {
+    try {
+        const userId = req.user?.userId;
+        const chapterId = req.params.id;
+        const updateData = req.body;
 
-}
+        // Validation
+        if (!userId) {
+            throw new ApiError(400, "User ID is required", "VALIDATION_ERROR");
+        }
+        if (!chapterId) {
+            throw new ApiError(400, "Chapter ID is required", "VALIDATION_ERROR");
+        }
+        if (!updateData || Object.keys(updateData).length === 0) {
+            throw new ApiError(400, "No data provided for update", "VALIDATION_ERROR");
+        }
+
+        const updatedChapter = await chapterService.updateChapter(userId, chapterId, updateData);
+
+        return successResponse(res, { chapter: updatedChapter });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const deleteChapter = async (req, res, next) => {
+    try {
+        const userId = req.user?.userId;
+        const chapterId = req.params.id;
+
+        if (!userId) {
+            throw new ApiError(400, "User ID is required", "VALIDATION_ERROR");
+        }
+        if (!chapterId) {
+            throw new ApiError(400, "Chapter ID is required", "VALIDATION_ERROR");
+        }
+                 
+        const deleted = await chapterService.deleteChapter(userId, chapterId);
+
+        return successResponse(res, { message: "Chapter deleted successfully", chapter: deleted });
+    } catch (error) {
+        next(error);
+    }
+};
