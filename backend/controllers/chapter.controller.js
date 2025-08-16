@@ -7,13 +7,12 @@ export const createChapter = async (req, res, next) => {
     try {
         const { name, bookId, isMids } = req.body;
         const userId = req.user?.userId;
-        const files = req.files;
 
-        const imageFile = files?.image?.[0];
-        const imageFilesArray = files?.images || [];
+        const coverImageCloudinary = req.files?.image?.[0] || null; // single file
+        const localImageFiles = req.files?.images || [];            // multiple files
 
-        if (!name || !bookId || typeof isMids === 'undefined' || !imageFile) {
-            throw new ApiError(400, 'All required fields must be provided', 'MISSING_FIELDS');
+        if (!name || !bookId || typeof isMids === "undefined" || !coverImageCloudinary) {
+            throw new ApiError(400, "All required fields must be provided", "MISSING_FIELDS");
         }
 
         const chapter = await chapterService.createChapter({
@@ -21,12 +20,12 @@ export const createChapter = async (req, res, next) => {
             name,
             bookId,
             isMids,
-            imageFile,
-            imageFilesArray,
+            imageFile: coverImageCloudinary,   
+            imageFilesArray: localImageFiles,  
         });
 
         return successResponse(res, {
-            message: 'Chapter created successfully!',
+            message: "Chapter created successfully!",
             chapter,
         }, 201);
 
@@ -108,7 +107,7 @@ export const deleteChapter = async (req, res, next) => {
         if (!chapterId) {
             throw new ApiError(400, "Chapter ID is required", "VALIDATION_ERROR");
         }
-                 
+
         const deleted = await chapterService.deleteChapter(userId, chapterId);
 
         return successResponse(res, { message: "Chapter deleted successfully", chapter: deleted });

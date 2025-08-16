@@ -12,6 +12,7 @@ import imageRoutes from './routes/Image.route.js'
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { cloudinaryConnect } from './config (db connect)/cloudinary.config.js';
+import path from 'path';
 
 const options = {
     origin: 'http://localhost:5173',
@@ -22,6 +23,7 @@ const options = {
 app.use(cors(options))
 app.use(express.json());
 app.use(cookieParser());
+app.use("/public", express.static(path.join(process.cwd(), "public")));
 
 // connect to mongodb
 const startServer = async () => {

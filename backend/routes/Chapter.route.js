@@ -2,18 +2,22 @@ import express from 'express';
 import * as chapterController from '../controllers/chapter.controller.js'
 import auth from '../middleware/auth.js';
 import upload from '../middleware/multer.js';
+import uploadChapter from '../middleware/multerLocal.js';
 
 const router = express.Router();
 
 router.use(auth);
 
+const multiUpload = uploadChapter.fields([
+  { name: "image", maxCount: 1 },     // cover image
+  { name: "images", maxCount: 10 }    // multiple chapter images
+]);
+
+
 router.post(
-    '/create',
-    upload.fields([
-        { name: 'image', maxCount: 1 },       // Cover image
-        { name: 'images', maxCount: 10 },     // Multiple chapter images
-    ]),
-    chapterController.createChapter
+  "/create",
+  multiUpload,
+  chapterController.createChapter
 );
 
 router.get('/getAllChapters', chapterController.getUserChapters);
