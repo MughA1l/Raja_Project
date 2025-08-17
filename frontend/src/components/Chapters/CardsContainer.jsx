@@ -1,18 +1,8 @@
 import React, { useState } from 'react'
 import Card from './Card.jsx';
-import { chapters } from '../../placeholder/ChapterData.js';
-import { useParams } from 'react-router-dom';
+// import { chapters } from '../../placeholder/ChapterData.js';
 
-const CardsContainer = () => {
-    const { bookId } = useParams();
-
-    if (!bookId) {
-        // search all the chapters of the user from db
-    }
-    else {
-        // search chapters for specific chapter
-        console.log('book to find in the backend: ' + bookId)
-    }
+const CardsContainer = ({chapters}) => {
 
     const [openCardIndex, setOpenCardIndex] = useState(null);
 

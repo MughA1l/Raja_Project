@@ -31,7 +31,7 @@ const Books = () => {
       {isDrawerOpen && <div className="absolute inset-0 h-screen w-screen z-0 bg-black/30"
         onClick={() => setIsDrawerOpen(!isDrawerOpen)}
       ></div>}
-      
+
     </div>
   )
 }

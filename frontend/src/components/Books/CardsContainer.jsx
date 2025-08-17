@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
-import { books } from '../../placeholder/Books.data';
+import React, { useEffect, useState } from 'react';
+// import { books } from '../../placeholder/Books.data';
 import Card from './Card';
+import { toast } from 'react-toastify';
+import { getAllBooksByUser } from '../../api/services/bookService';
 
 const CardsContainer = () => {
+
     const [openCardIndex, setOpenCardIndex] = useState(null);
+
+    // state to hold all the books
+    const [books, setBooks] = useState([]);
 
     const handleCardClick = (index) => {
         setOpenCardIndex(index === openCardIndex ? null : index);
@@ -12,6 +18,25 @@ const CardsContainer = () => {
     const handleCloseOptions = () => {
         setOpenCardIndex(null);
     };
+
+    const getAllBooks = async () => {
+        try {
+            let books = await getAllBooksByUser();
+
+            if (books.success) {
+                setBooks(books.data);
+            }
+        } catch (error) {
+            console.log('Error', error);
+            toast.error('Failed to get Books')
+        }
+    }
+
+    useEffect(() => {
+        getAllBooks()
+    }, [])
+
+
 
     return (
         <div className='pt-10 relative'>

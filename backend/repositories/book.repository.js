@@ -8,9 +8,9 @@ export const createBook = async (bookData) => {
 
     return savedBook;
   } catch (error) {
-    
+
     if (error.code === 11000) {
-      return ApiError(500, "A book with this name already exists for this user.")
+      throw new ApiError(500, "A book with this name already exists for this user.")
     }
     throw new ApiError(500, "Failed to created Book", "CREATE_BOOK")
   }
@@ -19,7 +19,7 @@ export const createBook = async (bookData) => {
 export const getBooksByUser = async (userId) => {
   try {
     return await Book.find({ userId })
-    // .populate('chapters');
+    .populate('chapters');
   } catch (error) {
     throw new ApiError(500, `Error fetching books for user: ${error.message}`, "ALL_BOOKS");
   }
@@ -28,7 +28,7 @@ export const getBooksByUser = async (userId) => {
 export const findBookById = async (bookId) => {
   try {
     return await Book.findById({ _id: bookId })
-    // .populate('chapters');
+    .populate('chapters');
   } catch (error) {
     throw new ApiError(500, `Error fetching book by ID: ${error.message}`, "SINGLE_BOOK");
   }

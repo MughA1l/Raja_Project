@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Heart, ListEnd, PencilLine } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Card = ({ book, showOptions, onClick }) => {
-    const navigate = useNavigate();
     const [isFav, setIsFav] = useState(book?.isFavourite);
+    const navigate = useNavigate();
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -15,11 +15,16 @@ const Card = ({ book, showOptions, onClick }) => {
         });
     }
 
+    const handleBookClick = () => {
+        const chapters = book?.chapters;
+        navigate(`/Books/${book?._id}/Chapters`, { state: { chapters } })
+    }
+
     if (!book) return null;
 
     return (
-        <Link className={`bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 cursor-pointer ${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} ease-in-out duration-300 mb-3 relative`}
-            to={`/Books/${book?._id}/Chapters`}
+        <div className={`bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 cursor-pointer ${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} ease-in-out duration-300 mb-3 relative`}
+            onClick={handleBookClick}
         >
             {/* image */}
             <div className='h-7/12 w-full rounded-2xl overflow-hidden relative'>
@@ -37,18 +42,18 @@ const Card = ({ book, showOptions, onClick }) => {
             <div className='pt-5 px-2 pb-2'>
                 {/* to show the creation date */}
                 <div className='text-[11px] text-black/40 font-medium'>
-                    {formatDate(book.createdAt)}
+                    {formatDate(book?.createdAt)}
                 </div>
                 {/* show the title */}
                 <div className='font-semibold pt-1 line-clamp-1 w-full break-all'>
-                    {book.Name}
+                    {book.name}
                 </div>
 
                 {/* to show the chapters count */}
                 <div className="flex items-center gap-1 pt-1 font-medium">
                     <ListEnd className='text-black/60' size={16} />
                     <div className='text-xs'>
-                        {book.chaptersCount}&nbsp;
+                        {book?.chapters?.length}&nbsp;
                         <span>Chapters</span>
                     </div>
                 </div>
@@ -56,9 +61,9 @@ const Card = ({ book, showOptions, onClick }) => {
 
             {/* slider */}
             <div className='w-full px-2 flex items-center gap-2'>
-                <progress className="progress progress-secondary w-7/12" value={book.completionPercentage} max="100"></progress>
+                <progress className="progress progress-secondary w-7/12" value={book.completionPercentage ? book.completionPercentage : 20} max="100"></progress>
                 <span className='text-sm font-semibold'>
-                    {book.completionPercentage}%
+                    {book.completionPercentage ? book.completionPercentage : 20}%
                 </span>
             </div>
 
@@ -80,7 +85,7 @@ const Card = ({ book, showOptions, onClick }) => {
             <div className='absolute top-5 left-4 px-2 py-1 rounded-xl bg-[#f5f5f5] text-[12px] font-medium'>
                 {book.isCompleted ? 'Complete' : 'InComplete'}
             </div>
-        </Link>
+        </div>
     );
 };
 

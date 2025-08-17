@@ -46,7 +46,7 @@ const Card = ({ chapter, showOptions, onClick }) => {
                     </div>
                     {/* show the title */}
                     <div className='font-semibold pt-1 line-clamp-2 w-full break-all'>
-                        {chapter?.Name}
+                        {chapter?.name}
                     </div>
                 </div>
 
@@ -57,7 +57,7 @@ const Card = ({ chapter, showOptions, onClick }) => {
                             <ImageDown size={18} />
                             <span className='text-sm font-medium'>
                                 {
-                                    chapter?.imageCount
+                                    chapter?.images?.length
                                 }
                             </span>
                         </span>
@@ -66,7 +66,7 @@ const Card = ({ chapter, showOptions, onClick }) => {
                             <FileText size={18} />
                             <span className='text-sm font-medium'>
                                 {
-                                    chapter?.ocrCount
+                                    chapter?.images?.length
                                 }
                             </span>
                         </span>
@@ -75,7 +75,7 @@ const Card = ({ chapter, showOptions, onClick }) => {
                             <ScanText size={18} />
                             <span className='text-sm font-medium'>
                                 {
-                                    chapter?.enhancedTextCount
+                                    chapter?.images?.length
                                 }
                             </span>
                         </span>
@@ -84,9 +84,9 @@ const Card = ({ chapter, showOptions, onClick }) => {
 
                     {/* start and progress */}
                     <div className='w-full px-2 flex items-center gap-3'>
-                        <progress className="progress progress-secondary w-11/12" value={chapter.completionPercentage} max="100"></progress>
+                        <progress className="progress progress-secondary w-11/12" value={chapter.completionPercentage ? chapter.completionPercentage : 19} max="100"></progress>
                         <span className='text-sm font-semibold'>
-                            {chapter.completionPercentage}%
+                            {chapter.completionPercentage ? chapter.completionPercentage : 19}%
                         </span>
                     </div>
                 </div>

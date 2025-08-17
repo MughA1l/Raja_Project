@@ -1,8 +1,10 @@
 import React, { useRef, useState } from 'react'
+import { createBook } from '../../api/services/bookService'
+import { showError, showSuccess } from '../../utils/toast';
 
 const CreateBookDrawer = ({ isOpen, onClose }) => {
   const fileInputRef = useRef(null)
-  const [selectedImage, setSelectedImage] = useState(null)
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageSelect = (e) => {
     const file = e.target.files[0]
@@ -15,26 +17,35 @@ const CreateBookDrawer = ({ isOpen, onClose }) => {
     fileInputRef.current.click()
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const formData = {
-      name: e.target.name.value,
-      image: selectedImage,
+    const file = fileInputRef.current.files[0];
+    if (!file) {
+      showError("Please select an image");
+      return;
     }
 
-    console.log('Book Data:', formData)
+    const formData = new FormData();
+    formData.append("name", e.target.name.value);
+    formData.append("image", file);
 
-    // TODO: Submit this data to your backend or update state
+    try {
+      const creation = await createBook(formData);
+      if (creation.success) {
+        showSuccess("Created Book successfully");
+        onClose();
+      }
+    } catch (err) {
+      console.error("Error creating book:", err);
+    }
+  };
 
-    onClose()
-  }
 
   return (
     <div
-      className={`fixed top-0 right-0 h-screen w-96 bg-base-100 shadow-lg z-50 transform transition-all duration-500 ${
-        isOpen ? 'translate-x-0' : 'translate-x-full'
-      }`}
+      className={`fixed top-0 right-0 h-screen w-96 bg-base-100 shadow-lg z-50 transform transition-all duration-500 ${isOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
     >
       {/* Overlay */}
       {isOpen && (

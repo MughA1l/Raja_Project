@@ -1,10 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/Chapters/Header';
 import CardsContainer from '../../components/Chapters/CardsContainer';
 import CreateChapterDrawer from '../../components/Chapters/CreateChapterDrawer';
+import { useLocation, useParams } from 'react-router-dom';
 
 const Chapters = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { state } = useLocation();
+
+  const [chapters, setChapters] = useState(state?.chapters);
+
+  const bookId = useParams();
+  console.log(chapters);
+
+  if (!chapters) <div>
+    No chapters found.
+  </div>
 
   return (
     <div className=''>
@@ -14,7 +25,7 @@ const Chapters = () => {
         <Header onCreateClick={() => setIsDrawerOpen(true)} />
 
         {/* cards container */}
-        <CardsContainer />
+        <CardsContainer chapters={chapters}/>
 
       </div>
       {/* Drawer */}
@@ -27,7 +38,7 @@ const Chapters = () => {
       {isDrawerOpen && <div className="absolute inset-0 h-screen w-screen z-0 bg-black/30"
         onClick={() => setIsDrawerOpen(!isDrawerOpen)}
       ></div>}
-      
+
     </div>
   )
 }
