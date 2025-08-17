@@ -9,10 +9,9 @@ const router = express.Router();
 router.use(auth);
 
 const multiUpload = uploadChapter.fields([
-  { name: "image", maxCount: 1 },     // cover image
-  { name: "images", maxCount: 10 }    // multiple chapter images
+  { name: "image", maxCount: 1 },     
+  { name: "images", maxCount: 10 }
 ]);
-
 
 router.post(
   "/create",

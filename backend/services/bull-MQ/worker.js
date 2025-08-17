@@ -26,13 +26,13 @@ export const worker = new Worker(
   'image-processing',
   async (job) => {
     try {
-      const { imageId, url } = job.data;
+      const { imageId, localPath } = job.data;
       console.log(`🚀 Starting job for image: ${imageId}`);
 
       // STEP 1: Extract text
       await job.updateProgress(10);
       console.log(`[10%] Extracting text from image...`);
-      const extractedText = await extractTextFromCloudinaryUrl(url);
+      const extractedText = await extractTextFromCloudinaryUrl(localPath);
 
       // STEP 2: Gemini processing
       await job.updateProgress(40);

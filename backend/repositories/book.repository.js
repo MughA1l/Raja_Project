@@ -8,6 +8,10 @@ export const createBook = async (bookData) => {
 
     return savedBook;
   } catch (error) {
+    
+    if (error.code === 11000) {
+      return ApiError(500, "A book with this name already exists for this user.")
+    }
     throw new ApiError(500, "Failed to created Book", "CREATE_BOOK")
   }
 };
@@ -49,7 +53,7 @@ export const deleteBookById = async (bookId) => {
     if (!book) {
       throw new ApiError(404, 'Book not found', 'BOOK_NOT_FOUND');
     }
-    
+
     // Trigger pre('deleteOne') hook
     await book.deleteOne();
 

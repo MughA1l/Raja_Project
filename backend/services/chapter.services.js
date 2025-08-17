@@ -7,27 +7,38 @@ import * as imageRepo from '../repositories/image.repository.js'
 // book repository function
 import { findBookById } from '../repositories/book.repository.js';
 import { imageQueue } from './bull-MQ/producer.js';
+import fs from "fs/promises";
 
 export const createChapter = async ({
     userId,
     name,
     bookId,
     isMids,
-    imageFile,          // cover image (cloudinary)
+    imageFile,          // cloudinary cover image of chapter
     imageFilesArray,    // chapter images (local first, then cloudinary)
 }) => {
-    // 1. Ensure book exists
+
+    // Ensure book exists
     const bookExists = await findBookById(bookId);
     if (!bookExists) {
         throw new ApiError(404, "No Book found with the given ID", "BOOK_NOT_FOUND");
     }
 
-    // 2. Upload cover image to Cloudinary
+    // Upload cover image to Cloudinary
     const coverImageUpload = await getCloudinaryUrl(imageFile.path);
     const coverImageUrl = coverImageUpload?.url;
     if (!coverImageUrl) throw new ApiError(500, "Cover image upload failed");
 
-    // 3. Create chapter without images first
+
+    // delete local cover file
+    try {
+        await fs.unlink(imageFile.path);
+        console.log(`Deleted local cover image: ${imageFile.path}`);
+    } catch (err) {
+        console.error("Failed to delete cover image:", err);
+    }
+
+    // Create chapter without images first
     const initialChapter = await chapterRepo.createChapter({
         userId,
         bookId,
@@ -37,11 +48,12 @@ export const createChapter = async ({
         images: [],
     });
 
-    // 4. Upload chapter images to Cloudinary + create Image docs
+    // Upload chapter images to Cloudinary + create Image docs
     const imageIds = [];
 
     for (const file of imageFilesArray) {
-        // Upload to Cloudinary for persistence
+
+        // Upload to Cloudinary
         const uploaded = await getCloudinaryUrl(file.path);
         if (!uploaded?.url) {
             throw new ApiError(
@@ -56,24 +68,25 @@ export const createChapter = async ({
             userId,
             chapterId: initialChapter._id,
             name: `${Date.now()}-${file.originalname}`,
-            url: uploaded.url, // permanent Cloudinary URL
+            url: uploaded.url, // cloudinary
         });
 
-        // ✅ Queue worker with local path for fast OCR
+
+        // Queue worker with local path for fast OCR
         await imageQueue.add("process-image", {
             imageId: imageDoc._id.toString(),
-            url: uploaded.url, // local path for OCR
+            localPath: file.path,
             userId,
         });
 
         imageIds.push(imageDoc._id);
     }
 
-    // 5. Update chapter with image references
+    // Update chapter with image references
     initialChapter.images = imageIds;
     await initialChapter.save();
 
-    // 6. Push chapter into book
+    // Push chapter into book
     await addChapterToBook(bookId, initialChapter._id);
 
     return initialChapter;

@@ -8,8 +8,8 @@ export const createChapter = async (req, res, next) => {
         const { name, bookId, isMids } = req.body;
         const userId = req.user?.userId;
 
-        const coverImageCloudinary = req.files?.image?.[0] || null; // single file
-        const localImageFiles = req.files?.images || [];            // multiple files
+        const coverImageCloudinary = req.files?.image?.[0] || null;
+        const localImageFiles = req.files?.images || [];
 
         if (!name || !bookId || typeof isMids === "undefined" || !coverImageCloudinary) {
             throw new ApiError(400, "All required fields must be provided", "MISSING_FIELDS");
@@ -20,8 +20,8 @@ export const createChapter = async (req, res, next) => {
             name,
             bookId,
             isMids,
-            imageFile: coverImageCloudinary,   
-            imageFilesArray: localImageFiles,  
+            imageFile: coverImageCloudinary,
+            imageFilesArray: localImageFiles,
         });
 
         return successResponse(res, {
