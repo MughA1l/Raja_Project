@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-// import { books } from '../../placeholder/Books.data';
 import Card from './Card';
 import { toast } from 'react-toastify';
-import { getAllBooksByUser } from '../../api/services/bookService';
+import { getAllBooksByUser, deleteBook } from '../../api/services/bookService';
+import { showSuccess } from '../../utils/toast';
+import ConfirmationModal from '../general/ConfirmationModal.jsx';
 
 const CardsContainer = () => {
-
     const [openCardIndex, setOpenCardIndex] = useState(null);
-
-    // state to hold all the books
     const [books, setBooks] = useState([]);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedBook, setSelectedBook] = useState(null);
+
+    const [loading, setLoading] = useState(false);
+
 
     const handleCardClick = (index) => {
         setOpenCardIndex(index === openCardIndex ? null : index);
@@ -19,36 +22,87 @@ const CardsContainer = () => {
         setOpenCardIndex(null);
     };
 
+    const handleDeleteBook = (book) => {
+        setSelectedBook(book);
+        setIsDeleteModalOpen(true);
+    };
+
+    const onCancel = () => {
+        setIsDeleteModalOpen(false);
+        setSelectedBook(null);
+    };
+
+    const onConfirm = async () => {
+        try {
+            if (selectedBook) {
+                const response = await deleteBook(selectedBook._id);
+                if (response.success) {
+                    showSuccess('Book deleted successfully');
+                    setBooks((prev) => prev.filter((b) => b._id !== selectedBook._id));
+                }
+            }
+        } catch (error) {
+            console.log('Error', error);
+            toast.error('Failed to delete book');
+        }
+        setIsDeleteModalOpen(false);
+        setSelectedBook(null);
+    };
+
     const getAllBooks = async () => {
         try {
+            setLoading(true);
             let books = await getAllBooksByUser();
-
             if (books.success) {
                 setBooks(books.data);
             }
         } catch (error) {
             console.log('Error', error);
-            toast.error('Failed to get Books')
+            toast.error('Failed to get Books');
         }
-    }
+        finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        getAllBooks()
-    }, [])
-
-
+        getAllBooks();
+    }, []);
 
     return (
         <div className='pt-10 relative'>
             <div className='grid grid-cols-4 gap-3'>
-                {books.map((singleBook, index) => (
+                {!loading ? books.map((singleBook, index) => (
                     <Card
-                        key={index} // Using index as a fallback key
+                        key={singleBook._id}
                         book={singleBook}
                         showOptions={openCardIndex === index}
                         onClick={() => handleCardClick(index)}
+                        onDelete={() => handleDeleteBook(singleBook)}
                     />
-                ))}
+                )) :
+                    Array.from({ length: 4 }).map((_, index) => <div className="bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 mb-3 relative">
+                        <div className="h-7/12 w-full rounded-2xl overflow-hidden">
+                            <div className="skeleton h-full w-full"></div>
+                        </div>
+                        <div className="pt-5 px-2 pb-2 space-y-2">
+                            <div className="skeleton h-3 w-24"></div>
+                            <div className="skeleton h-4 w-32"></div>
+                            <div className="skeleton h-4 w-20"></div>
+                        </div>
+                        <div className="w-full px-2 flex items-center gap-2">
+                            <div className="skeleton h-3 w-7/12 rounded-full"></div>
+                            <div className="skeleton h-3 w-10"></div>
+                        </div>
+                        <div className="absolute bottom-4 right-3">
+                            <div className="skeleton h-8 w-8 rounded-lg"></div>
+                        </div>
+                        <div className="absolute top-5 left-4">
+                            <div className="skeleton h-5 w-20 rounded-lg"></div>
+                        </div>
+                    </div>
+                    )
+                }
             </div>
 
             {openCardIndex !== null && (
@@ -57,6 +111,14 @@ const CardsContainer = () => {
                     onClick={handleCloseOptions}
                 ></div>
             )}
+
+            <ConfirmationModal
+                isOpen={isDeleteModalOpen}
+                title={`Are you sure you want to delete ${selectedBook?.name} Book?`}
+                para="By deleting this book you will lose all the material inside including Chapters, Images, OCR,Youtube Suggestions."
+                onCancel={onCancel}
+                onConfirm={onConfirm}
+            />
         </div>
     );
 };

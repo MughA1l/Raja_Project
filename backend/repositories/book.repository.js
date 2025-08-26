@@ -19,20 +19,34 @@ export const createBook = async (bookData) => {
 export const getBooksByUser = async (userId) => {
   try {
     return await Book.find({ userId })
-    .populate('chapters');
+      .populate({
+        path: 'chapters', 
+        populate: {
+          path: 'images',   // populate images inside chapters
+          model: 'Image'
+        }
+      });
   } catch (error) {
     throw new ApiError(500, `Error fetching books for user: ${error.message}`, "ALL_BOOKS");
   }
 };
 
+
 export const findBookById = async (bookId) => {
   try {
     return await Book.findById({ _id: bookId })
-    .populate('chapters');
+      .populate({
+        path: 'chapters',
+        populate: {
+          path: 'images',   // populate images inside chapters
+          model: 'Image'
+        }
+      });
   } catch (error) {
     throw new ApiError(500, `Error fetching book by ID: ${error.message}`, "SINGLE_BOOK");
   }
 };
+
 
 export const updateBookById = async (bookId, updateData) => {
   try {

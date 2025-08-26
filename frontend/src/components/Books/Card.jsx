@@ -1,30 +1,38 @@
 import React, { useState } from 'react';
 import { Heart, ListEnd, PencilLine } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { formateDate } from '../../utils/formateDate.js';
+import { updateBook } from '../../api/services/bookService.js';
 
-const Card = ({ book, showOptions, onClick }) => {
+const Card = ({ book, showOptions, onClick, onDelete }) => {
     const [isFav, setIsFav] = useState(book?.isFavourite);
     const navigate = useNavigate();
 
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-    }
+    //  handle fav click
+    const handleFavClick = async (e) => {
+        e.stopPropagation();
+        // API Call can be made here to update fav status in DB
+        const payload = { isFavourite: !isFav };
+        try {
+            const updation = await updateBook(book._id, payload);
+            if (updation.success) {
+                setIsFav((prev) => !prev);
+            }
+        } catch (error) {
+            console.log('Error', error);
+        }
 
-    const handleBookClick = () => {
-        const chapters = book?.chapters;
-        navigate(`/Books/${book?._id}/Chapters`, { state: { chapters } })
-    }
+    };
 
     if (!book) return null;
 
     return (
-        <div className={`bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 cursor-pointer ${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} ease-in-out duration-300 mb-3 relative`}
-            onClick={handleBookClick}
+        <div
+            className={`bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 cursor-pointer ${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} ease-in-out duration-300 mb-3 relative`}
+            onClick={() => {
+                const chapters = book?.chapters;
+                navigate(`/Books/${book?._id}/Chapters`, { state: { chapters } });
+            }}
         >
             {/* image */}
             <div className='h-7/12 w-full rounded-2xl overflow-hidden relative'>
@@ -33,23 +41,19 @@ const Card = ({ book, showOptions, onClick }) => {
                     <Heart
                         className={`text-light-pink/80 duration-200 ${isFav ? 'fill-light-pink' : ' hover:fill-light-pink/30'}`}
                         size={26}
-                        onClick={() => setIsFav(!isFav)}
+                        onClick={handleFavClick}
                     />
                 </span>
             </div>
 
             {/* content section */}
             <div className='pt-5 px-2 pb-2'>
-                {/* to show the creation date */}
                 <div className='text-[11px] text-black/40 font-medium'>
-                    {formatDate(book?.createdAt)}
+                    {formateDate(book?.createdAt)}
                 </div>
-                {/* show the title */}
                 <div className='font-semibold pt-1 line-clamp-1 w-full break-all'>
                     {book.name}
                 </div>
-
-                {/* to show the chapters count */}
                 <div className="flex items-center gap-1 pt-1 font-medium">
                     <ListEnd className='text-black/60' size={16} />
                     <div className='text-xs'>
@@ -61,29 +65,37 @@ const Card = ({ book, showOptions, onClick }) => {
 
             {/* slider */}
             <div className='w-full px-2 flex items-center gap-2'>
-                <progress className="progress progress-secondary w-7/12" value={book.completionPercentage ? book.completionPercentage : 20} max="100"></progress>
+                <progress className="progress progress-secondary w-7/12" value={book.completionPercentage || 20} max="100"></progress>
                 <span className='text-sm font-semibold'>
-                    {book.completionPercentage ? book.completionPercentage : 20}%
+                    {book.completionPercentage || 20}%
                 </span>
             </div>
 
             {/* edit/delete options */}
             <div
                 className="flex items-center justify-center absolute bottom-4 right-3 rounded-xl p-[9px] bg-dark-blue/90 hover:bg-dark-blue duration-100 z-50"
-                onClick={onClick}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onClick?.();
+                }}
             >
                 <PencilLine size={16} color='white' />
                 {showOptions && (
                     <div className='absolute z-50 -top-16 w-fit -left-20 shadow-md border border-black/10 bg-white text-sm rounded-xl flex flex-col items-start justify-start font-medium text-dark-blue'>
                         <span className='w-full px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'>Edit</span>
-                        <span className='px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'>Delete</span>
+                        <span
+                            className='px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'
+                            onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                        >
+                            Delete
+                        </span>
                     </div>
                 )}
             </div>
 
-            {/* to show complete/ incomplete */}
+            {/* complete/incomplete */}
             <div className='absolute top-5 left-4 px-2 py-1 rounded-xl bg-[#f5f5f5] text-[12px] font-medium'>
-                {book.isCompleted ? 'Complete' : 'InComplete'}
+                {book.isCompleted ? 'Complete' : 'Incomplete'}
             </div>
         </div>
     );

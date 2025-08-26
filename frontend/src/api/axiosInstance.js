@@ -4,8 +4,8 @@ import { getToken, setToken, removeToken } from '../utils/token';
 import { logoutUser } from '../api/services/authService.js'
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api',
-  withCredentials: true, // to send cookies
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api',
+  withCredentials: true,
 });
 
 // Request Interceptor: Add access token
