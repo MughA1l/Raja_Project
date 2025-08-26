@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import SingleImageContainer from '../../components/SingleChapter/ImageContainer';
 import TextContainer from '../../components/SingleChapter/TextContainer';
 import AllImagesContainer from '../../components/SingleChapter/AllImagesContainer';
-import { singleChapterData } from '../../placeholder/SingleChapter.data';
 
 const PreviewChapter = () => {
   const { chapterId } = useParams();
-  const [images, setImages] = useState(singleChapterData);
+  const location = useLocation();
+  const [images, setImages] = useState(location.state?.images || []);
   const [selectedImage, setSelectedImage] = useState(1);
 
   const getAllImages = async () => {

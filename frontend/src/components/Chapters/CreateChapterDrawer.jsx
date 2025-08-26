@@ -1,11 +1,18 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { FiTrash2 } from 'react-icons/fi'
+import { getAllBooksByUser } from '../../api/services/bookService'
+import { showSuccess } from '../../utils/toast'
+import { createChapter } from '../../api/services/chapterService'
 
 const CreateChapterDrawer = ({ isOpen, onClose }) => {
     const fileInputRef = useRef(null)
     const [selectedImage, setSelectedImage] = useState(null)
     const [examType, setExamType] = useState('')
     const [chapterImages, setChapterImages] = useState([])
+
+    const [books, setBooks] = useState([])
+    const [selectedBookId, setSelectedBookId] = useState('')
+
 
     const handleImageSelect = (e) => {
         const file = e.target.files[0]
@@ -53,22 +60,45 @@ const CreateChapterDrawer = ({ isOpen, onClose }) => {
         e.preventDefault()
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
+        const formData = new FormData();
 
-        const formData = {
-            name: e.target.name.value,
-            image: selectedImage,
-            examType,
-            additionalImages: chapterImages.map((img) => img.file), // Send files, not blobs
+        formData.append("bookId", selectedBookId)
+        formData.append('name', e.target.name.value);
+        formData.append("image", fileInputRef.current.files[0])
+        formData.append("isMids", examType === "Mids")
+        chapterImages.forEach((img) => {
+            formData.append("images", img.file) // multiple images
+        })
+
+        try {
+            const res = await createChapter(formData)
+            if (res.success) {
+                showSuccess("Chapter created successfully");
+            }
+
+        } catch (error) {
+            console.error("Error creating chapter:", error)
         }
-
-        console.log('Chapter Data:', formData)
-
-        // TODO: Submit to backend
-
-        onClose()
     }
+
+    useEffect(() => {
+        const fetchBooks = async () => {
+            try {
+                const data = await getAllBooksByUser();
+                if (data.success) {
+                    setBooks(data.data);
+                }
+            } catch (err) {
+                console.error("Error fetching books:", err);
+            }
+        };
+
+        if (isOpen) {
+            fetchBooks();
+        }
+    }, [isOpen]);
 
     return (
         <div
@@ -133,6 +163,27 @@ const CreateChapterDrawer = ({ isOpen, onClose }) => {
                             </div>
                         )}
                     </div>
+
+                    {/* Select Book */}
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text font-medium">Select Book</span>
+                        </label>
+                        <select
+                            className="select select-bordered w-full mt-2"
+                            required
+                            value={selectedBookId}
+                            onChange={(e) => setSelectedBookId(e.target.value)}
+                        >
+                            <option value="" disabled>Select a book</option>
+                            {books.map((book) => (
+                                <option key={book._id} value={book._id}>
+                                    {book.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
 
                     {/* Exam Type */}
                     <div className="form-control">

@@ -1,7 +1,6 @@
 
 import axios from '../axiosInstance.js';
 
-
 // requirements => name (text => unique),image
 
 export const createBook = async (payload) => {

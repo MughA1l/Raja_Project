@@ -1,25 +1,19 @@
 import React, { useState } from 'react'
 import { FileText, Heart, ImageDown, PencilLine, ScanText } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { formateDate } from '../../utils/formateDate.js';
 
 const Card = ({ chapter, showOptions, onClick }) => {
     const [isFav, setIsFav] = useState(chapter?.isFavourite);
+    const navigate = useNavigate();
 
     if (!chapter) return null;
 
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
-    }
     return (
-        <Link className={`${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} col-span-1 h-72 mb-14 p-2 pb-3 bg-white shadow-md shadow-black/5 rounded-2xl relative cursor-pointer`}
-            to={`/Chapters/:${chapter?._id}`}
+        <div
+            className={`${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} col-span-1 h-72 mb-14 p-2 pb-3 bg-white shadow-md shadow-black/5 rounded-2xl relative cursor-pointer`}
+            onClick={() => navigate(`/Chapters/${chapter?._id}`, { state: { images: chapter?.images } })}
         >
-
             {/* div to show the image */}
             <div className='absolute left-1/2 -translate-x-1/2 -top-9 inset-x-0 h-40 w-11/12 rounded-2xl overflow-hidden shadow-md'>
                 <img src={chapter?.image} className='h-full w-full object-cover' alt="chapter-image" />
@@ -32,7 +26,10 @@ const Card = ({ chapter, showOptions, onClick }) => {
                     <Heart
                         className={`text-light-pink/80 duration-200 ${isFav ? 'fill-light-pink' : ' hover:fill-light-pink/30'}`}
                         size={26}
-                        onClick={() => setIsFav(!isFav)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsFav(!isFav);
+                        }}
                     />
                 </span>
             </div>
@@ -42,7 +39,7 @@ const Card = ({ chapter, showOptions, onClick }) => {
                 {/* to show the creation date */}
                 <div>
                     <div className='text-[11px] text-black/40 font-medium'>
-                        {formatDate(chapter?.createdAt)}
+                        {formateDate(chapter?.createdAt)}
                     </div>
                     {/* show the title */}
                     <div className='font-semibold pt-1 line-clamp-2 w-full break-all'>
@@ -56,30 +53,23 @@ const Card = ({ chapter, showOptions, onClick }) => {
                         <span className='text-black/60 flex items-center justify-center gap-1'>
                             <ImageDown size={18} />
                             <span className='text-sm font-medium'>
-                                {
-                                    chapter?.images?.length
-                                }
+                                {chapter?.images?.length}
                             </span>
                         </span>
 
                         <span className='text-black/60 flex items-center justify-center py-3 gap-1'>
                             <FileText size={18} />
                             <span className='text-sm font-medium'>
-                                {
-                                    chapter?.images?.length
-                                }
+                                {chapter?.images?.length}
                             </span>
                         </span>
 
                         <span className='text-black/60 flex items-center justify-center py-3 gap-1'>
                             <ScanText size={18} />
                             <span className='text-sm font-medium'>
-                                {
-                                    chapter?.images?.length
-                                }
+                                {chapter?.images?.length}
                             </span>
                         </span>
-
                     </div>
 
                     {/* start and progress */}
@@ -94,7 +84,10 @@ const Card = ({ chapter, showOptions, onClick }) => {
                 {/* edit/delete options */}
                 <div
                     className="flex items-center justify-center absolute top-20 right-5 rounded-lg p-[9px] bg-white hover:opacity-90 duration-100 z-50"
-                    onClick={onClick}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onClick?.();
+                    }}
                 >
                     <PencilLine size={15} color='black' />
                     {showOptions && (
@@ -104,10 +97,8 @@ const Card = ({ chapter, showOptions, onClick }) => {
                         </div>
                     )}
                 </div>
-
             </div>
-
-        </Link>
+        </div>
     )
 }
 
