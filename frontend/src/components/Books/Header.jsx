@@ -1,18 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Plus, Search } from 'lucide-react';
 
-const Header = ({ onCreateClick }) => {
-  const [selected, setSelected] = useState(0);
+const Header = ({ onCreateClick,selected,setSelected,tabOptions }) => {
+  
   const [underlineStyle, setUnderlineStyle] = useState({});
   const tabRefs = useRef([]);
-
-  const tabOptions = [
-    { label: "All Books", count: "03" },
-    { label: "Complete", count: "20" },
-    { label: "InComplete", count: "25" },
-    { label: "Favourite", count: "06" },
-
-  ];
 
   useEffect(() => {
     if (tabRefs.current[selected]) {

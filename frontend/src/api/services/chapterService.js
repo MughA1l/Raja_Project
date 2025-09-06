@@ -12,3 +12,12 @@ export const createChapter = async (payload) => {
     });
     return res.data;
 }
+
+// reqirements => id of the book to delete and token that axios Instance will handle on it's own.
+
+export const deleteChapter = async (id) => {
+    console.log(id)
+    const res = await axios.delete(`/chapters/deleteChapter/${id}`);
+
+    return res.data;
+}

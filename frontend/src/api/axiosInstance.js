@@ -38,6 +38,8 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
     const errorType = error?.response?.data?.error?.type;
 
+    console.log(errorType)
+
     // ACCESS_TOKEN_EXPIRED: try retrying after backend gives new access token
     if (
       errorType === 'ACCESS_TOKEN_EXPIRED' &&
@@ -56,7 +58,7 @@ axiosInstance.interceptors.response.use(
         // Refresh token failed or expired —> force logout
         await logoutUser();
         removeToken();
-        window.location.href = '/login';
+        window.location.href = 'http://localhost:5173/login';
       }
     }
 

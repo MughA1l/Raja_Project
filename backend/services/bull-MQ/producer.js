@@ -6,6 +6,6 @@ export const imageQueue = new Queue('image-processing', {
 });
 
 // Called inside createChapter or addImages service
-export async function queueImageProcessing({ imageId, imageUrl }) {
-  await imageQueue.add('process-image', { imageId, imageUrl });
+export async function queueImageProcessing({ imageId, localPath }) {
+  await imageQueue.add('process-image', { imageId, localPath });
 }

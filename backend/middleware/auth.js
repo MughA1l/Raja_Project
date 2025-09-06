@@ -10,16 +10,18 @@ const auth = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new ApiError(401, 'Access token is missing', 'UNAUTHORIZED');
+      throw new ApiError(401, 'Access token is missing', 'ACCESS_TOKEN_EXPIRED');
     }
 
     const accessToken = authHeader.split(' ')[1];
+
 
     try {
       // 2. Try verifying the access token
       const decoded = jwt.verify(accessToken, jwtConfig.secret);
       req.user = decoded; // { userId, email }
-      return next(); // ✅ Token valid — proceed to route handler
+
+      return next(); // Token valid — proceed to route handler
     } catch (err) {
       if (err.name !== 'TokenExpiredError') {
         // Invalid token (not expired), block access
@@ -28,6 +30,7 @@ const auth = async (req, res, next) => {
 
       // 3. If token expired, check refresh token from cookies
       const refreshToken = req.cookies?.refreshToken;
+
 
       if (!refreshToken) {
         throw new ApiError(401, 'Access token expired & refresh token missing', 'ACCESS_TOKEN_EXPIRED');

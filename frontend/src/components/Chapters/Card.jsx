@@ -3,11 +3,15 @@ import { FileText, Heart, ImageDown, PencilLine, ScanText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { formateDate } from '../../utils/formateDate.js';
 
-const Card = ({ chapter, showOptions, onClick }) => {
+const Card = ({ chapter, showOptions, onClick, onDelete }) => {
     const [isFav, setIsFav] = useState(chapter?.isFavourite);
     const navigate = useNavigate();
 
     if (!chapter) return null;
+
+    const handleDeleteChapter=()=>{
+        onDelete();
+    }
 
     return (
         <div
@@ -93,7 +97,9 @@ const Card = ({ chapter, showOptions, onClick }) => {
                     {showOptions && (
                         <div className='absolute z-50 -top-16 w-fit -left-20 shadow-md border border-black/10 bg-white text-sm rounded-xl flex flex-col items-start justify-start font-medium text-dark-blue'>
                             <span className='w-full px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'>Edit</span>
-                            <span className='px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'>Delete</span>
+                            <span className='px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'
+                            onClick={handleDeleteChapter}
+                            >Delete</span>
                         </div>
                     )}
                 </div>

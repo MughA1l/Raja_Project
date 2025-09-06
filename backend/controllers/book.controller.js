@@ -31,6 +31,7 @@ export const createBook = async (req, res, next) => {
 
 export const getUserBooks = async (req, res, next) => {
 
+
     try {
         const userId = req.user?.userId;
         const books = await bookService.getUserBooks(userId);
@@ -48,7 +49,7 @@ export const getBookById = async (req, res, next) => {
             throw new ApiError(400, 'Invalid book ID format');
         }
         const book = await bookService.getBookById(id);
-        return successResponse(res, { data: book });
+        return successResponse(res, book,200 );
     } catch (error) {
         next(error);
     }

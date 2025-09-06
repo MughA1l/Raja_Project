@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { createBook } from '../../api/services/bookService'
 import { showError, showSuccess } from '../../utils/toast';
 
-const CreateBookDrawer = ({ isOpen, onClose }) => {
+const CreateBookDrawer = ({ isOpen, onClose,getAllBooks }) => {
   const fileInputRef = useRef(null)
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -34,6 +34,7 @@ const CreateBookDrawer = ({ isOpen, onClose }) => {
       const creation = await createBook(formData);
       if (creation.success) {
         showSuccess("Created Book successfully");
+        getAllBooks();
         onClose();
       }
     } catch (err) {

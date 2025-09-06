@@ -4,7 +4,7 @@ import { getAllBooksByUser } from '../../api/services/bookService'
 import { showSuccess } from '../../utils/toast'
 import { createChapter } from '../../api/services/chapterService'
 
-const CreateChapterDrawer = ({ isOpen, onClose }) => {
+const CreateChapterDrawer = ({ isOpen, onClose,chapters,setChapters }) => {
     const fileInputRef = useRef(null)
     const [selectedImage, setSelectedImage] = useState(null)
     const [examType, setExamType] = useState('')
@@ -76,6 +76,8 @@ const CreateChapterDrawer = ({ isOpen, onClose }) => {
             const res = await createChapter(formData)
             if (res.success) {
                 showSuccess("Chapter created successfully");
+                await getAllBooksByUser();
+                onClose();
             }
 
         } catch (error) {

@@ -20,7 +20,7 @@ export const getBooksByUser = async (userId) => {
   try {
     return await Book.find({ userId })
       .populate({
-        path: 'chapters', 
+        path: 'chapters',
         populate: {
           path: 'images',   // populate images inside chapters
           model: 'Image'

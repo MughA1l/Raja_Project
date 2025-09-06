@@ -14,9 +14,9 @@ dotenv.config();
       process.env.MONGO_URI || 'mongodb+srv://hassan:4eN6OfqAqRuUeqDZ@cluster0.pvhhoib.mongodb.net/db?retryWrites=true&w=majority&appName=Cluster0',
       { useNewUrlParser: true, useUnifiedTopology: true }
     );
-    console.log("✅ Worker connected to MongoDB");
+    console.log(" Worker connected to MongoDB");
   } catch (err) {
-    console.error("❌ MongoDB connection error in worker:", err);
+    console.error(" MongoDB connection error in worker:", err);
     process.exit(1);
   }
 })();
@@ -27,7 +27,7 @@ export const worker = new Worker(
   async (job) => {
     try {
       const { imageId, localPath } = job.data;
-      console.log(`🚀 Starting job for image: ${imageId}`);
+      console.log(` Starting job for image: ${localPath}`);
 
       // STEP 1: Extract text
       await job.updateProgress(10);
@@ -43,7 +43,7 @@ export const worker = new Worker(
         try {
           geminiResult = JSON.parse(geminiResult);
         } catch (err) {
-          console.error("❌ Failed to parse Gemini result:", geminiResult);
+          console.error(" Failed to parse Gemini result:", geminiResult);
           throw err;
         }
       }
@@ -67,11 +67,11 @@ export const worker = new Worker(
 
       // Final step
       await job.updateProgress(100);
-      console.log(`✅ [100%] Completed job for image: ${imageId}`);
+      console.log(` [100%] Completed job for image: ${imageId}`);
 
       return { imageId };
     } catch (err) {
-      console.error(`❌ Failed to process image ${job.data.imageId}:`, err);
+      console.error(` Failed to process image ${job.data.imageId}:`, err);
       throw err;
     }
   },

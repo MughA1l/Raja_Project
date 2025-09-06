@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { formateDate } from '../../utils/formateDate.js';
 import { updateBook } from '../../api/services/bookService.js';
 
-const Card = ({ book, showOptions, onClick, onDelete }) => {
+const Card = ({ book, showOptions, onClick, onDelete, onEdit }) => {
     const [isFav, setIsFav] = useState(book?.isFavourite);
     const navigate = useNavigate();
 
@@ -23,6 +23,7 @@ const Card = ({ book, showOptions, onClick, onDelete }) => {
         }
 
     };
+
 
     if (!book) return null;
 
@@ -82,7 +83,9 @@ const Card = ({ book, showOptions, onClick, onDelete }) => {
                 <PencilLine size={16} color='white' />
                 {showOptions && (
                     <div className='absolute z-50 -top-16 w-fit -left-20 shadow-md border border-black/10 bg-white text-sm rounded-xl flex flex-col items-start justify-start font-medium text-dark-blue'>
-                        <span className='w-full px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'>Edit</span>
+                        <span className='w-full px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'
+                            onClick={(e) => { e.stopPropagation(); onEdit?.(book); }}
+                        >Edit</span>
                         <span
                             className='px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'
                             onClick={(e) => { e.stopPropagation(); onDelete(); }}

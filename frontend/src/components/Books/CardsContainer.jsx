@@ -4,14 +4,16 @@ import { toast } from 'react-toastify';
 import { getAllBooksByUser, deleteBook } from '../../api/services/bookService';
 import { showSuccess } from '../../utils/toast';
 import ConfirmationModal from '../general/ConfirmationModal.jsx';
+import EditBook from './EditBook.jsx';
 
-const CardsContainer = () => {
+const CardsContainer = ({ books, setBooks, loading, setLoading }) => {
     const [openCardIndex, setOpenCardIndex] = useState(null);
-    const [books, setBooks] = useState([]);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedBook, setSelectedBook] = useState(null);
 
-    const [loading, setLoading] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [editBook, setEditBook] = useState(null);
+
 
 
     const handleCardClick = (index) => {
@@ -49,25 +51,17 @@ const CardsContainer = () => {
         setSelectedBook(null);
     };
 
-    const getAllBooks = async () => {
-        try {
-            setLoading(true);
-            let books = await getAllBooksByUser();
-            if (books.success) {
-                setBooks(books.data);
-            }
-        } catch (error) {
-            console.log('Error', error);
-            toast.error('Failed to get Books');
-        }
-        finally {
-            setLoading(false);
-        }
+    const handleEdit = (book) => {
+        setEditBook(book);
+        setIsEditModalOpen(true);
     };
 
-    useEffect(() => {
-        getAllBooks();
-    }, []);
+    // if after loading no books found then show no books found
+    if (books.length == 0 && !loading) {
+        return <>
+            No books found!
+        </>
+    }
 
     return (
         <div className='pt-10 relative'>
@@ -79,9 +73,12 @@ const CardsContainer = () => {
                         showOptions={openCardIndex === index}
                         onClick={() => handleCardClick(index)}
                         onDelete={() => handleDeleteBook(singleBook)}
+                        onEdit={() => handleEdit(singleBook)}
                     />
                 )) :
-                    Array.from({ length: 4 }).map((_, index) => <div className="bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 mb-3 relative">
+                    Array.from({ length: 4 }).map((_, index) => <div
+                        key={index}
+                        className="bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 mb-3 relative">
                         <div className="h-7/12 w-full rounded-2xl overflow-hidden">
                             <div className="skeleton h-full w-full"></div>
                         </div>
@@ -119,6 +116,20 @@ const CardsContainer = () => {
                 onCancel={onCancel}
                 onConfirm={onConfirm}
             />
+
+            {isEditModalOpen && (
+                <EditBook
+                    bookData={editBook}
+                    onClose={() => setIsEditModalOpen(false)}
+                    isOpen={isEditModalOpen}
+                    onUpdate={(updatedBook) => {
+                        // update local books list after editing
+                        setBooks((prev) =>
+                            prev.map((b) => (b._id === updatedBook._id ? updatedBook : b))
+                        );
+                    }}
+                />
+            )}
         </div>
     );
 };
