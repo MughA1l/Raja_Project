@@ -31,8 +31,7 @@ const Card = ({ book, showOptions, onClick, onDelete, onEdit }) => {
         <div
             className={`bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 cursor-pointer ${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} ease-in-out duration-300 mb-3 relative`}
             onClick={() => {
-                const chapters = book?.chapters;
-                navigate(`/Books/${book?._id}/Chapters`, { state: { chapters } });
+                navigate(`/Books/${book?._id}/Chapters`);
             }}
         >
             {/* image */}

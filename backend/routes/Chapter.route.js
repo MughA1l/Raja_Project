@@ -6,10 +6,12 @@ import uploadChapter from '../middleware/multerLocal.js';
 
 const router = express.Router();
 
+
+// using my auth middleware to protect backend!
 router.use(auth);
 
 const multiUpload = uploadChapter.fields([
-  { name: "image", maxCount: 1 },     
+  { name: "image", maxCount: 1 },
   { name: "images", maxCount: 10 }
 ]);
 
@@ -20,6 +22,8 @@ router.post(
 );
 
 router.get('/getAllChapters', chapterController.getUserChapters);
+
+router.get('/getAllChaptersByBook/:id', chapterController.getAllChaptersByBook)
 
 router.get('/getSingleChapter/:id', chapterController.getChapterById);
 

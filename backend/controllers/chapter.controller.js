@@ -115,3 +115,24 @@ export const deleteChapter = async (req, res, next) => {
         next(error);
     }
 };
+
+
+//  ################  To get chapters by project id.   #################
+
+export const getAllChaptersByBook = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            throw new ApiError(400, "book Id is required", "VALIDATION_ERROR");
+        }
+
+        const allChapters = await chapterService.chaptersByBook(id);
+
+        return successResponse(res, { message: "All chapters by book!", chapters: allChapters });
+
+
+    } catch (error) {
+        next(error);
+    }
+}

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Plus, Search } from 'lucide-react';
 
-const Header = ({ onCreateClick,tabOptions,selected,setSelected }) => {
+const Header = ({ onCreateClick, tabOptions, selected, setSelected, fetchChapters }) => {
 
   const [underlineStyle, setUnderlineStyle] = useState({});
   const tabRefs = useRef([]);

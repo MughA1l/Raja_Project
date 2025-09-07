@@ -4,15 +4,15 @@ import { getAllBooksByUser } from '../../api/services/bookService'
 import { showSuccess } from '../../utils/toast'
 import { createChapter } from '../../api/services/chapterService'
 
-const CreateChapterDrawer = ({ isOpen, onClose,chapters,setChapters }) => {
+const CreateChapterDrawer = ({ isOpen, onClose, chapters, setChapters, bookId }) => {
     const fileInputRef = useRef(null)
     const [selectedImage, setSelectedImage] = useState(null)
     const [examType, setExamType] = useState('')
     const [chapterImages, setChapterImages] = useState([])
 
     const [books, setBooks] = useState([])
-    const [selectedBookId, setSelectedBookId] = useState('')
-
+    const [selectedBookId, setSelectedBookId] = useState(bookId || '')
+    const [loadingBooks, setLoadingBooks] = useState(false)
 
     const handleImageSelect = (e) => {
         const file = e.target.files[0]
@@ -79,7 +79,6 @@ const CreateChapterDrawer = ({ isOpen, onClose,chapters,setChapters }) => {
                 await getAllBooksByUser();
                 onClose();
             }
-
         } catch (error) {
             console.error("Error creating chapter:", error)
         }
@@ -87,6 +86,7 @@ const CreateChapterDrawer = ({ isOpen, onClose,chapters,setChapters }) => {
 
     useEffect(() => {
         const fetchBooks = async () => {
+            setLoadingBooks(true)
             try {
                 const data = await getAllBooksByUser();
                 if (data.success) {
@@ -94,13 +94,15 @@ const CreateChapterDrawer = ({ isOpen, onClose,chapters,setChapters }) => {
                 }
             } catch (err) {
                 console.error("Error fetching books:", err);
+            } finally {
+                setLoadingBooks(false)
             }
         };
 
-        if (isOpen) {
+        if (isOpen && !bookId) {
             fetchBooks();
         }
-    }, [isOpen]);
+    }, [isOpen, bookId]);
 
     return (
         <div
@@ -166,26 +168,32 @@ const CreateChapterDrawer = ({ isOpen, onClose,chapters,setChapters }) => {
                         )}
                     </div>
 
-                    {/* Select Book */}
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text font-medium">Select Book</span>
-                        </label>
-                        <select
-                            className="select select-bordered w-full mt-2"
-                            required
-                            value={selectedBookId}
-                            onChange={(e) => setSelectedBookId(e.target.value)}
-                        >
-                            <option value="" disabled>Select a book</option>
-                            {books.map((book) => (
-                                <option key={book._id} value={book._id}>
-                                    {book.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                    {/* Select Book (only show if bookId is not provided) */}
+                    {!bookId && (
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text font-medium">Select Book</span>
+                            </label>
 
+                            {loadingBooks ? (
+                                <div className="w-full h-9 mt-2 rounded-md bg-gray-200 animate-pulse" />
+                            ) : (
+                                <select
+                                    className="select select-bordered w-full mt-2"
+                                    required
+                                    value={selectedBookId}
+                                    onChange={(e) => setSelectedBookId(e.target.value)}
+                                >
+                                    <option value="" disabled>Select a book</option>
+                                    {books.map((book) => (
+                                        <option key={book._id} value={book._id}>
+                                            {book.name}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                        </div>
+                    )}
 
                     {/* Exam Type */}
                     <div className="form-control">

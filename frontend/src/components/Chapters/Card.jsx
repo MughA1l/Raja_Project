@@ -2,20 +2,35 @@ import React, { useState } from 'react'
 import { FileText, Heart, ImageDown, PencilLine, ScanText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { formateDate } from '../../utils/formateDate.js';
+import { updateChapter } from '../../api/services/chapterService.js';
 
-const Card = ({ chapter, showOptions, onClick, onDelete }) => {
+const Card = ({ chapter, showOptions, onClick, onDelete, bookId }) => {
     const [isFav, setIsFav] = useState(chapter?.isFavourite);
     const navigate = useNavigate();
 
     if (!chapter) return null;
 
-    const handleDeleteChapter=()=>{
+    const handleDeleteChapter = () => {
         onDelete();
+    }
+
+    const handleLikeChapter = async (chapter) => {
+        console.log(chapter)
+        try {
+            const likeChapter = await updateChapter(chapter?._id, { isFavourite: !isFav });
+            if (likeChapter.success) {
+                setIsFav(!isFav)
+            }
+
+        } catch (error) {
+            console.log(error.message);
+        }
+
     }
 
     return (
         <div
-            className={`${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} col-span-1 h-72 mb-14 p-2 pb-3 bg-white shadow-md shadow-black/5 rounded-2xl relative cursor-pointer`}
+            className={`${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} col-span-1 ${!bookId ? 'h-76' : 'h-72'} mb-14 p-2 pb-3 bg-white shadow-md shadow-black/5 rounded-2xl relative cursor-pointer`}
             onClick={() => navigate(`/Chapters/${chapter?._id}`, { state: { images: chapter?.images } })}
         >
             {/* div to show the image */}
@@ -32,7 +47,7 @@ const Card = ({ chapter, showOptions, onClick, onDelete }) => {
                         size={26}
                         onClick={(e) => {
                             e.stopPropagation();
-                            setIsFav(!isFav);
+                            handleLikeChapter(chapter)
                         }}
                     />
                 </span>
@@ -49,6 +64,11 @@ const Card = ({ chapter, showOptions, onClick, onDelete }) => {
                     <div className='font-semibold pt-1 line-clamp-2 w-full break-all'>
                         {chapter?.name}
                     </div>
+                    {!bookId && (
+                        <div className="text-[12px] text-pink-500 rounded-full line-clamp-1 w-fit font-medium break-all">
+                            {chapter?.bookId?.name}
+                        </div>
+                    )}
                 </div>
 
                 {/* to show the counts */}
@@ -98,7 +118,7 @@ const Card = ({ chapter, showOptions, onClick, onDelete }) => {
                         <div className='absolute z-50 -top-16 w-fit -left-20 shadow-md border border-black/10 bg-white text-sm rounded-xl flex flex-col items-start justify-start font-medium text-dark-blue'>
                             <span className='w-full px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'>Edit</span>
                             <span className='px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'
-                            onClick={handleDeleteChapter}
+                                onClick={handleDeleteChapter}
                             >Delete</span>
                         </div>
                     )}

@@ -16,8 +16,30 @@ export const createChapter = async (payload) => {
 // reqirements => id of the book to delete and token that axios Instance will handle on it's own.
 
 export const deleteChapter = async (id) => {
-    console.log(id)
+
     const res = await axios.delete(`/chapters/deleteChapter/${id}`);
+
+    return res.data;
+}
+
+// requirements => Id of the book to get the chatpers of that specific book
+
+export const getChaptersByBookId = async (id) => {
+
+    const res = await axios.get(`/chapters/getAllChaptersByBook/${id}`);
+
+    return res.data;
+}
+
+export const updateChapter = async (chapterId, payload) => {
+
+    const res = await axios.put(`/chapters/updateChapter/${chapterId}`, payload);
+    return res.data;
+}
+
+export const getAllChaptersByUser = async () => {
+
+    const res = await axios.get("/chapters/getAllChapters");
 
     return res.data;
 }

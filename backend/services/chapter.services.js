@@ -9,6 +9,9 @@ import { findBookById } from '../repositories/book.repository.js';
 import { imageQueue } from './bull-MQ/producer.js';
 import fs from "fs/promises";
 
+import mongoose from "mongoose";
+
+
 export const createChapter = async ({
     userId,
     name,
@@ -131,6 +134,18 @@ export const deleteChapter = async (userId, chapterId) => {
 
     return deletedChapter;
 };
+
+export const chaptersByBook = async (bookId) => {
+
+    if (!mongoose.Types.ObjectId.isValid(bookId)) {
+        throw new ApiError(400, "Invalid bookId format", "VALIDATION_ERROR");
+    }
+
+    const chapters = await chapterRepo.getChaptersByBook(bookId);
+
+    return chapters;
+
+}
 
 
 

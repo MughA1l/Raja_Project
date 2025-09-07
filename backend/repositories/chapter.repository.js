@@ -81,3 +81,16 @@ export const deleteChapterById = async (userId, chapterId) => {
     throw new ApiError(500, "Database error while deleting chapter", "DB_ERROR");
   }
 };
+
+export const getChaptersByBook = async (bookId) => {
+  try {
+
+    const allChapters = await Chapter.find({ bookId }).populate('images');
+
+    return allChapters;
+
+  } catch (error) {
+    console.log(error.message)
+    throw new ApiError(500, "Database error while fetchings books by user", "DB_ERROR");
+  }
+}
