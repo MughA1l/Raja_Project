@@ -11,6 +11,7 @@ let tabOptions = [];
 const Books = () => {
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selected, setSelected] = useState(0);
   const [loading, setLoading] = useState();
 
@@ -83,7 +84,7 @@ const Books = () => {
         <Header tabOptions={tabOptions} onCreateClick={() => setIsDrawerOpen(true)} selected={selected} setSelected={setSelected} />
 
         {/* cards container */}
-        <CardsContainer books={filteredBooks} setBooks={setBooks} loading={loading} setLoading={setLoading} />
+        <CardsContainer isEditModalOpen={isEditModalOpen} setIsEditModalOpen={setIsEditModalOpen} books={filteredBooks} getAllBooks={getAllBooks} setBooks={setBooks} loading={loading} setLoading={setLoading} />
 
       </div>
 
@@ -95,7 +96,7 @@ const Books = () => {
       />
 
       {/* overlay */}
-      {isDrawerOpen && <div className="absolute inset-0 h-screen w-screen z-0 bg-black/30"
+      {(isDrawerOpen || isEditModalOpen) && <div className="absolute inset-0 h-screen w-screen z-0 bg-black/30"
         onClick={() => setIsDrawerOpen(!isDrawerOpen)}
       ></div>}
 

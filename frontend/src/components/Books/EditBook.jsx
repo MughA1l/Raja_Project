@@ -51,7 +51,7 @@ const EditBook = ({ bookData, onClose, onUpdate, isOpen }) => {
 
     return (
         <div className={`modal ${isOpen ? "modal-open" : ""}`}>
-            <div className="modal-box relative rounded-2xl shadow-lg bg-white max-w-2xl">
+            <div className="modal-box relative rounded-2xl  shadow-lg bg-white w-[450px]">
                 {/* Close button (top-right) */}
                 <button
                     type="button"
@@ -84,7 +84,7 @@ const EditBook = ({ bookData, onClose, onUpdate, isOpen }) => {
                     {/* Image Preview + Update */}
                     <div className="flex gap-3">
                         {formData.image ? (
-                            <div className="relative w-full h-40 rounded-lg overflow-hidden group">
+                            <div className="relative w-full object-contain h-40 rounded-lg overflow-hidden group">
                                 <img
                                     src={formData.image}
                                     alt="Book Preview"

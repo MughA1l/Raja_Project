@@ -4,25 +4,46 @@ import { useNavigate } from 'react-router-dom';
 import { formateDate } from '../../utils/formateDate.js';
 import { updateBook } from '../../api/services/bookService.js';
 
-const Card = ({ book, showOptions, onClick, onDelete, onEdit }) => {
-    const [isFav, setIsFav] = useState(book?.isFavourite);
+const Card = ({ book, showOptions, onClick, onDelete, onEdit, getAllBooks, setBooks }) => {
     const navigate = useNavigate();
 
-    //  handle fav click
+    const [isFav, setIsFav] = useState(book.isFavourite);
+
+
     const handleFavClick = async (e) => {
         e.stopPropagation();
-        // API Call can be made here to update fav status in DB
-        const payload = { isFavourite: !isFav };
+        const newFav = !isFav;
+        setIsFav(newFav);
+
+        // update parent instantly
+        setBooks((prev) =>
+            prev.map((b) =>
+                b._id === book._id ? { ...b, isFavourite: newFav } : b
+            )
+        );
+
         try {
-            const updation = await updateBook(book._id, payload);
-            if (updation.success) {
-                setIsFav((prev) => !prev);
+            const updation = await updateBook(book._id, { isFavourite: newFav });
+            if (!updation.success) {
+                // rollback on failure
+                setIsFav(book.isFavourite);
+                setBooks((prev) =>
+                    prev.map((b) =>
+                        b._id === book._id ? { ...b, isFavourite: book.isFavourite } : b
+                    )
+                );
             }
         } catch (error) {
-            console.log('Error', error);
+            console.log(error);
+            setIsFav(book.isFavourite);
+            setBooks((prev) =>
+                prev.map((b) =>
+                    b._id === book._id ? { ...b, isFavourite: book.isFavourite } : b
+                )
+            );
         }
-
     };
+
 
 
     if (!book) return null;

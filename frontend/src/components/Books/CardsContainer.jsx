@@ -6,12 +6,11 @@ import { showSuccess } from '../../utils/toast';
 import ConfirmationModal from '../general/ConfirmationModal.jsx';
 import EditBook from './EditBook.jsx';
 
-const CardsContainer = ({ books, setBooks, loading, setLoading }) => {
+const CardsContainer = ({ books, setBooks, loading, setLoading,getAllBooks,isEditModalOpen,setIsEditModalOpen }) => {
     const [openCardIndex, setOpenCardIndex] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedBook, setSelectedBook] = useState(null);
 
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editBook, setEditBook] = useState(null);
 
 
@@ -22,6 +21,7 @@ const CardsContainer = ({ books, setBooks, loading, setLoading }) => {
 
     const handleCloseOptions = () => {
         setOpenCardIndex(null);
+        setIsEditModalOpen(false)
     };
 
     const handleDeleteBook = (book) => {
@@ -74,6 +74,8 @@ const CardsContainer = ({ books, setBooks, loading, setLoading }) => {
                         onClick={() => handleCardClick(index)}
                         onDelete={() => handleDeleteBook(singleBook)}
                         onEdit={() => handleEdit(singleBook)}
+                        getAllBooks={getAllBooks}
+                        setBooks={setBooks} 
                     />
                 )) :
                     Array.from({ length: 4 }).map((_, index) => <div

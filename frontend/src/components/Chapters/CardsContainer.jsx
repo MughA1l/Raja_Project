@@ -66,6 +66,7 @@ const CardsContainer = ({ chapters, setChapters, loading, bookId, fetchChapters 
             showOptions={openCardIndex === index}
             onClick={() => handleCardClick(index)}
             onDelete={() => handleDeleteChapter(singleChapter)}
+            setChapters={setChapters}
           />
         )) :
           Array.from({ length: 4 }).map((_, index) => <div key={index} className="col-span-1 h-72 mb-14 p-2 pb-3 bg-white shadow-md shadow-black/5 rounded-2xl relative">

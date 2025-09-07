@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { formateDate } from '../../utils/formateDate.js';
 import { updateChapter } from '../../api/services/chapterService.js';
 
-const Card = ({ chapter, showOptions, onClick, onDelete, bookId }) => {
+const Card = ({ chapter, showOptions, onClick, onDelete, bookId,setChapters }) => {
     const [isFav, setIsFav] = useState(chapter?.isFavourite);
     const navigate = useNavigate();
 
@@ -15,18 +15,22 @@ const Card = ({ chapter, showOptions, onClick, onDelete, bookId }) => {
     }
 
     const handleLikeChapter = async (chapter) => {
-        console.log(chapter)
         try {
-            const likeChapter = await updateChapter(chapter?._id, { isFavourite: !isFav });
-            if (likeChapter.success) {
-                setIsFav(!isFav)
-            }
+            setIsFav(!isFav);
 
+            setChapters((prev) =>
+                prev.map((c) =>
+                    c._id === chapter._id ? { ...c, isFavourite: !isFav } : c
+                )
+            );
+
+            // Call API in background
+            await updateChapter(chapter._id, { isFavourite: !isFav });
         } catch (error) {
             console.log(error.message);
         }
+    };
 
-    }
 
     return (
         <div
