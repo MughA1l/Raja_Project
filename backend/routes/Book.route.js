@@ -10,7 +10,7 @@ router.use(auth); // Protect all routes below
 router.post('/create', upload.single('image'), bookController.createBook);
 router.get('/getAllBooks', bookController.getUserBooks);
 router.get('/getSingleBook/:id', bookController.getBookById);
-router.put('/updateBook/:id', bookController.updateBook);
+router.put('/updateBook/:id',upload.single('image'), bookController.updateBook);
 router.delete('/deleteBook/:id', bookController.deleteBook);
 
 export default router;

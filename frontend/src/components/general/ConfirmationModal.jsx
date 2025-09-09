@@ -1,8 +1,9 @@
 import React from 'react';
 
 const ConfirmationModal = ({ isOpen, title, para, onCancel, onConfirm }) => {
+
   return (
-    <dialog className={`modal ${isOpen ? "modal-open" : ""}`}>
+    <dialog className={`modal h-screen ${isOpen ? "modal-open" : ""}`}>
       <div className="modal-box bg-white rounded-xl shadow-lg">
         {/* Heading */}
         <h3 className="font-bold text-lg text-gray-800">

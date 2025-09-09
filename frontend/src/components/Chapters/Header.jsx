@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Plus, Search } from 'lucide-react';
 
-const Header = ({ onCreateClick, tabOptions, selected, setSelected, fetchChapters }) => {
+const Header = ({ onCreateClick, tabOptions, selected, setSelected, fetchChapters, filter, setFilter }) => {
 
   const [underlineStyle, setUnderlineStyle] = useState({});
   const tabRefs = useRef([]);
@@ -29,6 +29,8 @@ const Header = ({ onCreateClick, tabOptions, selected, setSelected, fetchChapter
               type="text"
               className='focus-within:outline-none h-full w-full pl-3 pr-10 text-sm caret-black/60 text-black/80'
               placeholder='Search by name'
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
             />
             <Search className='text-black/50 absolute right-2' size={20} />
           </div>

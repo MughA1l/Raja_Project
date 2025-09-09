@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import { getAllChaptersByUser, getChaptersByBookId } from '../../api/services/chapterService';
 import { showError } from '../../utils/toast';
 
+let tabOptions = [];
+
 const Chapters = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selected, setSelected] = useState(0);
@@ -16,25 +18,27 @@ const Chapters = () => {
 
   const [loading, setLoading] = useState(false);
 
-  console.log(chapters)
+  const [filter, setFilter] = useState('');
+
 
   useEffect(() => {
     if (!chapters?.length) return;
+    setLoading(true)
 
     let filtered = chapters;
 
     switch (selected) {
       case 1: // Mids
-        filtered = chapters.filter(c => c.type === "Mid");
+        filtered = chapters.filter(c => c.isMids);
         break;
       case 2: // Finals
-        filtered = chapters.filter(c => c.type === "Final");
+        filtered = chapters.filter(c => !c.isMids);
         break;
       case 3: // Complete
-        filtered = chapters.filter(c => c.isComplete);
+        filtered = chapters.filter(c => c.isCompleted);
         break;
       case 4: // InComplete
-        filtered = chapters.filter(c => !c.isComplete);
+        filtered = chapters.filter(c => !c.isCompleted);
         break;
       case 5: // Favourite
         filtered = chapters.filter(c => c.isFavourite);
@@ -43,8 +47,23 @@ const Chapters = () => {
         filtered = chapters;
     }
 
-    setFilteredChapters(filtered);
-  }, [selected, chapters]);
+    tabOptions = [
+      { label: "All Chatpers", count: chapters.length },
+      { label: "Mids", count: chapters.filter(c => c.isMids).length },
+      { label: "Finals", count: chapters.filter(c => !c.isMids).length },
+      { label: "Complete", count: chapters.filter(c => c.isComplete).length },
+      { label: "InComplete", count: chapters.filter(c => !c.isComplete).length },
+      { label: "Favourite", count: chapters.filter(c => c.isFavourite).length },
+    ];
+
+    const filteredBy = filtered.filter(chapter =>
+      chapter.name.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    setFilteredChapters(filteredBy);
+
+    setLoading(false)
+  }, [selected, chapters,filter]);
 
 
   const getChapterFromBackend = async () => {
@@ -91,21 +110,14 @@ const Chapters = () => {
 
   }, [bookId])
 
-  const tabOptions = [
-    { label: "All Courses", count: chapters.length },
-    { label: "Mids", count: chapters.filter(c => c.type === "Mid").length },
-    { label: "Finals", count: chapters.filter(c => c.type === "Final").length },
-    { label: "Complete", count: chapters.filter(c => c.isComplete).length },
-    { label: "InComplete", count: chapters.filter(c => !c.isComplete).length },
-    { label: "Favourite", count: chapters.filter(c => c.isFavourite).length },
-  ];
-
   return (
     <div className=''>
       <div className='min-h-screen max-h-fit w-full p-5 pt-5 bg-[#F7F7F7] rounded-xl'>
 
         {/* header */}
         <Header
+          filter={filter}
+          setFilter={setFilter}
           selected={selected}
           setSelected={setSelected}
           tabOptions={tabOptions}  // pass dynamic counts

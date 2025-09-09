@@ -4,7 +4,7 @@ import { getAllBooksByUser } from '../../api/services/bookService'
 import { showSuccess } from '../../utils/toast'
 import { createChapter } from '../../api/services/chapterService'
 
-const CreateChapterDrawer = ({ isOpen, onClose, chapters, setChapters, bookId }) => {
+const CreateChapterDrawer = ({ isOpen, onClose, chapters, setChapters, bookId, fetchChapters }) => {
     const fileInputRef = useRef(null)
     const [selectedImage, setSelectedImage] = useState(null)
     const [examType, setExamType] = useState('')
@@ -13,6 +13,9 @@ const CreateChapterDrawer = ({ isOpen, onClose, chapters, setChapters, bookId })
     const [books, setBooks] = useState([])
     const [selectedBookId, setSelectedBookId] = useState(bookId || '')
     const [loadingBooks, setLoadingBooks] = useState(false)
+
+    const [isLoading, setIsLoading] = useState(false);
+
 
     const handleImageSelect = (e) => {
         const file = e.target.files[0]
@@ -62,6 +65,7 @@ const CreateChapterDrawer = ({ isOpen, onClose, chapters, setChapters, bookId })
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setIsLoading(true);
         const formData = new FormData();
 
         formData.append("bookId", selectedBookId)
@@ -77,10 +81,15 @@ const CreateChapterDrawer = ({ isOpen, onClose, chapters, setChapters, bookId })
             if (res.success) {
                 showSuccess("Chapter created successfully");
                 await getAllBooksByUser();
+                fetchChapters()
                 onClose();
+                isOpen(false);
             }
         } catch (error) {
             console.error("Error creating chapter:", error)
+        }
+        finally {
+            setIsLoading(false);
         }
     }
 
@@ -264,10 +273,21 @@ const CreateChapterDrawer = ({ isOpen, onClose, chapters, setChapters, bookId })
                     {/* Buttons */}
                     <button
                         type="submit"
-                        className="py-2 text-white bg-dark-blue/90 hover:bg-dark-blue duration-200 w-full rounded-full text-sm"
+                        disabled={isLoading}
+                        className={`py-2 w-full rounded-full text-sm flex items-center justify-center gap-2 text-white 
+        ${isLoading ? 'bg-dark-blue/70 cursor-not-allowed' : 'bg-dark-blue/90 hover:bg-dark-blue'}
+        duration-200`}
                     >
-                        Create Chapter
+                        {isLoading ? (
+                            <>
+                                <span className="loading loading-dots loading-md text-white"></span>
+                                Creating...
+                            </>
+                        ) : (
+                            'Create Chapter'
+                        )}
                     </button>
+
                     <button
                         type="button"
                         onClick={onClose}

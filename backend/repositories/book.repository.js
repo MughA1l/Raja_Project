@@ -56,6 +56,9 @@ export const updateBookById = async (bookId, updateData) => {
       { new: true, runValidators: true }
     );
   } catch (error) {
+    if (error.code === 11000) {
+      throw new ApiError(400, "Name of the book must be unique.", "DUPLICATE_NAME");
+    }
     throw new ApiError(500, `Error updating book: ${error.message}`, "UPDATE_BOOK");
   }
 };

@@ -20,6 +20,8 @@ const Books = () => {
   // State to show the filtered books like all, favourite etc.
   const [filteredBooks, setFilteredBooks] = useState([]);
 
+  const [filter, setFilter] = useState('');
+
 
 
   const getAllBooks = async () => {
@@ -62,26 +64,27 @@ const Books = () => {
         filtered = books;
     }
 
-    setFilteredBooks(filtered);
-  }, [selected, books]);
-
-  useEffect(() => {
     tabOptions = [
       { label: "All Books", count: books.length },
       { label: "Complete", count: books.filter(b => b.isComplete).length },
       { label: "InComplete", count: books.filter(b => !b.isComplete).length },
       { label: "Favourite", count: books.filter(b => b.isFavourite).length },
     ];
-  }, [books])
 
+    const filteredBy = filtered.filter(chapter =>
+      chapter.name.toLowerCase().includes(filter.toLowerCase())
+    );
 
+    setFilteredBooks(filteredBy);
+
+  }, [selected, books, filter]);
 
   return (
     <div className=''>
       <div className='min-h-screen max-h-fit w-full p-5 pt-5 bg-[#F7F7F7] rounded-xl'>
 
         {/* header */}
-        <Header tabOptions={tabOptions} onCreateClick={() => setIsDrawerOpen(true)} selected={selected} setSelected={setSelected} />
+        <Header tabOptions={tabOptions} filter={filter} setFilter={setFilter} onCreateClick={() => setIsDrawerOpen(true)} selected={selected} setSelected={setSelected} />
 
         {/* cards container */}
         <CardsContainer isEditModalOpen={isEditModalOpen} setIsEditModalOpen={setIsEditModalOpen} books={filteredBooks} getAllBooks={getAllBooks} setBooks={setBooks} loading={loading} setLoading={setLoading} />

@@ -30,7 +30,11 @@ export const getSingleBook = async (bookId) => {
 // requirements => just give an object with details to update with bookId
 
 export const updateBook = async (bookId, payload) => {
-    const res = await axios.put(`/books/updateBook/${bookId}`, payload);
+    const res = await axios.put(`/books/updateBook/${bookId}`, payload,
+        {
+            headers: { "Content-Type": "multipart/form-data" }
+        }
+    );
     return res.data;
 }
 

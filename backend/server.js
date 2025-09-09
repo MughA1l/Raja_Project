@@ -13,6 +13,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { cloudinaryConnect } from './config (db connect)/cloudinary.config.js';
 import path from 'path';
+import { createSocketServer } from './config (db connect)/socket.io.js';
 
 const corsOptions = {
     origin: 'http://localhost:5173',
@@ -47,9 +48,14 @@ const startServer = async () => {
         // custom errors handling
         app.use(errorHandler);
 
-        app.listen(port, () => {
-            console.log(`Server running on port ${port}`);
+        // connect to the socket.io server
+        const server = createSocketServer(app);
+
+        server.listen(port, () => {
+            console.log(`Server running with Express + Socket.IO on port ${port}`);
         });
+
+
     } catch (error) {
         console.error('Failed to start server:', error);
         process.exit(1);

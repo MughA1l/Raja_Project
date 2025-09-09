@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import Card from './Card';
 import { toast } from 'react-toastify';
-import { getAllBooksByUser, deleteBook } from '../../api/services/bookService';
+import { deleteBook } from '../../api/services/bookService';
 import { showSuccess } from '../../utils/toast';
 import ConfirmationModal from '../general/ConfirmationModal.jsx';
 import EditBook from './EditBook.jsx';
 
-const CardsContainer = ({ books, setBooks, loading, setLoading,getAllBooks,isEditModalOpen,setIsEditModalOpen }) => {
+const CardsContainer = ({ books, setBooks, loading, setLoading, getAllBooks, isEditModalOpen, setIsEditModalOpen }) => {
     const [openCardIndex, setOpenCardIndex] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [selectedBook, setSelectedBook] = useState(null);
 
     const [editBook, setEditBook] = useState(null);
-
 
 
     const handleCardClick = (index) => {
@@ -30,6 +29,7 @@ const CardsContainer = ({ books, setBooks, loading, setLoading,getAllBooks,isEdi
     };
 
     const onCancel = () => {
+        setOpenCardIndex(null);
         setIsDeleteModalOpen(false);
         setSelectedBook(null);
     };
@@ -75,7 +75,8 @@ const CardsContainer = ({ books, setBooks, loading, setLoading,getAllBooks,isEdi
                         onDelete={() => handleDeleteBook(singleBook)}
                         onEdit={() => handleEdit(singleBook)}
                         getAllBooks={getAllBooks}
-                        setBooks={setBooks} 
+                        setBooks={setBooks}
+                        isEditModalOpen={isEditModalOpen}
                     />
                 )) :
                     Array.from({ length: 4 }).map((_, index) => <div
@@ -122,7 +123,7 @@ const CardsContainer = ({ books, setBooks, loading, setLoading,getAllBooks,isEdi
             {isEditModalOpen && (
                 <EditBook
                     bookData={editBook}
-                    onClose={() => setIsEditModalOpen(false)}
+                    onClose={() => { setIsEditModalOpen(false); setOpenCardIndex(null) }}
                     isOpen={isEditModalOpen}
                     onUpdate={(updatedBook) => {
                         // update local books list after editing

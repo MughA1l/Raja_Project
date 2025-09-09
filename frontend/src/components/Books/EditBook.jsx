@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { updateBook } from "../../api/services/bookService";
+import { showSuccess } from "../../utils/toast";
 
 const EditBook = ({ bookData, onClose, onUpdate, isOpen }) => {
     const [formData, setFormData] = useState({
         name: "",
         image: "",
-        isCompleted: false,
+        imageUrl: ""
     });
+
+    const [loading, setLoading] = useState(false);
 
     // Pre-fill form with old data
     useEffect(() => {
@@ -14,7 +17,7 @@ const EditBook = ({ bookData, onClose, onUpdate, isOpen }) => {
             setFormData({
                 name: bookData.name || "",
                 image: bookData.image || "",
-                isCompleted: bookData.isCompleted || false,
+                imageUrl: bookData.image || ""
             });
         }
     }, [bookData]);
@@ -33,19 +36,35 @@ const EditBook = ({ bookData, onClose, onUpdate, isOpen }) => {
         const file = e.target.files[0];
         if (file) {
             const imageUrl = URL.createObjectURL(file);
-            setFormData((prev) => ({ ...prev, image: imageUrl }));
+            setFormData((prev) => ({ ...prev, imageUrl }))
+            setFormData((prev) => ({ ...prev, image: file }));
         }
     };
 
     // Save changes
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+
+        let fd = new FormData();
+
+        fd.append('name', formData.name);
+
+        if (formData.image instanceof File) {
+            fd.append('image', formData.image)
+        }
+
         try {
-            const res = await updateBook(bookData._id, formData);
+            const res = await updateBook(bookData._id, fd);
             onUpdate(res.data.data); // update parent state
+            showSuccess('Update Book!')
             onClose(); // close modal
         } catch (error) {
+            showSuccess('Failed to Update Book!')
             console.error("Update failed", error);
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -86,7 +105,7 @@ const EditBook = ({ bookData, onClose, onUpdate, isOpen }) => {
                         {formData.image ? (
                             <div className="relative w-full object-contain h-40 rounded-lg overflow-hidden group">
                                 <img
-                                    src={formData.image}
+                                    src={formData.imageUrl}
                                     alt="Book Preview"
                                     className="w-full h-full object-contain rounded-lg"
                                 />
@@ -117,19 +136,6 @@ const EditBook = ({ bookData, onClose, onUpdate, isOpen }) => {
                         )}
                     </div>
 
-
-                    {/* isCompleted */}
-                    <label className="flex items-center gap-2 text-gray-700">
-                        <input
-                            type="checkbox"
-                            name="isCompleted"
-                            checked={formData.isCompleted}
-                            onChange={handleChange}
-                            className="checkbox checkbox-secondary"
-                        />
-                        <span className="text-sm">Mark as Completed</span>
-                    </label>
-
                     {/* Action buttons */}
                     <div className="modal-action">
                         <button
@@ -143,7 +149,9 @@ const EditBook = ({ bookData, onClose, onUpdate, isOpen }) => {
                             type="submit"
                             className="btn px-5 !py-4 rounded-xl bg-light-pink text-white font-semibold hover:opacity-90"
                         >
-                            Update
+                            {
+                                loading ? <span className="loading loading-dots loading-sm text-white px-3"></span> : "Update"
+                            }
                         </button>
                     </div>
                 </form>

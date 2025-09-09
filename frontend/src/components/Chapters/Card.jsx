@@ -5,7 +5,7 @@ import { formateDate } from '../../utils/formateDate.js';
 import { updateChapter } from '../../api/services/chapterService.js';
 
 const Card = ({ chapter, showOptions, onClick, onDelete, bookId,setChapters }) => {
-    const [isFav, setIsFav] = useState(chapter?.isFavourite);
+    const [isFav, setIsFav] = useState(chapter.isFavourite ? chapter.isFavourite : false);
     const navigate = useNavigate();
 
     if (!chapter) return null;
@@ -31,7 +31,6 @@ const Card = ({ chapter, showOptions, onClick, onDelete, bookId,setChapters }) =
         }
     };
 
-
     return (
         <div
             className={`${!showOptions ? 'hover:scale-105 ease-in-out duration-300' : ''} col-span-1 ${!bookId ? 'h-76' : 'h-72'} mb-14 p-2 pb-3 bg-white shadow-md shadow-black/5 rounded-2xl relative cursor-pointer`}
@@ -47,7 +46,7 @@ const Card = ({ chapter, showOptions, onClick, onDelete, bookId,setChapters }) =
 
                 <span className='absolute top-2 right-3'>
                     <Heart
-                        className={`text-light-pink/80 duration-200 ${isFav ? 'fill-light-pink' : ' hover:fill-light-pink/30'}`}
+                        className={`text-light-pink/80 duration-200 ${chapter?.isFavourite ? 'fill-light-pink' : ' hover:fill-light-pink/30'}`}
                         size={26}
                         onClick={(e) => {
                             e.stopPropagation();

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { formateDate } from '../../utils/formateDate.js';
 import { updateBook } from '../../api/services/bookService.js';
 
-const Card = ({ book, showOptions, onClick, onDelete, onEdit, getAllBooks, setBooks }) => {
+const Card = ({ book, showOptions, onClick, onDelete, onEdit, getAllBooks, setBooks, isEditModalOpen }) => {
     const navigate = useNavigate();
 
     const [isFav, setIsFav] = useState(book.isFavourite);
@@ -107,7 +107,8 @@ const Card = ({ book, showOptions, onClick, onDelete, onEdit, getAllBooks, setBo
                             onClick={(e) => { e.stopPropagation(); onEdit?.(book); }}
                         >Edit</span>
                         <span
-                            className='px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100'
+                            className='px-6 py-[7px]
+                             border-b border-black/10 hover:opacity-60 duration-100'
                             onClick={(e) => { e.stopPropagation(); onDelete(); }}
                         >
                             Delete
