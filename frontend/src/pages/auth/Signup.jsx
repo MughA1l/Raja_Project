@@ -44,17 +44,13 @@ const Signup = () => {
     };
 
     return (
-        <div className='md:min-h-screen max-md:h-fit w-full max-md:flex-col md:flex items-center lg:p-10 relative overflow-visible'>
-            {/* first container to show the image */}
-            <div className='max-md:fixed max-md:top-0 max-md:z-0 h-fit overflow-hidden md:w-1/2 max-md:w-full'>
-                <img src="../../public/logo.png" className='h-full w-full object-cover md:rounded-3xl' alt="logoImage" />
-            </div>
+        <div className='md:min-h-screen max-md:h-fit w-full max-md:flex-col md:flex items-center lg:p-10 relative overflow-visible pt-8'>
 
-            <div className='max-md:absolute max-md:top-24 max-md:z-10 max-md:min-h-full md:h-full md:w-1/2 max-md:w-full flex items-center justify-center max-md:bg-white max-md:rounded-tr-4xl max-md:rounded-tl-4xl sm:max-md:pt-14'>
+            <div className='max-md:absolute max-md:top-24 max-md:z-10 max-md:min-h-full md:h-full md:w-1/2 max-md:w-full flex items-center justify-center max-md:bg-white max-md:rounded-tr-4xl max-md:rounded-tl-4xl sm:max-md:pt-14 mx-auto'>
                 <div className='w-10/12 md:h-fit flex flex-col items-center max-sm:pt-8 p-2'>
                     {/* logo */}
                     <div className='mx-auto'>
-                        <img src="../../public/logo.png" className='size-11 rounded-md shadow-xl' alt="logoImage" />
+                        <img src="../../public/logo-dark.png" className='w-52' alt="logoImage" />
                     </div>
 
                     {/* heading */}

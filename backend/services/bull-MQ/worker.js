@@ -6,6 +6,7 @@ import useGemini from '../image-processing/gemini-processing.js';
 import searchYouTubeVideos from '../image-processing/youtube-data-api.js';
 import dotenv from 'dotenv';
 dotenv.config();
+import { emitNotification } from '../../config (db connect)/socket.io.js';
 
 // MongoDB connection for worker
 (async () => {
@@ -32,6 +33,7 @@ export const worker = new Worker(
       // STEP 1: Extract text
       await job.updateProgress(10);
       console.log(`[10%] Extracting text from image...`);
+
       const extractedText = await extractTextFromCloudinaryUrl(localPath);
 
       // STEP 2: Gemini processing
@@ -68,6 +70,7 @@ export const worker = new Worker(
       // Final step
       await job.updateProgress(100);
       console.log(` [100%] Completed job for image: ${imageId}`);
+      emitNotification(`Image 100% ${imageId} processed successfully!`);
 
       return { imageId };
     } catch (err) {

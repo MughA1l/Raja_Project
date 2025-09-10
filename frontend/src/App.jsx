@@ -17,8 +17,32 @@ import Chapters from './pages/dashboard/Chapters.jsx';
 import Images from './pages/dashboard/Images.jsx';
 import Settings from './pages/dashboard/Settings.jsx';
 import PreviewChapter from './pages/dashboard/PreviewChapter.jsx';
+import useSocketStore from './context/useSocketStore.js';
+import { useEffect } from 'react';
 
 function App() {
+
+  const initSocket = useSocketStore((state) => state.initSocket);
+  const socket = useSocketStore((state) => state.socket)
+
+  useEffect(() => {
+    initSocket();
+  }, [initSocket]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNotify = (data) => {
+      alert(`Notification: ${data}`);
+    };
+
+    socket.on("notify", handleNotify);
+
+    // cleanup to avoid duplicate listeners
+    return () => {
+      socket.off("notify", handleNotify);
+    };
+  }, [socket]);
 
 
   return (

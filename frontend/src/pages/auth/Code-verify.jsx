@@ -88,7 +88,7 @@ const CodeVerify = () => {
                 <div className='max-[470px]:w-full max-[640px]:w-8/12 sm:w-7/12 md:w-full h-full flex flex-col justify-center items-center max-sm:pt-8 p-2 pb-10'>
                     {/* logo */}
                     <div className='mx-auto'>
-                        <img src="../../public/logo.png" className='size-11 rounded-md shadow-xl' alt="logoImage" />
+                        <img src="../../public/logo-dark.png" className='w-52' alt="logoImage" />
                     </div>
 
                     {/* heading */}
