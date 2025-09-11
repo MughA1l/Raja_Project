@@ -14,6 +14,7 @@ import cors from 'cors';
 import { cloudinaryConnect } from './config (db connect)/cloudinary.config.js';
 import path from 'path';
 import { createSocketServer } from './config (db connect)/socket.io.js';
+import { startWorker } from './services/bull-MQ/worker.js';
 
 const corsOptions = {
     origin: 'http://localhost:5173',
@@ -54,6 +55,9 @@ const startServer = async () => {
         server.listen(port, () => {
             console.log(`Server running with Express + Socket.IO on port ${port}`);
         });
+
+        // start bullMQ worker
+        startWorker();
 
 
     } catch (error) {

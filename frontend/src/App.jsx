@@ -19,6 +19,7 @@ import Settings from './pages/dashboard/Settings.jsx';
 import PreviewChapter from './pages/dashboard/PreviewChapter.jsx';
 import useSocketStore from './context/useSocketStore.js';
 import { useEffect } from 'react';
+import { showSuccess } from './utils/toast.js';
 
 function App() {
 
@@ -33,7 +34,7 @@ function App() {
     if (!socket) return;
 
     const handleNotify = (data) => {
-      alert(`Notification: ${data}`);
+      showSuccess(data)
     };
 
     socket.on("notify", handleNotify);

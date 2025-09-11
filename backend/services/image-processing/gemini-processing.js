@@ -76,11 +76,14 @@ async function useGemini(ocr) {
       contents: getPrompt(ocr),
     });
     let jsonString = response.text;
+
     jsonString = jsonString.replace(/```json\n?/g, "")
       .replace(/```/g, "")
       .replace(/\\'/g, "'")
       .replace(/,\s*}/g, "}")
       .replace(/,\s*]/g, "]");
+
+    console.log(jsonString)
       
     // Parse the response text as a direct array
     const data = JSON.parse(jsonString);
