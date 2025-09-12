@@ -17,7 +17,10 @@ import { generateFourDigitCode } from '../utils ( reusables )/generateFourDigitC
 import { sendCodeOnGmail } from '../utils ( reusables )/GmailCodeSend.js';
 
 export const registerUser = async ({ username, email, password }) => {
-  const existingUser = await findUserByEmailOrUsername(email, username);
+  const existingUser = await findUserByEmailOrUsername(
+    email,
+    username
+  );
   if (existingUser) {
     throw new ApiError(
       409,
@@ -26,8 +29,14 @@ export const registerUser = async ({ username, email, password }) => {
     );
   }
 
-  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-    throw new ApiError(400, 'Invalid email format', 'VALIDATION_ERROR');
+  if (
+    !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+  ) {
+    throw new ApiError(
+      400,
+      'Invalid email format',
+      'VALIDATION_ERROR'
+    );
   }
 
   let user = await createUser({
@@ -90,7 +99,11 @@ export const logoutUser = async (id, refreshToken) => {
     throw new ApiError(400, 'Invalid ID format', 'INVALID_ID');
   }
   if (id.length !== 24) {
-    throw new ApiError(400, 'ID must be 24 characters', 'INVALID_ID_LENGTH');
+    throw new ApiError(
+      400,
+      'ID must be 24 characters',
+      'INVALID_ID_LENGTH'
+    );
   }
   if (!jwtConfig.verifyToken(refreshToken)) {
     throw new ApiError(
@@ -102,7 +115,11 @@ export const logoutUser = async (id, refreshToken) => {
 
   let user = await findUserById(id);
   if (!user) {
-    throw new ApiError(404, 'No user to logout found', 'NO_DATA_FOUND');
+    throw new ApiError(
+      404,
+      'No user to logout found',
+      'NO_DATA_FOUND'
+    );
   }
 
   let dbResult = await user.removeRefreshToken(refreshToken);
@@ -115,11 +132,21 @@ export const logoutUser = async (id, refreshToken) => {
 // to send code on gmail
 export const UserCode = async (email) => {
   if (email.trim() === '') {
-    throw new ApiError(422, 'Email cannot be empty', 'INVALID_CREDENTIALS');
+    throw new ApiError(
+      422,
+      'Email cannot be empty',
+      'INVALID_CREDENTIALS'
+    );
   }
 
-  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-    throw new ApiError(400, 'Invalid email format', 'VALIDATION_ERROR');
+  if (
+    !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+  ) {
+    throw new ApiError(
+      400,
+      'Invalid email format',
+      'VALIDATION_ERROR'
+    );
   }
 
   let user = await findUserByEmail(email);
@@ -128,7 +155,11 @@ export const UserCode = async (email) => {
   }
   let generateCode = generateFourDigitCode();
   if (!generateCode) {
-    throw new ApiError(500, 'Failed to generate code', 'CODE_GENERATE_ERROR');
+    throw new ApiError(
+      500,
+      'Failed to generate code',
+      'CODE_GENERATE_ERROR'
+    );
   }
 
   // save the code in the db and send it on the gmail.
@@ -137,9 +168,16 @@ export const UserCode = async (email) => {
     throw new ApiError(500, 'Failed to save code', 'DB_ERROR');
   }
   // call the send code on gmail using this saveCode information
-  let codeSent = await sendCodeOnGmail(saveCode?.email, saveCode?.code);
+  let codeSent = await sendCodeOnGmail(
+    saveCode?.email,
+    saveCode?.code
+  );
   if (!codeSent) {
-    throw new ApiError(500, 'Failed to send code to gmail', 'GMAIL_SEND_ERROR');
+    throw new ApiError(
+      500,
+      'Failed to send code to gmail',
+      'GMAIL_SEND_ERROR'
+    );
   }
   return { message: 'Code sent to gmail' };
 };
@@ -154,8 +192,14 @@ export const userCodeVerify = async (email, code) => {
     );
   }
 
-  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-    throw new ApiError(400, 'Invalid email format', 'VALIDATION_ERROR');
+  if (
+    !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+  ) {
+    throw new ApiError(
+      400,
+      'Invalid email format',
+      'VALIDATION_ERROR'
+    );
   }
 
   // find the code saved if available then mark the isVerified.
@@ -171,7 +215,11 @@ export const userCodeVerify = async (email, code) => {
   // update the isVerified state of user code doc.
   let res = await updateCodeIsVerified(email, code);
   if (!res) {
-    throw new ApiError(500, 'Failed to verify the code', 'CODE_VERIFY_ERROR');
+    throw new ApiError(
+      500,
+      'Failed to verify the code',
+      'CODE_VERIFY_ERROR'
+    );
   }
   return { message: 'Verified code' };
 };
@@ -212,20 +260,37 @@ export const userPasswordReset = async (email, newPassword) => {
     );
   }
 
-  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-    throw new ApiError(400, 'Invalid email format', 'VALIDATION_ERROR');
+  if (
+    !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
+  ) {
+    throw new ApiError(
+      400,
+      'Invalid email format',
+      'VALIDATION_ERROR'
+    );
   }
 
   // Check if a verified code exists for the email
   const verifiedCode = await findVerifiedCodeByEmail(email);
   if (!verifiedCode) {
-    throw new ApiError(400, 'Time expired to update password', 'UN-AUTHORIZED');
+    throw new ApiError(
+      400,
+      'Time expired to update password',
+      'UN-AUTHORIZED'
+    );
   }
 
   // Update the password (only if code is verified)
-  const updation = await updateUserPasswordByEmail(email, newPassword);
+  const updation = await updateUserPasswordByEmail(
+    email,
+    newPassword
+  );
   if (!updation) {
-    throw new ApiError(500, 'Failed to update password', 'INTERNAL_ERROR');
+    throw new ApiError(
+      500,
+      'Failed to update password',
+      'INTERNAL_ERROR'
+    );
   }
 
   return { message: 'Password updated successfully' };

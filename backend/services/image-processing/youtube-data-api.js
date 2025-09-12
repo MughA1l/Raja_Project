@@ -6,7 +6,8 @@ dotenv.config();
 const youtube = google.youtube({
   version: 'v3',
   auth:
-    process.env.YOUTUBE_API_KEY || 'AIzaSyBjORSaRF2NJoj5KALmFl981J3YCL8DFms',
+    process.env.YOUTUBE_API_KEY ||
+    'AIzaSyBjORSaRF2NJoj5KALmFl981J3YCL8DFms',
 });
 
 async function searchYouTubeVideos(keywords) {

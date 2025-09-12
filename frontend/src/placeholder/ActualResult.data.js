@@ -1,1 +1,1 @@
-export const ocrData =[]
+export const ocrData = [];

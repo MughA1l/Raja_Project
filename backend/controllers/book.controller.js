@@ -15,7 +15,11 @@ export const createBook = async (req, res, next) => {
     }
 
     // service layer
-    const newBook = await bookService.createBook({ userId, name, imageFile });
+    const newBook = await bookService.createBook({
+      userId,
+      name,
+      imageFile,
+    });
     return successResponse(
       res,
       {
@@ -26,11 +30,10 @@ export const createBook = async (req, res, next) => {
     );
   } catch (error) {
     if (error.code === 11000) {
-      return res
-        .status(409)
-        .json({
-          message: 'A book with this name already exists for this user.',
-        });
+      return res.status(409).json({
+        message:
+          'A book with this name already exists for this user.',
+      });
     }
     next(error);
   }

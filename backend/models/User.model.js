@@ -50,7 +50,9 @@ userSchema.method('addRefreshToken', async function (token) {
 userSchema.method('removeRefreshToken', async function (token) {
   const initialLength = this.refreshTokens.length;
 
-  this.refreshTokens = this.refreshTokens.filter((t) => t.token !== token);
+  this.refreshTokens = this.refreshTokens.filter(
+    (t) => t.token !== token
+  );
 
   if (this.refreshTokens.length === initialLength) {
     return false; // Or return false
@@ -71,7 +73,10 @@ userSchema.pre('save', async function (next) {
   }
 });
 
-userSchema.statics.updatePasswordByEmail = async function (email, newPassword) {
+userSchema.statics.updatePasswordByEmail = async function (
+  email,
+  newPassword
+) {
   const hashedPassword = await bcrypt.hash(newPassword, 10);
   return this.findOneAndUpdate(
     { email }, // Find by email
@@ -82,7 +87,9 @@ userSchema.statics.updatePasswordByEmail = async function (email, newPassword) {
   );
 };
 
-userSchema.methods.comparePassword = async function (candidatePassword) {
+userSchema.methods.comparePassword = async function (
+  candidatePassword
+) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
 

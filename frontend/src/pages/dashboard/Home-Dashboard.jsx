@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const HomeDashboard = () => {
-  return (
-    <div className='h-screen'>Home-Dashboard</div>
-  )
-}
+  return <div className="h-screen">Home-Dashboard</div>;
+};
 
-export default HomeDashboard
+export default HomeDashboard;

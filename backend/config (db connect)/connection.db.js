@@ -17,7 +17,11 @@ const connectDB = async () => {
     console.log('connected to db!');
     return connect;
   } catch (e) {
-    throw new ApiError(500, 'Failed to connect to mongodb', 'CONNECTION_DB');
+    throw new ApiError(
+      500,
+      'Failed to connect to mongodb',
+      'CONNECTION_DB'
+    );
   }
 };
 

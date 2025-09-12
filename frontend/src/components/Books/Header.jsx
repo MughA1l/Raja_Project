@@ -1,7 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Plus, Search } from 'lucide-react';
+import React, { useState, useRef, useEffect } from "react";
+import { Plus, Search } from "lucide-react";
 
-const Header = ({ onCreateClick, selected, setSelected, tabOptions, filter, setFilter }) => {
+const Header = ({
+  onCreateClick,
+  selected,
+  setSelected,
+  tabOptions,
+  filter,
+  setFilter,
+}) => {
   const [underlineStyle, setUnderlineStyle] = useState({});
   const tabRefs = useRef([]);
 
@@ -11,7 +18,7 @@ const Header = ({ onCreateClick, selected, setSelected, tabOptions, filter, setF
       setUnderlineStyle({
         left: tabElement.offsetLeft,
         width: tabElement.offsetWidth,
-        transition: 'all 300ms ease-in-out',
+        transition: "all 300ms ease-in-out",
       });
     }
   }, [selected]);
@@ -20,7 +27,9 @@ const Header = ({ onCreateClick, selected, setSelected, tabOptions, filter, setF
     <div className="space-y-0">
       {/* Header with title and search */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-semibold text-gray-800">Welcome to Books Page</h3>
+        <h3 className="text-xl font-semibold text-gray-800">
+          Welcome to Books Page
+        </h3>
 
         <div className="flex items-center gap-3">
           <div className="flex items-center justify-center w-64 h-10 border border-black/10 focus-within:border-black/30 duration-200 shadow-black/5 bg-white rounded-full relative">
@@ -31,7 +40,10 @@ const Header = ({ onCreateClick, selected, setSelected, tabOptions, filter, setF
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
             />
-            <Search className="text-black/50 absolute right-2" size={20} />
+            <Search
+              className="text-black/50 absolute right-2"
+              size={20}
+            />
           </div>
 
           <button
@@ -53,8 +65,8 @@ const Header = ({ onCreateClick, selected, setSelected, tabOptions, filter, setF
               ref={(el) => (tabRefs.current[index] = el)}
               className={`px-4 py-3 text-sm font-medium relative cursor-pointer ${
                 selected === index
-                  ? 'text-light-pink'
-                  : 'text-gray-500 hover:text-gray-700 hover:bg-white/40'
+                  ? "text-light-pink"
+                  : "text-gray-500 hover:text-gray-700 hover:bg-white/40"
               }`}
               onClick={() => setSelected(index)}
             >
@@ -62,7 +74,9 @@ const Header = ({ onCreateClick, selected, setSelected, tabOptions, filter, setF
                 <span>{option.label}</span>
                 <span
                   className={`text-xs ${
-                    selected === index ? 'text-light-pink/90' : 'text-gray-400'
+                    selected === index
+                      ? "text-light-pink/90"
+                      : "text-gray-400"
                   }`}
                 >
                   ({option.count})

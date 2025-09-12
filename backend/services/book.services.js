@@ -39,7 +39,10 @@ export const updateBook = async (bookId, updateData) => {
     throw new ApiError(400, 'No fields provided for update');
   }
 
-  const updatedBook = await bookRepo.updateBookById(bookId, updateData);
+  const updatedBook = await bookRepo.updateBookById(
+    bookId,
+    updateData
+  );
 
   if (!updatedBook) {
     throw new ApiError(404, 'Book not found');

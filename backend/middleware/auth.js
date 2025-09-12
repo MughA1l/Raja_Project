@@ -28,7 +28,11 @@ const auth = async (req, res, next) => {
     } catch (err) {
       if (err.name !== 'TokenExpiredError') {
         // Invalid token (not expired), block access
-        throw new ApiError(401, 'Invalid access token', 'INVALID_ACCESS_TOKEN');
+        throw new ApiError(
+          401,
+          'Invalid access token',
+          'INVALID_ACCESS_TOKEN'
+        );
       }
 
       // 3. If token expired, check refresh token from cookies

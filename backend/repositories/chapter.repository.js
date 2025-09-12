@@ -58,7 +58,11 @@ export const findByIdAndUser = async (userId, chapterId) => {
   }
 };
 
-export const updateChapterById = async (userId, chapterId, updateData) => {
+export const updateChapterById = async (
+  userId,
+  chapterId,
+  updateData
+) => {
   try {
     const updatedChapter = await Chapter.findOneAndUpdate(
       { _id: chapterId, userId },
@@ -106,7 +110,9 @@ export const deleteChapterById = async (userId, chapterId) => {
 
 export const getChaptersByBook = async (bookId) => {
   try {
-    const allChapters = await Chapter.find({ bookId }).populate('images');
+    const allChapters = await Chapter.find({ bookId }).populate(
+      'images'
+    );
 
     return allChapters;
   } catch (error) {

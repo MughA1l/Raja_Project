@@ -82,7 +82,9 @@ const Videos = ({ videosArr }) => {
 
             {/* Title */}
             <div className="p-3">
-              <h3 className="font-medium text-gray-800">{video.title}</h3>
+              <h3 className="font-medium text-gray-800">
+                {video.title}
+              </h3>
             </div>
           </div>
         );

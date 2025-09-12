@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import Header from '../../components/Books/Header';
-import CardsContainer from '../../components/Books/CardsContainer';
-import CreateBookDrawer from '../../components/Books/CreateBookDrawer';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import { getAllBooksByUser } from '../../api/services/bookService';
+import React, { useEffect } from "react";
+import Header from "../../components/Books/Header";
+import CardsContainer from "../../components/Books/CardsContainer";
+import CreateBookDrawer from "../../components/Books/CreateBookDrawer";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { getAllBooksByUser } from "../../api/services/bookService";
 
 let tabOptions = [];
 const Books = () => {
@@ -18,7 +18,7 @@ const Books = () => {
   // State to show the filtered books like all, favourite etc.
   const [filteredBooks, setFilteredBooks] = useState([]);
 
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState("");
 
   const getAllBooks = async () => {
     try {
@@ -28,8 +28,8 @@ const Books = () => {
         setBooks(books.data);
       }
     } catch (error) {
-      console.log('Error', error);
-      toast.error('Failed to get Books');
+      console.log("Error", error);
+      toast.error("Failed to get Books");
     } finally {
       setLoading(false);
     }
@@ -59,23 +59,23 @@ const Books = () => {
     }
 
     tabOptions = [
-      { label: 'All Books', count: books.length },
+      { label: "All Books", count: books.length },
       {
-        label: 'Complete',
+        label: "Complete",
         count: books.filter((b) => b.isComplete).length,
       },
       {
-        label: 'InComplete',
+        label: "InComplete",
         count: books.filter((b) => !b.isComplete).length,
       },
       {
-        label: 'Favourite',
+        label: "Favourite",
         count: books.filter((b) => b.isFavourite).length,
       },
     ];
 
     const filteredBy = filtered.filter((chapter) =>
-      chapter.name.toLowerCase().includes(filter.toLowerCase()),
+      chapter.name.toLowerCase().includes(filter.toLowerCase())
     );
 
     setFilteredBooks(filteredBy);
