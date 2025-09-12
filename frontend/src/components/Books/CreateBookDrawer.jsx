@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { createBook } from '../../api/services/bookService';
-import { showError, showSuccess } from '../../utils/toast';
+import React, { useRef, useState } from "react";
+import { createBook } from "../../api/services/bookService";
+import { showError, showSuccess } from "../../utils/toast";
 
 const CreateBookDrawer = ({ isOpen, onClose, getAllBooks }) => {
   const fileInputRef = useRef(null);
@@ -22,34 +22,39 @@ const CreateBookDrawer = ({ isOpen, onClose, getAllBooks }) => {
 
     const file = fileInputRef.current.files[0];
     if (!file) {
-      showError('Please select an image');
+      showError("Please select an image");
       return;
     }
 
     const formData = new FormData();
-    formData.append('name', e.target.name.value);
-    formData.append('image', file);
+    formData.append("name", e.target.name.value);
+    formData.append("image", file);
 
     try {
       const creation = await createBook(formData);
       if (creation.success) {
-        showSuccess('Created Book successfully');
+        showSuccess("Created Book successfully");
         getAllBooks();
         onClose();
       }
     } catch (err) {
-      console.error('Error creating book:', err);
+      console.error("Error creating book:", err);
     }
   };
 
   return (
     <div
       className={`fixed top-0 right-0 h-screen w-96 bg-base-100 shadow-lg z-50 transform transition-all duration-500 ${
-        isOpen ? 'translate-x-0' : 'translate-x-full'
+        isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
       {/* Overlay */}
-      {isOpen && <div className="fixed inset-0 bg-opacity-40 z-40" onClick={onClose} />}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-opacity-40 z-40"
+          onClick={onClose}
+        />
+      )}
 
       {/* Drawer Content */}
       <div className="p-6 space-y-4 z-50 relative h-full overflow-y-auto">
@@ -59,7 +64,9 @@ const CreateBookDrawer = ({ isOpen, onClose, getAllBooks }) => {
           {/* Book Name */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-medium">Book Name</span>
+              <span className="label-text font-medium">
+                Book Name
+              </span>
             </label>
             <input
               type="text"
@@ -73,7 +80,9 @@ const CreateBookDrawer = ({ isOpen, onClose, getAllBooks }) => {
           {/* Image Upload */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-medium">Book Cover Image</span>
+              <span className="label-text font-medium">
+                Book Cover Image
+              </span>
             </label>
 
             {/* Hidden File Input */}
@@ -81,7 +90,7 @@ const CreateBookDrawer = ({ isOpen, onClose, getAllBooks }) => {
               type="file"
               accept="image/*"
               ref={fileInputRef}
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
               onChange={handleImageSelect}
             />
 
@@ -90,7 +99,9 @@ const CreateBookDrawer = ({ isOpen, onClose, getAllBooks }) => {
               onClick={handleImageClick}
               className="w-full aspect-video border-2 border-dashed border-gray-300 cursor-pointer flex items-center justify-center text-sm text-gray-500 p-4 bg-base-200 rounded-xl hover:bg-base-300 transition mt-2"
             >
-              {selectedImage ? 'Click to change image' : 'Click to select a cover image'}
+              {selectedImage
+                ? "Click to change image"
+                : "Click to select a cover image"}
             </div>
 
             {/* Preview */}

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import Card from './Card';
-import { toast } from 'react-toastify';
-import { deleteBook } from '../../api/services/bookService';
-import { showSuccess } from '../../utils/toast';
-import ConfirmationModal from '../general/ConfirmationModal.jsx';
-import EditBook from './EditBook.jsx';
+import React, { useState } from "react";
+import Card from "./Card";
+import { toast } from "react-toastify";
+import { deleteBook } from "../../api/services/bookService";
+import { showSuccess } from "../../utils/toast";
+import ConfirmationModal from "../general/ConfirmationModal.jsx";
+import EditBook from "./EditBook.jsx";
 
 const CardsContainer = ({
   books,
@@ -46,13 +46,15 @@ const CardsContainer = ({
       if (selectedBook) {
         const response = await deleteBook(selectedBook._id);
         if (response.success) {
-          showSuccess('Book deleted successfully');
-          setBooks((prev) => prev.filter((b) => b._id !== selectedBook._id));
+          showSuccess("Book deleted successfully");
+          setBooks((prev) =>
+            prev.filter((b) => b._id !== selectedBook._id)
+          );
         }
       }
     } catch (error) {
-      console.log('Error', error);
-      toast.error('Failed to delete book');
+      console.log("Error", error);
+      toast.error("Failed to delete book");
     }
     setIsDeleteModalOpen(false);
     setSelectedBook(null);
@@ -137,7 +139,11 @@ const CardsContainer = ({
           isOpen={isEditModalOpen}
           onUpdate={(updatedBook) => {
             // update local books list after editing
-            setBooks((prev) => prev.map((b) => (b._id === updatedBook._id ? updatedBook : b)));
+            setBooks((prev) =>
+              prev.map((b) =>
+                b._id === updatedBook._id ? updatedBook : b
+              )
+            );
           }}
         />
       )}

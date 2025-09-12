@@ -4,7 +4,10 @@ import path from 'path';
 import fs from 'fs';
 
 // Ensure uploads/chapter-images exists
-const uploadPath = path.join(process.cwd(), 'public/uploads/chapters');
+const uploadPath = path.join(
+  process.cwd(),
+  'public/uploads/chapters'
+);
 if (!fs.existsSync(uploadPath)) {
   fs.mkdirSync(uploadPath, { recursive: true });
 }

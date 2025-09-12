@@ -29,7 +29,12 @@ export const findUserByEmailOrUsername = async (email, username) => {
       $or: [{ email }, { username }],
     });
   } catch (error) {
-    throw new ApiError(500, 'Database: Query failed', 'DATABASE_ERROR', error);
+    throw new ApiError(
+      500,
+      'Database: Query failed',
+      'DATABASE_ERROR',
+      error
+    );
   }
 };
 
@@ -37,7 +42,12 @@ export const findUserByEmail = async (email) => {
   try {
     return await User.findOne({ email }).select('+password');
   } catch (error) {
-    throw new ApiError(500, 'Database: Query failed', 'DATABASE_ERROR', error);
+    throw new ApiError(
+      500,
+      'Database: Query failed',
+      'DATABASE_ERROR',
+      error
+    );
   }
 };
 
@@ -46,7 +56,12 @@ export const findUserById = async (id) => {
     let user = await User.findOne({ _id: id });
     return user;
   } catch (error) {
-    throw new ApiError(500, 'Database: Query failed', 'DATABASE_ERROR', error);
+    throw new ApiError(
+      500,
+      'Database: Query failed',
+      'DATABASE_ERROR',
+      error
+    );
   }
 };
 
@@ -55,13 +70,22 @@ export const SaveCodeInDb = async (email, generateCode) => {
     const saveCode = await Code.findOneAndUpdate(
       { email },
       {
-        $set: { code: generateCode, createdAt: new Date(), isVerified: false },
+        $set: {
+          code: generateCode,
+          createdAt: new Date(),
+          isVerified: false,
+        },
       },
       { upsert: true, new: true }
     );
     if (saveCode) return saveCode;
   } catch (error) {
-    throw new ApiError(500, 'Code saving failed', 'DATABASE_ERROR', error);
+    throw new ApiError(
+      500,
+      'Code saving failed',
+      'DATABASE_ERROR',
+      error
+    );
   }
 };
 
@@ -85,9 +109,15 @@ export const FindSavedCode = async (email, code) => {
   }
 };
 
-export const updateUserPasswordByEmail = async (email, newPassword) => {
+export const updateUserPasswordByEmail = async (
+  email,
+  newPassword
+) => {
   try {
-    let process = await User.updatePasswordByEmail(email, newPassword);
+    let process = await User.updatePasswordByEmail(
+      email,
+      newPassword
+    );
     if (!process) return false;
     return true;
   } catch (error) {

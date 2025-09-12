@@ -53,7 +53,10 @@ const imageSchema = new Schema(
   }
 );
 
-imageSchema.index({ userId: 1, chapterId: 1, name: 1 }, { unique: true });
+imageSchema.index(
+  { userId: 1, chapterId: 1, name: 1 },
+  { unique: true }
+);
 
 const Image = mongoose.model('Image', imageSchema);
 

@@ -51,7 +51,11 @@ export const getUserChapters = async (req, res, next) => {
 
     // Validate userId
     if (!userId) {
-      throw new ApiError(400, 'User ID is required', 'VALIDATION_ERROR');
+      throw new ApiError(
+        400,
+        'User ID is required',
+        'VALIDATION_ERROR'
+      );
     }
     const chapters = await chapterService.getUserChapters(userId);
 
@@ -68,13 +72,24 @@ export const getChapterById = async (req, res, next) => {
 
     // Validation
     if (!userId) {
-      throw new ApiError(400, 'User ID is required', 'VALIDATION_ERROR');
+      throw new ApiError(
+        400,
+        'User ID is required',
+        'VALIDATION_ERROR'
+      );
     }
     if (!chapterId) {
-      throw new ApiError(400, 'Chapter ID is required', 'VALIDATION_ERROR');
+      throw new ApiError(
+        400,
+        'Chapter ID is required',
+        'VALIDATION_ERROR'
+      );
     }
 
-    const chapter = await chapterService.getChapterById(userId, chapterId);
+    const chapter = await chapterService.getChapterById(
+      userId,
+      chapterId
+    );
 
     return successResponse(res, { chapter });
   } catch (error) {
@@ -90,10 +105,18 @@ export const updateChapter = async (req, res, next) => {
 
     // Validation
     if (!userId) {
-      throw new ApiError(400, 'User ID is required', 'VALIDATION_ERROR');
+      throw new ApiError(
+        400,
+        'User ID is required',
+        'VALIDATION_ERROR'
+      );
     }
     if (!chapterId) {
-      throw new ApiError(400, 'Chapter ID is required', 'VALIDATION_ERROR');
+      throw new ApiError(
+        400,
+        'Chapter ID is required',
+        'VALIDATION_ERROR'
+      );
     }
     if (!updateData || Object.keys(updateData).length === 0) {
       throw new ApiError(
@@ -123,13 +146,24 @@ export const deleteChapter = async (req, res, next) => {
     const chapterId = req.params.id;
 
     if (!userId) {
-      throw new ApiError(400, 'User ID is required', 'VALIDATION_ERROR');
+      throw new ApiError(
+        400,
+        'User ID is required',
+        'VALIDATION_ERROR'
+      );
     }
     if (!chapterId) {
-      throw new ApiError(400, 'Chapter ID is required', 'VALIDATION_ERROR');
+      throw new ApiError(
+        400,
+        'Chapter ID is required',
+        'VALIDATION_ERROR'
+      );
     }
 
-    const deleted = await chapterService.deleteChapter(userId, chapterId);
+    const deleted = await chapterService.deleteChapter(
+      userId,
+      chapterId
+    );
 
     return successResponse(res, {
       message: 'Chapter deleted successfully',
@@ -147,7 +181,11 @@ export const getAllChaptersByBook = async (req, res, next) => {
     const { id } = req.params;
 
     if (!id) {
-      throw new ApiError(400, 'book Id is required', 'VALIDATION_ERROR');
+      throw new ApiError(
+        400,
+        'book Id is required',
+        'VALIDATION_ERROR'
+      );
     }
 
     const allChapters = await chapterService.chaptersByBook(id);

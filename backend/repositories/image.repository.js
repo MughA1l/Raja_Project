@@ -20,9 +20,15 @@ export const createImage = async (imageData) => {
 
 export const updateImagesChapterId = async (imageIds, chapterId) => {
   try {
-    await Image.updateMany({ _id: { $in: imageIds } }, { $set: { chapterId } });
+    await Image.updateMany(
+      { _id: { $in: imageIds } },
+      { $set: { chapterId } }
+    );
   } catch (error) {
     console.error('Error updating images:', error);
-    throw new ApiError(500, 'Failed to associate images with chapter');
+    throw new ApiError(
+      500,
+      'Failed to associate images with chapter'
+    );
   }
 };

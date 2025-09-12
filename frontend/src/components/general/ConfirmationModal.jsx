@@ -1,9 +1,16 @@
-import React from 'react';
+import React from "react";
 
-const ConfirmationModal = ({ isOpen, title, para, onCancel, onConfirm }) => {
-
+const ConfirmationModal = ({
+  isOpen,
+  title,
+  para,
+  onCancel,
+  onConfirm,
+}) => {
   return (
-    <dialog className={`modal h-screen ${isOpen ? "modal-open" : ""}`}>
+    <dialog
+      className={`modal h-screen ${isOpen ? "modal-open" : ""}`}
+    >
       <div className="modal-box bg-white rounded-xl shadow-lg">
         {/* Heading */}
         <h3 className="font-bold text-lg text-gray-800">
@@ -12,7 +19,8 @@ const ConfirmationModal = ({ isOpen, title, para, onCancel, onConfirm }) => {
 
         {/* Paragraph */}
         <p className="py-3 text-gray-600 text-sm">
-          {para || "This action cannot be undone. Please confirm your choice."}
+          {para ||
+            "This action cannot be undone. Please confirm your choice."}
         </p>
 
         {/* Buttons */}

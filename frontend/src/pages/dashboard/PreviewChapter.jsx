@@ -1,18 +1,13 @@
-import React, { useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import SingleImageContainer from '../../components/SingleChapter/ImageContainer';
-import TextContainer from '../../components/SingleChapter/TextContainer';
-import AllImagesContainer from '../../components/SingleChapter/AllImagesContainer';
+import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import SingleImageContainer from "../../components/SingleChapter/ImageContainer";
+import TextContainer from "../../components/SingleChapter/TextContainer";
+import AllImagesContainer from "../../components/SingleChapter/AllImagesContainer";
 
 const PreviewChapter = () => {
-  const { chapterId } = useParams();
   const location = useLocation();
   const [images, setImages] = useState(location.state?.images || []);
   const [selectedImage, setSelectedImage] = useState(1);
-
-  const getAllImages = async () => {
-    // later call the service to get the data
-  };
 
   return (
     <div className="min-h-screen max-h-fit w-full p-5 pt-5 bg-[#F7F7F7] rounded-xl">

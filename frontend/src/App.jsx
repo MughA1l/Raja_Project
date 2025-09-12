@@ -1,21 +1,26 @@
-import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Signup from './pages/auth/Signup.jsx';
-import LoginPage from './pages/auth/LoginPage';
-import ForgotPassword from './pages/auth/ForgotPassword';
-import CodeVerify from './pages/auth/Code-verify';
-import ResetPassword from './pages/auth/Reset-password';
-import DashboardLayout from './pages/dashboard/DashboardLayout.jsx';
-import HomeDashboard from './pages/dashboard/Home-Dashboard.jsx';
-import NotFound from './pages/Not-Found.jsx';
-import Books from './pages/dashboard/Books.jsx';
-import Chapters from './pages/dashboard/Chapters.jsx';
-import Images from './pages/dashboard/Images.jsx';
-import Settings from './pages/dashboard/Settings.jsx';
-import PreviewChapter from './pages/dashboard/PreviewChapter.jsx';
-import useSocketStore from './context/useSocketStore.js';
-import { useEffect } from 'react';
-import { showSuccess } from './utils/toast.js';
+import React from "react";
+import "./App.css";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import Signup from "./pages/auth/Signup.jsx";
+import LoginPage from "./pages/auth/LoginPage";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import CodeVerify from "./pages/auth/Code-verify";
+import ResetPassword from "./pages/auth/Reset-password";
+import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
+import HomeDashboard from "./pages/dashboard/Home-Dashboard.jsx";
+import NotFound from "./pages/Not-Found.jsx";
+import Books from "./pages/dashboard/Books.jsx";
+import Chapters from "./pages/dashboard/Chapters.jsx";
+import Images from "./pages/dashboard/Images.jsx";
+import Settings from "./pages/dashboard/Settings.jsx";
+import PreviewChapter from "./pages/dashboard/PreviewChapter.jsx";
+import useSocketStore from "./context/useSocketStore.js";
+import { useEffect } from "react";
+import { showSuccess } from "./utils/toast.js";
 
 function App() {
   const initSocket = useSocketStore((state) => state.initSocket);
@@ -32,11 +37,11 @@ function App() {
       showSuccess(data);
     };
 
-    socket.on('notify', handleNotify);
+    socket.on("notify", handleNotify);
 
     // cleanup to avoid duplicate listeners
     return () => {
-      socket.off('notify', handleNotify);
+      socket.off("notify", handleNotify);
     };
   }, [socket]);
 
@@ -46,7 +51,10 @@ function App() {
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route
+            path="/forgot-password"
+            element={<ForgotPassword />}
+          />
           <Route path="/verify-code" element={<CodeVerify />} />
           <Route path="/reset-password" element={<ResetPassword />} />
 
@@ -60,9 +68,15 @@ function App() {
             <Route path="/Settings" element={<Settings />} />
 
             {/* route from book to chapter */}
-            <Route path="/Books/:bookId/Chapters" element={<Chapters />} />
+            <Route
+              path="/Books/:bookId/Chapters"
+              element={<Chapters />}
+            />
             {/* for book -> chapter -> preview single chapter */}
-            <Route path="/Chapters/:chapterId" element={<PreviewChapter />} />
+            <Route
+              path="/Chapters/:chapterId"
+              element={<PreviewChapter />}
+            />
           </Route>
 
           <Route path="*" element={<NotFound />} />

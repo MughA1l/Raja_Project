@@ -18,7 +18,10 @@ router.post('/create', multiUpload, chapterController.createChapter);
 
 router.get('/getAllChapters', chapterController.getUserChapters);
 
-router.get('/getAllChaptersByBook/:id', chapterController.getAllChaptersByBook);
+router.get(
+  '/getAllChaptersByBook/:id',
+  chapterController.getAllChaptersByBook
+);
 
 router.get('/getSingleChapter/:id', chapterController.getChapterById);
 

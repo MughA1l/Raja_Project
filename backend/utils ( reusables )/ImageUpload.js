@@ -10,7 +10,11 @@ const getCloudinaryUrl = async (path) => {
     });
   } catch (error) {
     console.log(error);
-    throw new ApiError(500, 'cloudinary url error', 'CLOUDINARY_UPLOAD');
+    throw new ApiError(
+      500,
+      'cloudinary url error',
+      'CLOUDINARY_UPLOAD'
+    );
   }
 };
 

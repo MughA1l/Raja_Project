@@ -14,7 +14,11 @@ export const register = async (req, res, next) => {
     // validate input data
     let { username, email, password } = req.body || {};
     if (!username || !email || !password) {
-      throw new ApiError(422, 'All fields are required', 'MISSING_DATA');
+      throw new ApiError(
+        422,
+        'All fields are required',
+        'MISSING_DATA'
+      );
     }
     const payload = { username, email, password };
     // service call
@@ -41,7 +45,11 @@ export const register = async (req, res, next) => {
     }
 
     return next(
-      new ApiError(500, 'User registration failed', 'REGISTRATION_ERROR')
+      new ApiError(
+        500,
+        'User registration failed',
+        'REGISTRATION_ERROR'
+      )
     );
   }
 };
@@ -75,7 +83,9 @@ export const login = async (req, res, next) => {
     if (error instanceof ApiError) {
       return next(error);
     }
-    return next(new ApiError(500, 'User Login failed', 'LOGIN_ERROR'));
+    return next(
+      new ApiError(500, 'User Login failed', 'LOGIN_ERROR')
+    );
   }
 };
 
@@ -84,7 +94,11 @@ export const logout = async (req, res, next) => {
     const refreshToken = req.cookies?.refreshToken;
 
     if (!refreshToken) {
-      throw new ApiError(401, 'No refresh token found', 'UNAUTHORIZED');
+      throw new ApiError(
+        401,
+        'No refresh token found',
+        'UNAUTHORIZED'
+      );
     }
 
     const userId = req.user?.userId;
@@ -134,7 +148,11 @@ export const verifyCode = async (req, res, next) => {
   let { code, email } = req.body || {};
   try {
     if (!code || !email) {
-      throw new ApiError(422, 'All fields are required', 'MISSING_DATA');
+      throw new ApiError(
+        422,
+        'All fields are required',
+        'MISSING_DATA'
+      );
     }
     let message = await userCodeVerify(email, code);
 
