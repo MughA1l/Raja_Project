@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import SingleImageContainer from '../../components/SingleChapter/ImageContainer';
 import TextContainer from '../../components/SingleChapter/TextContainer';
@@ -12,14 +12,13 @@ const PreviewChapter = () => {
 
   const getAllImages = async () => {
     // later call the service to get the data
-  }
+  };
 
   return (
-    <div className='min-h-screen max-h-fit w-full p-5 pt-5 bg-[#F7F7F7] rounded-xl'>
-      <div className='grid grid-cols-20 gap-3'>
-
+    <div className="min-h-screen max-h-fit w-full p-5 pt-5 bg-[#F7F7F7] rounded-xl">
+      <div className="grid grid-cols-20 gap-3">
         {/* to show both the image container and the text (ocr ++) */}
-        <div className='col-span-14 w-full h-full bg-white rounded-xl'>
+        <div className="col-span-14 w-full h-full bg-white rounded-xl">
           <SingleImageContainer
             setSelectedImage={setSelectedImage}
             selectedImage={selectedImage}
@@ -41,10 +40,9 @@ const PreviewChapter = () => {
           selectedImage={selectedImage}
           setSelectedImage={setSelectedImage}
         />
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PreviewChapter
+export default PreviewChapter;

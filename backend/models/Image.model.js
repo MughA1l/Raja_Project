@@ -1,6 +1,5 @@
-
-import mongoose from "mongoose";
-import { Schema } from "mongoose";
+import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 
 const videoSchema = new Schema(
   {
@@ -41,11 +40,11 @@ const imageSchema = new Schema(
     },
     ocr: {
       type: String,
-      default: null
+      default: null,
     },
     enhancedText: {
       type: String,
-      default: null
+      default: null,
     },
     videos: [videoSchema],
   },
@@ -53,7 +52,6 @@ const imageSchema = new Schema(
     timestamps: true,
   }
 );
-
 
 imageSchema.index({ userId: 1, chapterId: 1, name: 1 }, { unique: true });
 

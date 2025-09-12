@@ -1,11 +1,12 @@
 import { google } from 'googleapis';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
 dotenv.config();
 
 // Create YouTube service client
 const youtube = google.youtube({
   version: 'v3',
-  auth: process.env.YOUTUBE_API_KEY || 'AIzaSyBjORSaRF2NJoj5KALmFl981J3YCL8DFms'
+  auth:
+    process.env.YOUTUBE_API_KEY || 'AIzaSyBjORSaRF2NJoj5KALmFl981J3YCL8DFms',
 });
 
 async function searchYouTubeVideos(keywords) {
@@ -18,10 +19,10 @@ async function searchYouTubeVideos(keywords) {
       order: 'relevance',
     });
 
-    return response.data.items.map(item => ({
+    return response.data.items.map((item) => ({
       title: item.snippet.title,
       url: `https://youtu.be/${item.id.videoId}`,
-      thumbnail: item.snippet.thumbnails.default.url
+      thumbnail: item.snippet.thumbnails.default.url,
     }));
   } catch (error) {
     console.error('YouTube API Error:', error);
@@ -30,4 +31,3 @@ async function searchYouTubeVideos(keywords) {
 }
 
 export default searchYouTubeVideos;
-

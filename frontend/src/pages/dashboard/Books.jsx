@@ -1,5 +1,4 @@
-
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import Header from '../../components/Books/Header';
 import CardsContainer from '../../components/Books/CardsContainer';
 import CreateBookDrawer from '../../components/Books/CreateBookDrawer';
@@ -9,7 +8,6 @@ import { getAllBooksByUser } from '../../api/services/bookService';
 
 let tabOptions = [];
 const Books = () => {
-
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selected, setSelected] = useState(0);
@@ -22,8 +20,6 @@ const Books = () => {
 
   const [filter, setFilter] = useState('');
 
-
-
   const getAllBooks = async () => {
     try {
       setLoading(true);
@@ -34,8 +30,7 @@ const Books = () => {
     } catch (error) {
       console.log('Error', error);
       toast.error('Failed to get Books');
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -44,7 +39,6 @@ const Books = () => {
     getAllBooks();
   }, []);
 
-
   useEffect(() => {
     if (!books.length) return;
 
@@ -52,43 +46,64 @@ const Books = () => {
 
     switch (selected) {
       case 1: // Complete
-        filtered = books.filter(b => b.isComplete);
+        filtered = books.filter((b) => b.isComplete);
         break;
       case 2: // InComplete
-        filtered = books.filter(b => !b.isComplete);
+        filtered = books.filter((b) => !b.isComplete);
         break;
       case 3: // Favourite
-        filtered = books.filter(b => b.isFavourite);
+        filtered = books.filter((b) => b.isFavourite);
         break;
       default: // All Books
         filtered = books;
     }
 
     tabOptions = [
-      { label: "All Books", count: books.length },
-      { label: "Complete", count: books.filter(b => b.isComplete).length },
-      { label: "InComplete", count: books.filter(b => !b.isComplete).length },
-      { label: "Favourite", count: books.filter(b => b.isFavourite).length },
+      { label: 'All Books', count: books.length },
+      {
+        label: 'Complete',
+        count: books.filter((b) => b.isComplete).length,
+      },
+      {
+        label: 'InComplete',
+        count: books.filter((b) => !b.isComplete).length,
+      },
+      {
+        label: 'Favourite',
+        count: books.filter((b) => b.isFavourite).length,
+      },
     ];
 
-    const filteredBy = filtered.filter(chapter =>
-      chapter.name.toLowerCase().includes(filter.toLowerCase())
+    const filteredBy = filtered.filter((chapter) =>
+      chapter.name.toLowerCase().includes(filter.toLowerCase()),
     );
 
     setFilteredBooks(filteredBy);
-
   }, [selected, books, filter]);
 
   return (
-    <div className=''>
-      <div className='min-h-screen max-h-fit w-full p-5 pt-5 bg-[#F7F7F7] rounded-xl'>
-
+    <div className="">
+      <div className="max-h-fit min-h-screen w-full rounded-xl bg-[#F7F7F7] p-5 pt-5">
         {/* header */}
-        <Header tabOptions={tabOptions} filter={filter} setFilter={setFilter} onCreateClick={() => setIsDrawerOpen(true)} selected={selected} setSelected={setSelected} />
+        <Header
+          tabOptions={tabOptions}
+          filter={filter}
+          setFilter={setFilter}
+          onCreateClick={() => setIsDrawerOpen(true)}
+          selected={selected}
+          setSelected={setSelected}
+        />
 
         {/* cards container */}
-        <CardsContainer isEditModalOpen={isEditModalOpen} setIsEditModalOpen={setIsEditModalOpen} books={filteredBooks} getAllBooks={getAllBooks} setBooks={setBooks} loading={loading} setLoading={setLoading} />
-
+        <CardsContainer
+          isEditModalOpen={isEditModalOpen}
+          setIsEditModalOpen={setIsEditModalOpen}
+          books={filteredBooks}
+          getAllBooks={getAllBooks}
+          setBooks={setBooks}
+          loading={loading}
+          setLoading={setLoading}
+        />
       </div>
 
       {/* Drawer */}
@@ -99,12 +114,14 @@ const Books = () => {
       />
 
       {/* overlay */}
-      {(isDrawerOpen || isEditModalOpen) && <div className="absolute inset-0 h-screen w-screen z-0 bg-black/30"
-        onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-      ></div>}
-
+      {(isDrawerOpen || isEditModalOpen) && (
+        <div
+          className="absolute inset-0 z-0 h-screen w-screen bg-black/30"
+          onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+        ></div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default Books;

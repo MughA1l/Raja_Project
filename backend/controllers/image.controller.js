@@ -1,4 +1,1 @@
-
-export const createImage=()=>{
-    
-}
+export const createImage = () => {};

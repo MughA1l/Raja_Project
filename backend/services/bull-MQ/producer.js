@@ -2,7 +2,7 @@
 import { Queue } from 'bullmq';
 
 export const imageQueue = new Queue('image-processing', {
-  connection: { host: '127.0.0.1', port: 6379 }
+  connection: { host: '127.0.0.1', port: 6379 },
 });
 
 // Called inside createChapter or addImages service

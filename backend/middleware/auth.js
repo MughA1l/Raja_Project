@@ -10,11 +10,14 @@ const auth = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new ApiError(401, 'Access token is missing', 'ACCESS_TOKEN_EXPIRED');
+      throw new ApiError(
+        401,
+        'Access token is missing',
+        'ACCESS_TOKEN_EXPIRED'
+      );
     }
 
     const accessToken = authHeader.split(' ')[1];
-
 
     try {
       // 2. Try verifying the access token
@@ -31,9 +34,12 @@ const auth = async (req, res, next) => {
       // 3. If token expired, check refresh token from cookies
       const refreshToken = req.cookies?.refreshToken;
 
-
       if (!refreshToken) {
-        throw new ApiError(401, 'Access token expired & refresh token missing', 'ACCESS_TOKEN_EXPIRED');
+        throw new ApiError(
+          401,
+          'Access token expired & refresh token missing',
+          'ACCESS_TOKEN_EXPIRED'
+        );
       }
 
       // 4. Try verifying the refresh token
@@ -41,7 +47,11 @@ const auth = async (req, res, next) => {
       try {
         decodedRefresh = jwtConfig.verifyToken(refreshToken);
       } catch {
-        throw new ApiError(401, 'Refresh token is invalid or expired', 'INVALID_REFRESH_TOKEN');
+        throw new ApiError(
+          401,
+          'Refresh token is invalid or expired',
+          'INVALID_REFRESH_TOKEN'
+        );
       }
 
       // 5. Check if refresh token is in DB and not expired
@@ -52,7 +62,11 @@ const auth = async (req, res, next) => {
       });
 
       if (!user) {
-        throw new ApiError(401, 'Refresh token is not valid', 'INVALID_REFRESH_TOKEN');
+        throw new ApiError(
+          401,
+          'Refresh token is not valid',
+          'INVALID_REFRESH_TOKEN'
+        );
       }
 
       // 6. Generate new access token

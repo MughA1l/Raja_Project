@@ -1,60 +1,55 @@
-import React, { useRef, useState } from 'react'
-import { createBook } from '../../api/services/bookService'
+import React, { useRef, useState } from 'react';
+import { createBook } from '../../api/services/bookService';
 import { showError, showSuccess } from '../../utils/toast';
 
-const CreateBookDrawer = ({ isOpen, onClose,getAllBooks }) => {
-  const fileInputRef = useRef(null)
+const CreateBookDrawer = ({ isOpen, onClose, getAllBooks }) => {
+  const fileInputRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageSelect = (e) => {
-    const file = e.target.files[0]
+    const file = e.target.files[0];
     if (file) {
-      setSelectedImage(URL.createObjectURL(file))
+      setSelectedImage(URL.createObjectURL(file));
     }
-  }
+  };
 
   const handleImageClick = () => {
-    fileInputRef.current.click()
-  }
+    fileInputRef.current.click();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const file = fileInputRef.current.files[0];
     if (!file) {
-      showError("Please select an image");
+      showError('Please select an image');
       return;
     }
 
     const formData = new FormData();
-    formData.append("name", e.target.name.value);
-    formData.append("image", file);
+    formData.append('name', e.target.name.value);
+    formData.append('image', file);
 
     try {
       const creation = await createBook(formData);
       if (creation.success) {
-        showSuccess("Created Book successfully");
+        showSuccess('Created Book successfully');
         getAllBooks();
         onClose();
       }
     } catch (err) {
-      console.error("Error creating book:", err);
+      console.error('Error creating book:', err);
     }
   };
 
-
   return (
     <div
-      className={`fixed top-0 right-0 h-screen w-96 bg-base-100 shadow-lg z-50 transform transition-all duration-500 ${isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+      className={`fixed top-0 right-0 h-screen w-96 bg-base-100 shadow-lg z-50 transform transition-all duration-500 ${
+        isOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}
     >
       {/* Overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-opacity-40 z-40"
-          onClick={onClose}
-        />
-      )}
+      {isOpen && <div className="fixed inset-0 bg-opacity-40 z-40" onClick={onClose} />}
 
       {/* Drawer Content */}
       <div className="p-6 space-y-4 z-50 relative h-full overflow-y-auto">
@@ -127,7 +122,7 @@ const CreateBookDrawer = ({ isOpen, onClose,getAllBooks }) => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CreateBookDrawer
+export default CreateBookDrawer;

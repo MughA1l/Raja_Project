@@ -1,4 +1,3 @@
-
 import ApiError from '../utils ( reusables )/ApiError.js';
 import Chapter from '../models/Chapter.model.js';
 import Book from '../models/Book.model.js';
@@ -8,9 +7,16 @@ export const createChapter = async (chapterData) => {
     const newChapter = new Chapter(chapterData);
     return await newChapter.save();
   } catch (error) {
-
-    if (error.code === 11000 && error.keyPattern?.bookId && error.keyPattern?.name) {
-      throw new ApiError(400, 'Chapter name must be unique within the same book', 'DUPLICATE_CHAPTER');
+    if (
+      error.code === 11000 &&
+      error.keyPattern?.bookId &&
+      error.keyPattern?.name
+    ) {
+      throw new ApiError(
+        400,
+        'Chapter name must be unique within the same book',
+        'DUPLICATE_CHAPTER'
+      );
     }
     console.error('Error creating chapter:', error);
     throw new ApiError(500, 'Failed to create chapter');
@@ -27,7 +33,11 @@ export const findByUserId = async (userId) => {
 
     return chapters;
   } catch (error) {
-    throw new ApiError(500, "Database error while fetching chapters", "DB_ERROR");
+    throw new ApiError(
+      500,
+      'Database error while fetching chapters',
+      'DB_ERROR'
+    );
   }
 };
 
@@ -40,7 +50,11 @@ export const findByIdAndUser = async (userId, chapterId) => {
 
     return chapter;
   } catch (error) {
-    throw new ApiError(500, "Database error while fetching chapter", "DB_ERROR");
+    throw new ApiError(
+      500,
+      'Database error while fetching chapter',
+      'DB_ERROR'
+    );
   }
 };
 
@@ -48,7 +62,7 @@ export const updateChapterById = async (userId, chapterId, updateData) => {
   try {
     const updatedChapter = await Chapter.findOneAndUpdate(
       { _id: chapterId, userId },
-      { $set: updateData },  // update provided fields
+      { $set: updateData }, // update provided fields
       { new: true, runValidators: true }
     )
       .populate('bookId', 'title author')
@@ -57,7 +71,11 @@ export const updateChapterById = async (userId, chapterId, updateData) => {
 
     return updatedChapter;
   } catch (error) {
-    throw new ApiError(500, "Database error while updating chapter", "DB_ERROR");
+    throw new ApiError(
+      500,
+      'Database error while updating chapter',
+      'DB_ERROR'
+    );
   }
 };
 
@@ -78,19 +96,25 @@ export const deleteChapterById = async (userId, chapterId) => {
 
     return chapter;
   } catch (error) {
-    throw new ApiError(500, "Database error while deleting chapter", "DB_ERROR");
+    throw new ApiError(
+      500,
+      'Database error while deleting chapter',
+      'DB_ERROR'
+    );
   }
 };
 
 export const getChaptersByBook = async (bookId) => {
   try {
-
     const allChapters = await Chapter.find({ bookId }).populate('images');
 
     return allChapters;
-
   } catch (error) {
-    console.log(error.message)
-    throw new ApiError(500, "Database error while fetchings books by user", "DB_ERROR");
+    console.log(error.message);
+    throw new ApiError(
+      500,
+      'Database error while fetchings books by user',
+      'DB_ERROR'
+    );
   }
-}
+};

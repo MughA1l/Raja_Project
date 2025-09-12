@@ -1,5 +1,4 @@
-import ApiError from "../utils ( reusables )/ApiError.js";
-
+import ApiError from '../utils ( reusables )/ApiError.js';
 
 function errorHandler(err, req, res, next) {
   // Check if the error is a custom ApiError

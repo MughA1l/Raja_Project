@@ -1,5 +1,5 @@
-import { GoogleGenAI } from "@google/genai";
-import dotenv from "dotenv";
+import { GoogleGenAI } from '@google/genai';
+import dotenv from 'dotenv';
 
 dotenv.config();
 const getPrompt = (ocr) => {
@@ -65,9 +65,11 @@ CRITICAL FORMAT RULES:
 OCR INPUT:
 ${ocr}
 `;
-}
+};
 
-const ai = new GoogleGenAI({ apiKey: "AIzaSyBMvb7edU7u2Un1Mdt1aaN1ZpI5cKuHQ-Y" });
+const ai = new GoogleGenAI({
+  apiKey: 'AIzaSyBMvb7edU7u2Un1Mdt1aaN1ZpI5cKuHQ-Y',
+});
 
 async function useGemini(ocr) {
   try {
@@ -77,22 +79,22 @@ async function useGemini(ocr) {
     });
     let jsonString = response.text;
 
-    jsonString = jsonString.replace(/```json\n?/g, "")
-      .replace(/```/g, "")
+    jsonString = jsonString
+      .replace(/```json\n?/g, '')
+      .replace(/```/g, '')
       .replace(/\\'/g, "'")
-      .replace(/,\s*}/g, "}")
-      .replace(/,\s*]/g, "]");
+      .replace(/,\s*}/g, '}')
+      .replace(/,\s*]/g, ']');
 
-    console.log(jsonString)
-      
+    console.log(jsonString);
+
     // Parse the response text as a direct array
     const data = JSON.parse(jsonString);
     return data;
   } catch (error) {
-    console.error("Failed to parse JSON response:", error);
+    console.error('Failed to parse JSON response:', error);
     return null;
   }
 }
 
 export default useGemini;
-

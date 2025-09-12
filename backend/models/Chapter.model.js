@@ -1,7 +1,6 @@
-
 import mongoose from 'mongoose';
 import { Schema } from 'mongoose';
-import Image from './Image.model.js'
+import Image from './Image.model.js';
 
 const chapterSchema = new Schema(
   {
@@ -49,15 +48,19 @@ const chapterSchema = new Schema(
 
 chapterSchema.index({ bookId: 1, name: 1 }, { unique: true });
 
-chapterSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
-  try {
-    const chapterId = this._id;
-    await Image.deleteMany({ chapterId });
-    next();
-  } catch (err) {
-    next(err);
+chapterSchema.pre(
+  'deleteOne',
+  { document: true, query: false },
+  async function (next) {
+    try {
+      const chapterId = this._id;
+      await Image.deleteMany({ chapterId });
+      next();
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 const Chapter = mongoose.model('Chapter', chapterSchema);
 

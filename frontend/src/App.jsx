@@ -1,9 +1,5 @@
-import './App.css'
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Signup from './pages/auth/Signup.jsx';
 import LoginPage from './pages/auth/LoginPage';
 import ForgotPassword from './pages/auth/ForgotPassword';
@@ -22,9 +18,8 @@ import { useEffect } from 'react';
 import { showSuccess } from './utils/toast.js';
 
 function App() {
-
   const initSocket = useSocketStore((state) => state.initSocket);
-  const socket = useSocketStore((state) => state.socket)
+  const socket = useSocketStore((state) => state.socket);
 
   useEffect(() => {
     initSocket();
@@ -34,49 +29,47 @@ function App() {
     if (!socket) return;
 
     const handleNotify = (data) => {
-      showSuccess(data)
+      showSuccess(data);
     };
 
-    socket.on("notify", handleNotify);
+    socket.on('notify', handleNotify);
 
     // cleanup to avoid duplicate listeners
     return () => {
-      socket.off("notify", handleNotify);
+      socket.off('notify', handleNotify);
     };
   }, [socket]);
 
-
   return (
-    <div className=''>
+    <div className="">
       <Router>
         <Routes>
-          <Route path='/signup' element={<Signup />} />
-          <Route path='/login' element={<LoginPage />} />
-          <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/verify-code' element={<CodeVerify />} />
-          <Route path='/reset-password' element={<ResetPassword />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/verify-code" element={<CodeVerify />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
           <Route path="/" element={<DashboardLayout />}>
             {/* These are the nested routes. They will be rendered inside the <Outlet /> */}
             <Route index element={<HomeDashboard />} />
-            <Route path='/Books' element={<Books />} />
-            <Route path='/Chapters' element={<Chapters />} />
-            <Route path='/Books' element={<Books />} />
-            <Route path='/Images' element={<Images />} />
-            <Route path='/Settings' element={<Settings />} />
+            <Route path="/Books" element={<Books />} />
+            <Route path="/Chapters" element={<Chapters />} />
+            <Route path="/Books" element={<Books />} />
+            <Route path="/Images" element={<Images />} />
+            <Route path="/Settings" element={<Settings />} />
 
             {/* route from book to chapter */}
-            <Route path='/Books/:bookId/Chapters' element={<Chapters />} />
+            <Route path="/Books/:bookId/Chapters" element={<Chapters />} />
             {/* for book -> chapter -> preview single chapter */}
-            <Route path='/Chapters/:chapterId' element={<PreviewChapter />} />
-
+            <Route path="/Chapters/:chapterId" element={<PreviewChapter />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

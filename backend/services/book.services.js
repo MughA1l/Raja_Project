@@ -1,16 +1,14 @@
-
 import mongoose from 'mongoose';
 import * as bookRepo from '../repositories/book.repository.js';
 import ApiError from '../utils ( reusables )/ApiError.js';
 import getCloudinaryUrl from '../utils ( reusables )/ImageUpload.js';
-
 
 export const createBook = async ({ userId, name, imageFile }) => {
   const imageUrl = await getCloudinaryUrl(imageFile.path);
   const bookData = {
     userId,
     name,
-    image: imageUrl?.url
+    image: imageUrl?.url,
   };
   const savedBook = await bookRepo.createBook(bookData);
   return savedBook;
@@ -31,7 +29,6 @@ export const getBookById = async (bookId) => {
   return book;
 };
 
-
 export const updateBook = async (bookId, updateData) => {
   if (!mongoose.Types.ObjectId.isValid(bookId)) {
     throw new ApiError(400, 'Invalid book ID format');
@@ -51,7 +48,6 @@ export const updateBook = async (bookId, updateData) => {
   return updatedBook;
 };
 
-
 export const deleteBook = async (bookId) => {
   const deletedBook = await bookRepo.deleteBookById(bookId);
 
@@ -61,7 +57,6 @@ export const deleteBook = async (bookId) => {
 
   return deletedBook;
 };
-
 
 // to add chapter to books later
 export const addChapterToBook = async (bookId, chapterId) => {
