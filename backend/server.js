@@ -15,6 +15,15 @@ import { cloudinaryConnect } from './config (db connect)/cloudinary.config.js';
 import path from 'path';
 import { createSocketServer } from './config (db connect)/socket.io.js';
 import { startWorker } from './services/bull-MQ/worker.js';
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+
+const swaggerDocument = YAML.load('./docs/swagger.yaml');
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
 
 const corsOptions = {
   origin: 'http://localhost:5173',
