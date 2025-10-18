@@ -24,15 +24,13 @@ const LoginPage = () => {
       password,
     };
     try {
-      if (isChecked) {
-        const res = await loginUser(loginData);
+      const res = await loginUser(loginData);
 
-        if (res.success) {
-          // set the token in the localStorage
-          login(res?.data?.accessToken);
-          showSuccess("Welcome to Dashboard");
-          navigate("/");
-        }
+      if (res.success) {
+        // set the token in the localStorage
+        login(res?.data?.accessToken);
+        showSuccess("Welcome to Dashboard");
+        navigate("/");
       }
     } catch (error) {
       console.error("Login failed:", error.message);
@@ -144,12 +142,11 @@ const LoginPage = () => {
 
             <button
               type="submit"
-              disabled={!isChecked || isLoading}
-              className={`h-[36px] w-full rounded-md text-sm font-medium flex items-center justify-center gap-2 ${
-                isLoading
-                  ? "bg-[#121217]/90"
-                  : "bg-[#121217] hover:bg-[#121217]/85"
-              } duration-300 text-white mt-2`}
+              disabled={isLoading}
+              className={`h-[36px] w-full rounded-md text-sm font-medium flex items-center justify-center gap-2 ${isLoading
+                ? "bg-[#121217]/90"
+                : "bg-[#121217] hover:bg-[#121217]/85"
+                } duration-300 text-white mt-2`}
             >
               {isLoading ? (
                 <>

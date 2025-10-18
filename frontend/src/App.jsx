@@ -21,6 +21,7 @@ import PreviewChapter from "./pages/dashboard/PreviewChapter.jsx";
 import useSocketStore from "./context/useSocketStore.js";
 import { useEffect } from "react";
 import { showSuccess } from "./utils/toast.js";
+import Logout from "./pages/auth/Logout.jsx";
 
 function App() {
   const initSocket = useSocketStore((state) => state.initSocket);
@@ -78,6 +79,11 @@ function App() {
               element={<PreviewChapter />}
             />
           </Route>
+
+          <Route
+            path="/Logout"
+            element={<Logout />}
+          />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

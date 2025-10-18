@@ -18,6 +18,3 @@ const useAuthStore = create((set) => ({
 
 export default useAuthStore;
 
-// use case here
-
-// const { user, login, logout } = useAuthStore();

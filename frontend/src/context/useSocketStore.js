@@ -7,7 +7,7 @@ const useSocketStore = create((set, get) => ({
   initSocket: () => {
     if (!get().socket) {
       // no socket then create it
-      const socket = io("http://localhost:3001", {
+      const socket = io("http://localhost:3000", {
         transports: ["websocket"],
       });
       set({ socket });

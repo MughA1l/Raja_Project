@@ -130,14 +130,14 @@ const Card = ({
               value={
                 chapter.completionPercentage
                   ? chapter.completionPercentage
-                  : 19
+                  : 0
               }
               max="100"
             ></progress>
             <span className="text-sm font-semibold">
               {chapter.completionPercentage
                 ? chapter.completionPercentage
-                : 19}
+                : 0}
               %
             </span>
           </div>

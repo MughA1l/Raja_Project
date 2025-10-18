@@ -21,6 +21,7 @@ const Sidebar = () => {
     if (path.startsWith("/Chapters")) return "Chapters";
     if (path.startsWith("/Images")) return "Images";
     if (path.startsWith("/Settings")) return "Settings";
+    if (path.startsWith("/Logout")) return "Logout";
     return "";
   };
 
@@ -93,7 +94,7 @@ const SidebarItem = ({ icon: Icon, label, active, url }) => (
       `${isActive || label === active ? "text-white bg-[#333A45]" : "text-white/60 hover:bg-[#333A45]/30"} 
             flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm font-medium duration-200`
     }
-    to={url !== "/Logout" ? url : ""}
+    to={url !== "/Logout" ? url : "/Logout"}
   >
     <Icon className="w-4 h-4" />
     {label}
