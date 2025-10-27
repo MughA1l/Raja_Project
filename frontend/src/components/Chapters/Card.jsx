@@ -59,8 +59,8 @@ const Card = ({
       {/* div to show the image */}
       <div className="absolute left-1/2 -translate-x-1/2 -top-9 inset-x-0 h-40 w-11/12 rounded-2xl overflow-hidden shadow-md">
         <img
-          src={chapter?.image}
-          className="h-full w-full object-cover"
+          src={chapter?.image ? chapter?.image : "/9264822.jpg"}
+          className={`h-full w-full ${chapter?.image ? "object-cover" : "object-contain"}`}
           alt="chapter-image"
         />
         {/* to show complete/ incomplete */}

@@ -1,27 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
 } from "react-router-dom";
-import Signup from "./pages/auth/Signup.jsx";
-import LoginPage from "./pages/auth/LoginPage";
-import ForgotPassword from "./pages/auth/ForgotPassword";
-import CodeVerify from "./pages/auth/Code-verify";
-import ResetPassword from "./pages/auth/Reset-password";
-import DashboardLayout from "./pages/dashboard/DashboardLayout.jsx";
-import HomeDashboard from "./pages/dashboard/Home-Dashboard.jsx";
-import NotFound from "./pages/Not-Found.jsx";
-import Books from "./pages/dashboard/Books.jsx";
-import Chapters from "./pages/dashboard/Chapters.jsx";
-import Images from "./pages/dashboard/Images.jsx";
-import Settings from "./pages/dashboard/Settings.jsx";
-import PreviewChapter from "./pages/dashboard/PreviewChapter.jsx";
-import useSocketStore from "./context/useSocketStore.js";
-import { useEffect } from "react";
-import { showSuccess } from "./utils/toast.js";
-import Logout from "./pages/auth/Logout.jsx";
+import Signup from "@auth/Signup";
+import LoginPage from "@auth/LoginPage";
+import ForgotPassword from "@auth/ForgotPassword";
+import CodeVerify from "@auth/Code-verify";
+import ResetPassword from "@auth/Reset-password";
+import Logout from "@auth/Logout.jsx";
+import DashboardLayout from "@dashboard/DashboardLayout.jsx";
+import HomeDashboard from "@dashboard/Home-Dashboard.jsx";
+import NotFound from "@pages/Not-Found.jsx";
+import Books from "@dashboard/Books.jsx";
+import Chapters from "@dashboard/Chapters.jsx";
+import Images from "@dashboard/Images.jsx";
+import Settings from "@dashboard/Settings.jsx";
+import PreviewChapter from "@dashboard/PreviewChapter.jsx";
+import useSocketStore from "@context/useSocketStore.js";
+import { showSuccess } from "@utils/toast.js";
 
 function App() {
   const initSocket = useSocketStore((state) => state.initSocket);
