@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { jwtDecode } from "jwt-decode";
-import { getToken, removeToken, setToken } from "../utils/token";
+import { getToken, removeToken, setToken } from "@utils/token";
 
 const useAuthStore = create((set) => ({
   user: getToken() ? jwtDecode(getToken()) : null,

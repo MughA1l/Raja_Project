@@ -1,8 +1,8 @@
 import { ArrowUpRight } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
-import { verfiyCode } from "../../api/services/authService";
-import { showSuccess } from "../../utils/toast";
+import { verfiyCode } from "@services/authService";
+import { showSuccess } from "@utils/toast";
 
 const CodeVerify = () => {
   const location = useLocation();
@@ -144,13 +144,12 @@ const CodeVerify = () => {
             <button
               type="submit"
               disabled={!isCodeComplete || isLoading}
-              className={`h-[36px] w-full rounded-md text-sm font-medium flex items-center justify-center gap-2 ${
-                isCodeComplete
+              className={`h-[36px] w-full rounded-md text-sm font-medium flex items-center justify-center gap-2 ${isCodeComplete
                   ? isLoading
                     ? "bg-[#121217]/90"
                     : "bg-[#121217] hover:bg-[#121217]/85"
                   : "bg-gray-400 cursor-not-allowed"
-              } duration-300 text-white mt-2`}
+                } duration-300 text-white mt-2`}
             >
               {isLoading ? (
                 <>

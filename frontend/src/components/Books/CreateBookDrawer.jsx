@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { createBook } from "../../api/services/bookService";
-import { showError, showSuccess } from "../../utils/toast";
+import { createBook } from "@services/bookService";
+import { showError, showSuccess } from "@utils/toast";
 
 const CreateBookDrawer = ({ isOpen, onClose, getAllBooks }) => {
   const fileInputRef = useRef(null);
@@ -44,9 +44,8 @@ const CreateBookDrawer = ({ isOpen, onClose, getAllBooks }) => {
 
   return (
     <div
-      className={`fixed top-0 right-0 h-screen w-96 bg-base-100 shadow-lg z-50 transform transition-all duration-500 ${
-        isOpen ? "translate-x-0" : "translate-x-full"
-      }`}
+      className={`fixed top-0 right-0 h-screen w-96 bg-base-100 shadow-lg z-50 transform transition-all duration-500 ${isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
     >
       {/* Overlay */}
       {isOpen && (

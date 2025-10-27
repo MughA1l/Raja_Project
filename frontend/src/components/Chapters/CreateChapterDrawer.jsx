@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { FiTrash2 } from "react-icons/fi";
-import { getAllBooksByUser } from "../../api/services/bookService";
-import { showSuccess } from "../../utils/toast";
-import { createChapter } from "../../api/services/chapterService";
+import { getAllBooksByUser } from "@services/bookService";
+import { showSuccess } from "@utils/toast";
+import { createChapter } from "@services/chapterService";
 
 const CreateChapterDrawer = ({
   isOpen,
@@ -120,9 +120,8 @@ const CreateChapterDrawer = ({
 
   return (
     <div
-      className={`fixed top-0 right-0 h-screen w-96 bg-base-100 shadow-lg z-50 transform duration-500 transition-all ${
-        isOpen ? "translate-x-0" : "translate-x-full"
-      }`}
+      className={`fixed top-0 right-0 h-screen w-96 bg-base-100 shadow-lg z-50 transform duration-500 transition-all ${isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
     >
       {/* Overlay */}
       {isOpen && (

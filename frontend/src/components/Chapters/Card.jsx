@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import {
   FileText,
@@ -8,8 +7,8 @@ import {
   ScanText,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { formateDate } from "../../utils/formateDate.js";
-import { updateChapter } from "../../api/services/chapterService.js";
+import { formateDate } from "@utils/formateDate.js";
+import { updateChapter } from "@services/chapterService.js";
 
 const Card = ({
   chapter,

@@ -27,7 +27,8 @@ export default defineConfig({
       "@api": path.resolve(__dirname, "./src/api"),
       "@hooks": path.resolve(__dirname, "./src/hooks"),
       "@context": path.resolve(__dirname, "./src/context"),
-      "@pages": path.resolve(__dirname, "./src/pages")
+      "@pages": path.resolve(__dirname, "./src/pages"),
+      "@containers": path.resolve(__dirname, "./src/components/SingleChapter/Containers"),
     }
   }
 });

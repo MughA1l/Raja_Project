@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { ArrowUpRight, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { registerUser } from "../../api/services/authService";
-import useAuthStore from "../../context/useAuthStore";
-import { showSuccess } from "../../utils/toast";
+import { registerUser } from "@services/authService";
+import useAuthStore from "@context/useAuthStore";
+import { showSuccess } from "@utils/toast";
 
 const Signup = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -157,11 +157,10 @@ const Signup = () => {
             <button
               type="submit"
               disabled={!isChecked || isLoading}
-              className={`h-[36px] w-full rounded-md text-sm font-medium flex items-center justify-center gap-2 ${
-                isLoading
-                  ? "bg-[#121217]/90"
-                  : "bg-[#121217] hover:bg-[#121217]/85"
-              } duration-300 text-white mt-2`}
+              className={`h-[36px] w-full rounded-md text-sm font-medium flex items-center justify-center gap-2 ${isLoading
+                ? "bg-[#121217]/90"
+                : "bg-[#121217] hover:bg-[#121217]/85"
+                } duration-300 text-white mt-2`}
             >
               {isLoading ? (
                 <>

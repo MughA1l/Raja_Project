@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Card from "./Card";
+import Card from "@books/Card";
 import { toast } from "react-toastify";
-import { deleteBook } from "../../api/services/bookService";
-import { showSuccess } from "../../utils/toast";
-import ConfirmationModal from "../general/ConfirmationModal.jsx";
-import EditBook from "./EditBook.jsx";
+import { deleteBook } from "@services/bookService";
+import { showSuccess } from "@utils/toast";
+import ConfirmationModal from "@general/ConfirmationModal.jsx";
+import EditBook from "@books/EditBook.jsx";
 
 const CardsContainer = ({
   books,
@@ -75,43 +75,43 @@ const CardsContainer = ({
       <div className="grid grid-cols-4 gap-3">
         {!loading
           ? books.map((singleBook, index) => (
-              <Card
-                key={singleBook._id}
-                book={singleBook}
-                showOptions={openCardIndex === index}
-                onClick={() => handleCardClick(index)}
-                onDelete={() => handleDeleteBook(singleBook)}
-                onEdit={() => handleEdit(singleBook)}
-                getAllBooks={getAllBooks}
-                setBooks={setBooks}
-                isEditModalOpen={isEditModalOpen}
-              />
-            ))
+            <Card
+              key={singleBook._id}
+              book={singleBook}
+              showOptions={openCardIndex === index}
+              onClick={() => handleCardClick(index)}
+              onDelete={() => handleDeleteBook(singleBook)}
+              onEdit={() => handleEdit(singleBook)}
+              getAllBooks={getAllBooks}
+              setBooks={setBooks}
+              isEditModalOpen={isEditModalOpen}
+            />
+          ))
           : Array.from({ length: 4 }).map((_, index) => (
-              <div
-                key={index}
-                className="bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 mb-3 relative"
-              >
-                <div className="h-7/12 w-full rounded-2xl overflow-hidden">
-                  <div className="skeleton h-full w-full"></div>
-                </div>
-                <div className="pt-5 px-2 pb-2 space-y-2">
-                  <div className="skeleton h-3 w-24"></div>
-                  <div className="skeleton h-4 w-32"></div>
-                  <div className="skeleton h-4 w-20"></div>
-                </div>
-                <div className="w-full px-2 flex items-center gap-2">
-                  <div className="skeleton h-3 w-7/12 rounded-full"></div>
-                  <div className="skeleton h-3 w-10"></div>
-                </div>
-                <div className="absolute bottom-4 right-3">
-                  <div className="skeleton h-8 w-8 rounded-lg"></div>
-                </div>
-                <div className="absolute top-5 left-4">
-                  <div className="skeleton h-5 w-20 rounded-lg"></div>
-                </div>
+            <div
+              key={index}
+              className="bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 mb-3 relative"
+            >
+              <div className="h-7/12 w-full rounded-2xl overflow-hidden">
+                <div className="skeleton h-full w-full"></div>
               </div>
-            ))}
+              <div className="pt-5 px-2 pb-2 space-y-2">
+                <div className="skeleton h-3 w-24"></div>
+                <div className="skeleton h-4 w-32"></div>
+                <div className="skeleton h-4 w-20"></div>
+              </div>
+              <div className="w-full px-2 flex items-center gap-2">
+                <div className="skeleton h-3 w-7/12 rounded-full"></div>
+                <div className="skeleton h-3 w-10"></div>
+              </div>
+              <div className="absolute bottom-4 right-3">
+                <div className="skeleton h-8 w-8 rounded-lg"></div>
+              </div>
+              <div className="absolute top-5 left-4">
+                <div className="skeleton h-5 w-20 rounded-lg"></div>
+              </div>
+            </div>
+          ))}
       </div>
 
       {openCardIndex !== null && (

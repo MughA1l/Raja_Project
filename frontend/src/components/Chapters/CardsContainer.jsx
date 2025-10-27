@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Card from "./Card.jsx";
-import ConfirmationModal from "../general/ConfirmationModal.jsx";
-import { showSuccess } from "../../utils/toast.js";
+import Card from "@chapters/Card.jsx";
+import ConfirmationModal from "@general/ConfirmationModal.jsx";
+import { showSuccess } from "@utils/toast.js";
 import { toast } from "react-toastify";
-import { deleteChapter } from "../../api/services/chapterService.js";
+import { deleteChapter } from "@services/chapterService.js";
 
 const CardsContainer = ({
   chapters,
@@ -63,68 +63,68 @@ const CardsContainer = ({
       <div className="grid grid-cols-4 gap-3">
         {!loading
           ? chapters.map((singleChapter, index) => (
-              <Card
-                key={index}
-                chapter={singleChapter}
-                bookId={bookId}
-                showOptions={openCardIndex === index}
-                onClick={() => handleCardClick(index)}
-                onDelete={() => handleDeleteChapter(singleChapter)}
-                setChapters={setChapters}
-              />
-            ))
+            <Card
+              key={index}
+              chapter={singleChapter}
+              bookId={bookId}
+              showOptions={openCardIndex === index}
+              onClick={() => handleCardClick(index)}
+              onDelete={() => handleDeleteChapter(singleChapter)}
+              setChapters={setChapters}
+            />
+          ))
           : Array.from({ length: 4 }).map((_, index) => (
-              <div
-                key={index}
-                className="col-span-1 h-72 mb-14 p-2 pb-3 bg-white shadow-md shadow-black/5 rounded-2xl relative"
-              >
-                {/* Skeleton for image */}
-                <div className="absolute left-1/2 -translate-x-1/2 -top-9 inset-x-0 h-40 w-11/12 rounded-2xl overflow-hidden shadow-md">
-                  <div className="skeleton h-full w-full"></div>
+            <div
+              key={index}
+              className="col-span-1 h-72 mb-14 p-2 pb-3 bg-white shadow-md shadow-black/5 rounded-2xl relative"
+            >
+              {/* Skeleton for image */}
+              <div className="absolute left-1/2 -translate-x-1/2 -top-9 inset-x-0 h-40 w-11/12 rounded-2xl overflow-hidden shadow-md">
+                <div className="skeleton h-full w-full"></div>
 
-                  {/* Skeleton for mids/finals badge */}
-                  <div className="absolute bottom-3 left-3 px-6 py-2 rounded-xl">
-                    <div className="skeleton h-4 w-16 rounded-lg"></div>
-                  </div>
-
-                  {/* Skeleton for fav icon */}
-                  <span className="absolute top-2 right-3">
-                    <div className="skeleton h-7 w-7 rounded-full"></div>
-                  </span>
+                {/* Skeleton for mids/finals badge */}
+                <div className="absolute bottom-3 left-3 px-6 py-2 rounded-xl">
+                  <div className="skeleton h-4 w-16 rounded-lg"></div>
                 </div>
 
-                {/* Skeleton for content */}
-                <div className="pt-32 px-1 h-full w-full flex flex-col justify-between">
-                  <div>
-                    {/* Creation date */}
-                    <div className="skeleton h-3 w-20 mb-2"></div>
-                    {/* Title */}
-                    <div className="skeleton h-4 w-32 mb-1"></div>
-                    <div className="skeleton h-4 w-24"></div>
+                {/* Skeleton for fav icon */}
+                <span className="absolute top-2 right-3">
+                  <div className="skeleton h-7 w-7 rounded-full"></div>
+                </span>
+              </div>
+
+              {/* Skeleton for content */}
+              <div className="pt-32 px-1 h-full w-full flex flex-col justify-between">
+                <div>
+                  {/* Creation date */}
+                  <div className="skeleton h-3 w-20 mb-2"></div>
+                  {/* Title */}
+                  <div className="skeleton h-4 w-32 mb-1"></div>
+                  <div className="skeleton h-4 w-24"></div>
+                </div>
+
+                {/* Counts */}
+                <div>
+                  <div className="flex items-center justify-between px-2">
+                    <div className="skeleton h-4 w-10"></div>
+                    <div className="skeleton h-4 w-10"></div>
+                    <div className="skeleton h-4 w-10"></div>
                   </div>
 
-                  {/* Counts */}
-                  <div>
-                    <div className="flex items-center justify-between px-2">
-                      <div className="skeleton h-4 w-10"></div>
-                      <div className="skeleton h-4 w-10"></div>
-                      <div className="skeleton h-4 w-10"></div>
-                    </div>
-
-                    {/* Progress bar */}
-                    <div className="w-full px-2 flex items-center gap-3 mt-2">
-                      <div className="skeleton h-3 w-11/12 rounded-full"></div>
-                      <div className="skeleton h-3 w-8 rounded"></div>
-                    </div>
+                  {/* Progress bar */}
+                  <div className="w-full px-2 flex items-center gap-3 mt-2">
+                    <div className="skeleton h-3 w-11/12 rounded-full"></div>
+                    <div className="skeleton h-3 w-8 rounded"></div>
                   </div>
+                </div>
 
-                  {/* Edit/Delete Options */}
-                  <div className="flex items-center justify-center absolute top-20 right-5 rounded-lg p-[9px]">
-                    <div className="skeleton h-4 w-4 rounded"></div>
-                  </div>
+                {/* Edit/Delete Options */}
+                <div className="flex items-center justify-center absolute top-20 right-5 rounded-lg p-[9px]">
+                  <div className="skeleton h-4 w-4 rounded"></div>
                 </div>
               </div>
-            ))}
+            </div>
+          ))}
       </div>
 
       {/* overlay to show here */}

@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import Header from "../../components/Books/Header";
-import CardsContainer from "../../components/Books/CardsContainer";
-import CreateBookDrawer from "../../components/Books/CreateBookDrawer";
+import Header from "@books/Header";
+import CardsContainer from "@books/CardsContainer";
+import CreateBookDrawer from "@books/CreateBookDrawer";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { getAllBooksByUser } from "../../api/services/bookService";
+import { getAllBooksByUser } from "@services/bookService";
 
 let tabOptions = [];
 const Books = () => {

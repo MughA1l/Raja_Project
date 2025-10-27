@@ -1,8 +1,8 @@
 import { ArrowUpRight } from "lucide-react";
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { resetPassword } from "../../api/services/authService";
-import { showSuccess } from "../../utils/toast";
+import { resetPassword } from "@services/authService";
+import { showSuccess } from "@utils/toast";
 
 const ResetPassword = () => {
   const location = useLocation();
@@ -140,11 +140,10 @@ const ResetPassword = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`h-[36px] w-full rounded-md text-sm font-medium flex items-center justify-center gap-2 ${
-                isLoading
+              className={`h-[36px] w-full rounded-md text-sm font-medium flex items-center justify-center gap-2 ${isLoading
                   ? "bg-[#121217]/90"
                   : "bg-[#121217] hover:bg-[#121217]/85"
-              } duration-300 text-white mt-2`}
+                } duration-300 text-white mt-2`}
             >
               {isLoading ? (
                 <>

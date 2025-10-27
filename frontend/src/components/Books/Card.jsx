@@ -1,9 +1,9 @@
-/* eslint-disable react/prop-types */
+
 import React, { useState } from "react";
 import { Heart, ListEnd, PencilLine } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { formateDate } from "../../utils/formateDate.js";
-import { updateBook } from "../../api/services/bookService.js";
+import { formateDate } from "@utils/formateDate.js";
+import { updateBook } from "@services/bookService.js";
 
 const Card = ({
   book,

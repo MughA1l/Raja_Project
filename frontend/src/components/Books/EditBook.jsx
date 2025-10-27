@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { updateBook } from "../../api/services/bookService";
-import { showSuccess } from "../../utils/toast";
+import { updateBook } from "@services/bookService";
+import { showSuccess } from "@utils/toast";
 
 const EditBook = ({ bookData, onClose, onUpdate, isOpen }) => {
   const [formData, setFormData] = useState({

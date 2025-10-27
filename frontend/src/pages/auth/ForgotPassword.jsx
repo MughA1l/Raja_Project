@@ -1,8 +1,8 @@
 import { ArrowUpRight } from "lucide-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { getCodeByEmail } from "../../api/services/authService";
-import { showSuccess } from "../../utils/toast";
+import { getCodeByEmail } from "@services/authService";
+import { showSuccess } from "@utils/toast";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -93,9 +93,8 @@ const ForgotPassword = () => {
 
             <button
               type="submit"
-              className={`h-[36px] w-full rounded-md text-sm font-medium bg-[#121217] hover:bg-[#121217]/85 duration-300 text-white mt-2 flex items-center justify-center gap-3 ${
-                isLoading ? "opacity-85" : ""
-              }`}
+              className={`h-[36px] w-full rounded-md text-sm font-medium bg-[#121217] hover:bg-[#121217]/85 duration-300 text-white mt-2 flex items-center justify-center gap-3 ${isLoading ? "opacity-85" : ""
+                }`}
               disabled={isLoading}
             >
               {isLoading ? (

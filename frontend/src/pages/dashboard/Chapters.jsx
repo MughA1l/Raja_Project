@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Header from "../../components/Chapters/Header";
-import CardsContainer from "../../components/Chapters/CardsContainer";
-import CreateChapterDrawer from "../../components/Chapters/CreateChapterDrawer";
+import Header from "@chapters/Header";
+import CardsContainer from "@chapters/CardsContainer";
+import CreateChapterDrawer from "@chapters/CreateChapterDrawer";
 import { useParams } from "react-router-dom";
 import {
   getAllChaptersByUser,
   getChaptersByBookId,
-} from "../../api/services/chapterService";
-import { showError } from "../../utils/toast";
+} from "@services/chapterService";
+import { showError } from "@utils/toast";
 
 let tabOptions = [];
 

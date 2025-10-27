@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import SingleImageContainer from "../../components/SingleChapter/ImageContainer";
-import TextContainer from "../../components/SingleChapter/TextContainer";
-import AllImagesContainer from "../../components/SingleChapter/AllImagesContainer";
+import SingleImageContainer from "@singleChapter/ImageContainer";
+import TextContainer from "@singleChapter/TextContainer";
+import AllImagesContainer from "@singleChapter/AllImagesContainer";
 
 const PreviewChapter = () => {
   const location = useLocation();

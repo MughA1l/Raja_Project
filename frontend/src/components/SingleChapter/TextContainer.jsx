@@ -1,9 +1,9 @@
 import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import Header from "./Header";
-import Videos from "./Containers/Videos";
-import ENHANCED from "./Containers/ENHANCED";
-import OCR from "./Containers/OCR";
+import Videos from "@containers/Videos";
+import ENHANCED from "@containers/ENHANCED";
+import OCR from "@containers/OCR";
 
 const TextContainer = ({ image, selectedImage, totalImages }) => {
   const [selected, setSelected] = useState(0);

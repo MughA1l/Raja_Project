@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { ArrowUpRight, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../../api/services/authService.js";
-import useAuthStore from "../../context/useAuthStore.js";
-import { showSuccess } from "../../utils/toast.js";
+import { loginUser } from "@services/authService.js";
+import useAuthStore from "@context/useAuthStore.js";
+import { showSuccess } from "@utils/toast.js";
 
 const LoginPage = () => {
   const [isChecked, setIsChecked] = useState(false);
