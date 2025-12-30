@@ -1,31 +1,28 @@
-import { Plus } from "lucide-react";
 import React, { useState } from "react";
 import Header from "./Header";
 import Videos from "@containers/Videos";
 import ENHANCED from "@containers/ENHANCED";
 import OCR from "@containers/OCR";
 
-const TextContainer = ({ image, selectedImage, totalImages }) => {
+const TextContainer = ({ image, selectedImage, totalImages, className = "" }) => {
   const [selected, setSelected] = useState(0);
 
   return (
-    <div className="min-h-80 rounded-xl p-2 relative">
+    <div className={`min-h-80 rounded-xl p-2 relative flex flex-col overflow-hidden ${className}`}>
       {/* header */}
-      <div className="w-full flex items-center px-3 justify-between pt-4">
+      <div className="w-full flex items-center px-3 justify-between pt-4 shrink-0">
         <div className="w-9/12 font-semibold text-lg line-clamp-1">
           {image?.name}
         </div>
-        <button className="w-2/12 py-[9px] flex items-center justify-center gap-1 rounded-lg text-sm font-medium text-white bg-light-pink/90 hover:bg-light-pink duration-100 cursor-pointer">
-          <Plus size={18} color="white" />
-          <span>Add Image</span>
-        </button>
       </div>
 
       {/* main container to show the text and different components */}
-      <Header selected={selected} setSelected={setSelected} />
+      <div className="shrink-0">
+        <Header selected={selected} setSelected={setSelected} />
+      </div>
 
       {/* switch between OCR, Enhanced, and Videos */}
-      <div className="p-4 pt-8">
+      <div className="p-4 pt-8 flex-1 overflow-y-auto custom-scrollbar">
         {selected === 0 && (
           <OCR ocr={image?.ocr || "No OCR data available"} />
         )}

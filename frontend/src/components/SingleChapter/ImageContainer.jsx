@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import {
@@ -7,21 +7,35 @@ import {
   Maximize,
   Check,
   X,
+  Trash,
 } from "lucide-react";
 import {
   TransformWrapper,
   TransformComponent,
 } from "react-zoom-pan-pinch";
+import { updateImage, deleteImage } from "@services/imageService";
+import { showSuccess, showError } from "@utils/toast";
+import ConfirmationModal from "@general/ConfirmationModal";
 
 const ImageContainer = ({
   selectedImage,
   setSelectedImage,
   image,
   totalImages,
+  setImages,
 }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [direction, setDirection] = useState(0);
+  const [isFav, setIsFav] = useState(image?.isFavourite || false);
+  const [isCompleted, setIsCompleted] = useState(image?.isCompleted || false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const transformRef = useRef(null);
+
+  // Sync local state with image prop when IMAGE ID changes (not properties)
+  useEffect(() => {
+    setIsFav(image?.isFavourite || false);
+    setIsCompleted(image?.isCompleted || false);
+  }, [image?._id]); // Only re-run when navigating to a different image
 
   const handleNext = () => {
     if (selectedImage < totalImages) {
@@ -37,12 +51,131 @@ const ImageContainer = ({
     }
   };
 
-  const handleToggleFavorite = () => {
-    console.log("Toggling favorite for image:", image.name);
+  const handleToggleFavorite = async (e) => {
+    e.stopPropagation();
+    const newFav = !isFav;
+    const previousFav = isFav;
+
+    // Optimistic update
+    setIsFav(newFav);
+
+    // Update parent state
+    setImages((prev) =>
+      prev.map((img) =>
+        img._id === image._id ? { ...img, isFavourite: newFav } : img
+      )
+    );
+
+    try {
+      const response = await updateImage(image._id, {
+        isFavourite: newFav,
+      });
+
+      if (response.success) {
+        showSuccess(
+          newFav ? "Image added to favorites ❤️" : "Image removed from favorites"
+        );
+      } else {
+        // Rollback on failure
+        setIsFav(previousFav);
+        setImages((prev) =>
+          prev.map((img) =>
+            img._id === image._id ? { ...img, isFavourite: previousFav } : img
+          )
+        );
+        showError("Failed to update image. Please try again.");
+      }
+    } catch (error) {
+      // Rollback on error
+      setIsFav(previousFav);
+      setImages((prev) =>
+        prev.map((img) =>
+          img._id === image._id ? { ...img, isFavourite: previousFav } : img
+        )
+      );
+      showError("Failed to update image. Please try again.");
+    }
   };
 
-  const handleToggleCompleted = () => {
-    console.log("Toggling completion status for image:", image.name);
+  const handleToggleCompleted = async (e) => {
+    e.stopPropagation();
+    const newCompleted = !isCompleted;
+    const previousCompleted = isCompleted;
+
+    // Optimistic update
+    setIsCompleted(newCompleted);
+
+    // Update parent state
+    setImages((prev) =>
+      prev.map((img) =>
+        img._id === image._id ? { ...img, isCompleted: newCompleted } : img
+      )
+    );
+
+    try {
+      const response = await updateImage(image._id, {
+        isCompleted: newCompleted,
+      });
+
+      if (response.success) {
+        showSuccess(
+          newCompleted ? "Image marked as completed ✓" : "Image marked as incomplete"
+        );
+      } else {
+        // Rollback on failure
+        setIsCompleted(previousCompleted);
+        setImages((prev) =>
+          prev.map((img) =>
+            img._id === image._id ? { ...img, isCompleted: previousCompleted } : img
+          )
+        );
+        showError("Failed to update image. Please try again.");
+      }
+    } catch (error) {
+      // Rollback on error
+      setIsCompleted(previousCompleted);
+      setImages((prev) =>
+        prev.map((img) =>
+          img._id === image._id ? { ...img, isCompleted: previousCompleted } : img
+        )
+      );
+      showError("Failed to update image. Please try again.");
+    }
+  };
+
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      const response = await deleteImage(image._id);
+      if (response.success) {
+        // Remove from parent images array
+        setImages((prev) => prev.filter((img) => img._id !== image._id));
+
+        // Navigate to previous image if deleting the last image
+        if (selectedImage > 1 && totalImages === selectedImage) {
+          setSelectedImage(selectedImage - 1);
+        } else if (selectedImage > 1) {
+          setSelectedImage(selectedImage - 1);
+        }
+
+        showSuccess("Image deleted successfully");
+      } else {
+        showError("Failed to delete image");
+      }
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      showError("Failed to delete image. Please try again.");
+    } finally {
+      setIsDeleteModalOpen(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
   };
 
   const toggleFullscreen = () => {
@@ -96,14 +229,13 @@ const ImageContainer = ({
   return (
     <>
       <div
-        className="relative flex flex-col items-center rounded-xl p-2 overflow-hidden border-rose-50"
-        style={{ height: "479px" }}
+        className="relative flex flex-col items-center rounded-xl p-2 overflow-hidden border-rose-50 h-full"
       >
         <button
           onClick={handleToggleFavorite}
           className="absolute left-3 top-3 z-10 p-2 rounded-full bg-white/80 hover:bg-white/80 transition-colors duration-200"
         >
-          {image?.isFavourite ? (
+          {isFav ? (
             <FaHeart className="text-light-pink" size={20} />
           ) : (
             <FaRegHeart className="text-dark-blue/50" size={20} />
@@ -111,17 +243,26 @@ const ImageContainer = ({
         </button>
 
         <button
+          onClick={handleDeleteClick}
+          className="absolute right-12 top-3.5 z-10 p-1 rounded-full bg-red-400/10 text-gray-400 hover:bg-white/80 transition-all duration-200"
+        >
+          <Trash
+            size={17}
+            className="stroke-[3px] stroke-red-500/80"
+          />
+        </button>
+
+        <button
           onClick={handleToggleCompleted}
-          className={`absolute right-4 top-4 z-10 p-1 rounded-full transition-all duration-200 ${
-            image?.isCompleted
+          className={`absolute right-4 top-4 z-10 p-1 rounded-full transition-all duration-200 ${isCompleted
               ? "bg-green-400 text-white"
               : "bg-green-300/10 text-gray-400 hover:bg-white/80"
-          }`}
+            }`}
         >
           <Check
             size={15}
             className={
-              image?.isCompleted
+              isCompleted
                 ? "stroke-white stroke-5"
                 : "stroke-4 stroke-black/40"
             }
@@ -282,6 +423,14 @@ const ImageContainer = ({
           </div>
         </div>
       )}
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        title="Delete this image?"
+        para={`Are you sure you want to delete "${image?.name}"? This action cannot be undone.`}
+        onCancel={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+      />
     </>
   );
 };

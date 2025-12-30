@@ -1,13 +1,45 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import SingleImageContainer from "@singleChapter/ImageContainer";
 import TextContainer from "@singleChapter/TextContainer";
 import AllImagesContainer from "@singleChapter/AllImagesContainer";
+import ChapterSkeleton from "@singleChapter/ChapterSkeleton";
+import { getSingleChapter } from "@services/chapterService";
+import { showError } from "@utils/toast";
 
 const PreviewChapter = () => {
+  const { chapterId } = useParams();
   const location = useLocation();
-  const [images, setImages] = useState(location.state?.images || []);
+  const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(1);
+  const [loading, setLoading] = useState(true);
+
+  const fetchChapterData = async () => {
+    if (!chapterId) return;
+
+    setLoading(true);
+    try {
+      const response = await getSingleChapter(chapterId);
+      if (response.success) {
+        setImages(response.data.chapter.images || []);
+      } else {
+        showError("Failed to load chapter images");
+      }
+    } catch (error) {
+      console.error("Error fetching chapter:", error);
+      showError("Failed to load chapter images");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchChapterData();
+  }, [chapterId]);
+
+  if (loading) {
+    return <ChapterSkeleton />;
+  }
 
   return (
     <div className="min-h-screen max-h-fit w-full p-5 pt-5 bg-[#F7F7F7] rounded-xl">
@@ -19,6 +51,7 @@ const PreviewChapter = () => {
             selectedImage={selectedImage}
             image={images[selectedImage - 1]}
             totalImages={images?.length}
+            setImages={setImages}
           />
           {/* ocr,youtube-suggestions container */}
           <TextContainer

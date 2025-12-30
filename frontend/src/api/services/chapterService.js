@@ -28,15 +28,33 @@ export const getChaptersByBookId = async (id) => {
 };
 
 export const updateChapter = async (chapterId, payload) => {
+  const config = {};
+
+  // If payload is FormData, set multipart/form-data header
+  if (payload instanceof FormData) {
+    config.headers = {
+      "Content-Type": "multipart/form-data",
+    };
+  }
+
   const res = await axios.put(
     `/chapters/updateChapter/${chapterId}`,
-    payload
+    payload,
+    config
   );
   return res.data;
 };
 
 export const getAllChaptersByUser = async () => {
   const res = await axios.get("/chapters/getAllChapters");
+
+  return res.data;
+};
+
+// requirements => id of the chapter to get single chapter details
+
+export const getSingleChapter = async (id) => {
+  const res = await axios.get(`/chapters/getSingleChapter/${id}`);
 
   return res.data;
 };

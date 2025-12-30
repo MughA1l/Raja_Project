@@ -6,12 +6,12 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { getAllBooksByUser } from "@services/bookService";
 
-let tabOptions = [];
 const Books = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selected, setSelected] = useState(0);
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
+  const [hasLoaded, setHasLoaded] = useState(false);
 
   const [books, setBooks] = useState([]);
 
@@ -20,17 +20,41 @@ const Books = () => {
 
   const [filter, setFilter] = useState("");
 
+  // Always calculate tabOptions, even when books is empty
+  const tabOptions = [
+    { label: "All Books", count: books.length },
+    {
+      label: "Complete",
+      count: books.filter((b) => b.isComplete).length,
+    },
+    {
+      label: "InComplete",
+      count: books.filter((b) => !b.isComplete).length,
+    },
+    {
+      label: "Favourite",
+      count: books.filter((b) => b.isFavourite).length,
+    },
+  ];
+
   const getAllBooks = async () => {
     try {
       setLoading(true);
       let books = await getAllBooksByUser();
       if (books.success) {
-        setBooks(books.data);
+        const fetchedBooks = books.data || [];
+        setBooks(fetchedBooks);
+        setFilteredBooks(fetchedBooks);
+        setHasLoaded(true);
+        setLoading(false);
+      } else {
+        setHasLoaded(true);
+        setLoading(false);
       }
     } catch (error) {
       console.log("Error", error);
       toast.error("Failed to get Books");
-    } finally {
+      setHasLoaded(true);
       setLoading(false);
     }
   };
@@ -40,7 +64,10 @@ const Books = () => {
   }, []);
 
   useEffect(() => {
-    if (!books.length) return;
+    if (!books.length) {
+      setFilteredBooks([]);
+      return;
+    }
 
     let filtered = books;
 
@@ -58,24 +85,8 @@ const Books = () => {
         filtered = books;
     }
 
-    tabOptions = [
-      { label: "All Books", count: books.length },
-      {
-        label: "Complete",
-        count: books.filter((b) => b.isComplete).length,
-      },
-      {
-        label: "InComplete",
-        count: books.filter((b) => !b.isComplete).length,
-      },
-      {
-        label: "Favourite",
-        count: books.filter((b) => b.isFavourite).length,
-      },
-    ];
-
-    const filteredBy = filtered.filter((chapter) =>
-      chapter.name.toLowerCase().includes(filter.toLowerCase())
+    const filteredBy = filtered.filter((book) =>
+      book.name.toLowerCase().includes(filter.toLowerCase())
     );
 
     setFilteredBooks(filteredBy);
@@ -102,6 +113,7 @@ const Books = () => {
           getAllBooks={getAllBooks}
           setBooks={setBooks}
           loading={loading}
+          hasLoaded={hasLoaded}
           setLoading={setLoading}
         />
       </div>

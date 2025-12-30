@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import "./App.css";
 import {
   BrowserRouter as Router,
   Routes,
@@ -21,6 +20,7 @@ import Settings from "@dashboard/Settings.jsx";
 import PreviewChapter from "@dashboard/PreviewChapter.jsx";
 import useSocketStore from "@context/useSocketStore.js";
 import { showSuccess } from "@utils/toast.js";
+import { toast } from "react-toastify";
 
 function App() {
   const initSocket = useSocketStore((state) => state.initSocket);
@@ -34,7 +34,29 @@ function App() {
     if (!socket) return;
 
     const handleNotify = (data) => {
-      showSuccess(data);
+      console.log('[Frontend] Received socket notification:', data);
+
+      // Handle both string messages (legacy) and structured objects
+      if (typeof data === 'string') {
+        console.log('[Frontend] String notification:', data);
+        showSuccess(data);
+      } else if (data && typeof data === 'object') {
+        // Structured notification format
+        const message = data.message || 'Processing update';
+        console.log('[Frontend] Object notification, type:', data.type, 'message:', message);
+
+        // Show different toast types based on notification type
+        if (data.type === 'error') {
+          toast.error(message);
+        } else if (data.type === 'success') {
+          showSuccess(message);
+        } else {
+          // For 'queued' and 'processing' types, show info toast
+          toast.info(message, {
+            autoClose: 3000,
+          });
+        }
+      }
     };
 
     socket.on("notify", handleNotify);

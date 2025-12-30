@@ -15,6 +15,7 @@ const Card = ({
   showOptions,
   onClick,
   onDelete,
+  onEdit,
   bookId,
   setChapters,
 }) => {
@@ -153,7 +154,12 @@ const Card = ({
           <PencilLine size={15} color="black" />
           {showOptions && (
             <div className="absolute z-50 -top-16 w-fit -left-20 shadow-md border border-black/10 bg-white text-sm rounded-xl flex flex-col items-start justify-start font-medium text-dark-blue">
-              <span className="w-full px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100">
+              <span className="w-full px-6 py-[7px] border-b border-black/10 hover:opacity-60 duration-100"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit?.(chapter);
+                }}
+              >
                 Edit
               </span>
               <span

@@ -5,11 +5,13 @@ import { deleteBook } from "@services/bookService";
 import { showSuccess } from "@utils/toast";
 import ConfirmationModal from "@general/ConfirmationModal.jsx";
 import EditBook from "@books/EditBook.jsx";
+import { BookMarked } from "lucide-react";
 
 const CardsContainer = ({
   books,
   setBooks,
   loading,
+  hasLoaded,
   setLoading,
   getAllBooks,
   isEditModalOpen,
@@ -18,6 +20,7 @@ const CardsContainer = ({
   const [openCardIndex, setOpenCardIndex] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const [editBook, setEditBook] = useState(null);
 
@@ -42,6 +45,7 @@ const CardsContainer = ({
   };
 
   const onConfirm = async () => {
+    setDeleteLoading(true);
     try {
       if (selectedBook) {
         const response = await deleteBook(selectedBook._id);
@@ -55,9 +59,11 @@ const CardsContainer = ({
     } catch (error) {
       console.log("Error", error);
       toast.error("Failed to delete book");
+    } finally {
+      setDeleteLoading(false);
+      setIsDeleteModalOpen(false);
+      setSelectedBook(null);
     }
-    setIsDeleteModalOpen(false);
-    setSelectedBook(null);
   };
 
   const handleEdit = (book) => {
@@ -65,29 +71,12 @@ const CardsContainer = ({
     setIsEditModalOpen(true);
   };
 
-  // if after loading no books found then show no books found
-  if (books.length == 0 && !loading) {
-    return <>No books found!</>;
-  }
-
   return (
     <div className="pt-10 relative">
-      <div className="grid grid-cols-4 gap-3">
-        {!loading
-          ? books.map((singleBook, index) => (
-            <Card
-              key={singleBook._id}
-              book={singleBook}
-              showOptions={openCardIndex === index}
-              onClick={() => handleCardClick(index)}
-              onDelete={() => handleDeleteBook(singleBook)}
-              onEdit={() => handleEdit(singleBook)}
-              getAllBooks={getAllBooks}
-              setBooks={setBooks}
-              isEditModalOpen={isEditModalOpen}
-            />
-          ))
-          : Array.from({ length: 4 }).map((_, index) => (
+      {/* Show skeleton while loading */}
+      {loading ? (
+        <div className="grid grid-cols-4 gap-3">
+          {Array.from({ length: 4 }).map((_, index) => (
             <div
               key={index}
               className="bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 mb-3 relative"
@@ -112,7 +101,38 @@ const CardsContainer = ({
               </div>
             </div>
           ))}
-      </div>
+        </div>
+      ) : hasLoaded && books.length === 0 ? (
+        /* Show empty state only when loaded and confirmed no books */
+        <div className="flex flex-col items-center justify-center py-20 px-4">
+          <div className="bg-light-pink/10 rounded-full p-6 mb-6">
+            <BookMarked size={64} className="text-light-pink" strokeWidth={1.5} />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            No Books Available
+          </h2>
+          <p className="text-gray-500 text-center max-w-md">
+            Start your study journey by creating your first book.
+          </p>
+        </div>
+      ) : (
+        /* Show books */
+        <div className="grid grid-cols-4 gap-3">
+          {books.map((singleBook, index) => (
+            <Card
+              key={singleBook._id}
+              book={singleBook}
+              showOptions={openCardIndex === index}
+              onClick={() => handleCardClick(index)}
+              onDelete={() => handleDeleteBook(singleBook)}
+              onEdit={() => handleEdit(singleBook)}
+              getAllBooks={getAllBooks}
+              setBooks={setBooks}
+              isEditModalOpen={isEditModalOpen}
+            />
+          ))}
+        </div>
+      )}
 
       {openCardIndex !== null && (
         <div
@@ -127,6 +147,7 @@ const CardsContainer = ({
         para="By deleting this book you will lose all the material inside including Chapters, Images, OCR,Youtube Suggestions."
         onCancel={onCancel}
         onConfirm={onConfirm}
+        loading={deleteLoading}
       />
 
       {isEditModalOpen && (

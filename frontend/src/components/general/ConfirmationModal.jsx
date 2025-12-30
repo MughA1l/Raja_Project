@@ -6,6 +6,7 @@ const ConfirmationModal = ({
   para,
   onCancel,
   onConfirm,
+  loading = false,
 }) => {
   return (
     <dialog
@@ -28,14 +29,20 @@ const ConfirmationModal = ({
           <button
             className="btn px-5 py-3 rounded-xl border-gray-300 text-gray-700 hover:bg-gray-100"
             onClick={onCancel}
+            disabled={loading}
           >
             Cancel
           </button>
           <button
-            className="btn px-5 py-4 rounded-xl bg-red-600 text-white hover:bg-red-700"
+            className="btn px-5 py-4 rounded-xl bg-red-600 text-white hover:bg-red-700 disabled:bg-red-400"
             onClick={onConfirm}
+            disabled={loading}
           >
-            Confirm
+            {loading ? (
+              <span className="loading loading-dots loading-sm text-white"></span>
+            ) : (
+              "Confirm"
+            )}
           </button>
         </div>
       </div>

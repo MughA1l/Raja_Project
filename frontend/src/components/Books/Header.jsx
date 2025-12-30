@@ -8,6 +8,7 @@ const Header = ({
   tabOptions,
   filter,
   setFilter,
+  title = "Welcome to Books Page",
 }) => {
   const [underlineStyle, setUnderlineStyle] = useState({});
   const tabRefs = useRef([]);
@@ -28,7 +29,7 @@ const Header = ({
       {/* Header with title and search */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-semibold text-gray-800">
-          Welcome to Books Page
+          {title}
         </h3>
 
         <div className="flex items-center gap-3">
@@ -46,13 +47,15 @@ const Header = ({
             />
           </div>
 
-          <button
-            className="flex items-center justify-center gap-1 text-white bg-light-blue/95 hover:bg-light-blue/75 duration-200 cursor-pointer rounded-full shadow-sm px-3 py-[10px] text-sm font-medium"
-            onClick={onCreateClick}
-          >
-            <Plus size={16} color="white" />
-            <span>Create Book</span>
-          </button>
+          {onCreateClick && (
+            <button
+              className="flex items-center justify-center gap-1 text-white bg-light-blue/95 hover:bg-light-blue/75 duration-200 cursor-pointer rounded-full shadow-sm px-3 py-[10px] text-sm font-medium"
+              onClick={onCreateClick}
+            >
+              <Plus size={16} color="white" />
+              <span>Create Book</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -63,21 +66,19 @@ const Header = ({
             <button
               key={index}
               ref={(el) => (tabRefs.current[index] = el)}
-              className={`px-4 py-3 text-sm font-medium relative cursor-pointer ${
-                selected === index
-                  ? "text-light-pink"
-                  : "text-gray-500 hover:text-gray-700 hover:bg-white/40"
-              }`}
+              className={`px-4 py-3 text-sm font-medium relative cursor-pointer ${selected === index
+                ? "text-light-pink"
+                : "text-gray-500 hover:text-gray-700 hover:bg-white/40"
+                }`}
               onClick={() => setSelected(index)}
             >
               <div className="flex items-center gap-1">
                 <span>{option.label}</span>
                 <span
-                  className={`text-xs ${
-                    selected === index
-                      ? "text-light-pink/90"
-                      : "text-gray-400"
-                  }`}
+                  className={`text-xs ${selected === index
+                    ? "text-light-pink/90"
+                    : "text-gray-400"
+                    }`}
                 >
                   ({option.count})
                 </span>

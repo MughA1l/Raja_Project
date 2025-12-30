@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ImageOff } from "lucide-react";
 
 const AllImagesContainer = ({
   allImages,
@@ -34,45 +35,61 @@ const AllImagesContainer = ({
 
       {/* Image Cards */}
       <div className="space-y-3 overflow-y-auto pr-1">
-        {filteredImages.map((image, index) => {
-          // Find the actual index in allImages array to match the selectedImage index
-          const actualIndex = allImages.findIndex(
-            (img) => img.name === image.name
-          );
-
-          const isSelected = selectedImage - 1 === actualIndex;
-
-          return (
-            <div
-              key={index}
-              onClick={() => setSelectedImage(actualIndex + 1)}
-              className={`flex items-center w-full h-18 rounded-xl overflow-hidden border border-gray-100 cursor-pointer transition-opacity ${
-                isSelected
-                  ? "bg-dark-blue/5"
-                  : "opacity-100 hover:opacity-90"
-              }`}
-            >
-              {/* Image */}
-              <div className="h-full w-20 flex-shrink-0 overflow-hidden">
-                <img
-                  src={image.url}
-                  alt={image.name}
-                  className="h-full w-full object-cover rounded-xl"
-                />
-              </div>
-
-              {/* Text Info */}
-              <div className="flex flex-col justify-between px-3 py-2 h-full line-clamp-1 break-all flex-grow">
-                <div className="font-semibold text-sm text-gray-800 truncate">
-                  {image.name}
-                </div>
-                <div className="text-xs text-gray-500">
-                  Created At: {image.createdAt || "24 May, 2025"}
-                </div>
-              </div>
+        {filteredImages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+            <div className="bg-gray-100 rounded-full p-4 mb-4">
+              <ImageOff size={40} className="text-gray-400" />
             </div>
-          );
-        })}
+            <h3 className="text-gray-700 font-semibold text-base mb-2">
+              No Images Available
+            </h3>
+            <p className="text-gray-500 text-sm">
+              {filter === "all"
+                ? "No images found in this chapter"
+                : `No ${filter} images available`}
+            </p>
+          </div>
+        ) : (
+          filteredImages.map((image, index) => {
+            // Find the actual index in allImages array to match the selectedImage index
+            const actualIndex = allImages.findIndex(
+              (img) => img.name === image.name
+            );
+
+            const isSelected = selectedImage - 1 === actualIndex;
+
+            return (
+              <div
+                key={index}
+                onClick={() => setSelectedImage(actualIndex + 1)}
+                className={`flex items-center w-full h-18 rounded-xl overflow-hidden border border-gray-100 cursor-pointer transition-opacity ${
+                  isSelected
+                    ? "bg-dark-blue/5"
+                    : "opacity-100 hover:opacity-90"
+                }`}
+              >
+                {/* Image */}
+                <div className="h-full w-20 flex-shrink-0 overflow-hidden">
+                  <img
+                    src={image.url}
+                    alt={image.name}
+                    className="h-full w-full object-cover rounded-xl"
+                  />
+                </div>
+
+                {/* Text Info */}
+                <div className="flex flex-col justify-between px-3 py-2 h-full line-clamp-1 break-all flex-grow">
+                  <div className="font-semibold text-sm text-gray-800 truncate">
+                    {image.name}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    Created At: {image.createdAt || "24 May, 2025"}
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );
