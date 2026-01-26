@@ -229,7 +229,7 @@ const ImageContainer = ({
   return (
     <>
       <div
-        className="relative flex flex-col items-center rounded-xl p-2 overflow-hidden border-rose-50 h-full"
+        className="relative flex flex-col items-center rounded-xl p-2 overflow-hidden border-rose-50 h-[450px]"
       >
         <button
           onClick={handleToggleFavorite}
@@ -255,8 +255,8 @@ const ImageContainer = ({
         <button
           onClick={handleToggleCompleted}
           className={`absolute right-4 top-4 z-10 p-1 rounded-full transition-all duration-200 ${isCompleted
-              ? "bg-green-400 text-white"
-              : "bg-green-300/10 text-gray-400 hover:bg-white/80"
+            ? "bg-green-400 text-white"
+            : "bg-green-300/10 text-gray-400 hover:bg-white/80"
             }`}
         >
           <Check
@@ -273,7 +273,7 @@ const ImageContainer = ({
           {selectedImage} / {totalImages}
         </div>
 
-        <div className="flex-grow w-full h-full flex items-center justify-center overflow-hidden relative">
+        <div className="grow w-full h-full flex items-center justify-center overflow-hidden relative">
           <AnimatePresence custom={direction} mode="wait">
             <motion.div
               key={image?.url}
@@ -329,7 +329,7 @@ const ImageContainer = ({
             <div style={{ width: 40 }} />
           </div>
 
-          <div className="relative flex-grow flex items-center justify-center overflow-hidden">
+          <div className="relative grow flex items-center justify-center overflow-hidden">
             <button
               onClick={handlePrevious}
               disabled={selectedImage === 1}
@@ -348,7 +348,7 @@ const ImageContainer = ({
               <ChevronRight size={30} />
             </button>
 
-            <div className="absolute -top-0 left-5 flex flex-col gap-2 z-50">
+            <div className="absolute top-0 left-5 flex flex-col gap-2 z-50">
               <button
                 onClick={() => transformRef.current?.zoomIn()}
                 className="p-2 bg-white hover:bg-white/80 border border-black/20 text-black rounded-full shadow"

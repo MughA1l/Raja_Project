@@ -9,6 +9,7 @@ import userRoutes from './routes/User.route.js';
 import bookRoutes from './routes/Book.route.js';
 import chapterRoutes from './routes/Chapter.route.js';
 import imageRoutes from './routes/Image.route.js';
+import settingsRoutes from './routes/Settings.route.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { cloudinaryConnect } from './config (db connect)/cloudinary.config.js';
@@ -53,6 +54,7 @@ const startServer = async () => {
     app.use('/api/books', bookRoutes);
     app.use('/api/chapters', chapterRoutes);
     app.use('/api/images', imageRoutes);
+    app.use('/api/settings', settingsRoutes);
 
     app.get('/', (req, res) => {
       res.send('Home route');

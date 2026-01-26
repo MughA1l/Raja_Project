@@ -1,6 +1,7 @@
 import successResponse from '../utils ( reusables )/responseHandler.js';
 import * as chapterService from '../services/chapter.services.js';
 import ApiError from '../utils ( reusables )/ApiError.js';
+import getCloudinaryUrl from '../utils ( reusables )/ImageUpload.js';
 
 export const createChapter = async (req, res, next) => {
   try {
@@ -118,12 +119,21 @@ export const updateChapter = async (req, res, next) => {
         'VALIDATION_ERROR'
       );
     }
-    if (!updateData || Object.keys(updateData).length === 0) {
+    if ((!updateData || Object.keys(updateData).length === 0) && !req.file) {
       throw new ApiError(
         400,
         'No data provided for update',
         'VALIDATION_ERROR'
       );
+    }
+
+    // Handle image upload if present (same pattern as book update)
+    if (req.file) {
+      const cloudinaryImage = await getCloudinaryUrl(req.file.path);
+
+      if (cloudinaryImage) {
+        updateData.image = cloudinaryImage.secure_url || cloudinaryImage.url;
+      }
     }
 
     const updatedChapter = await chapterService.updateChapter(

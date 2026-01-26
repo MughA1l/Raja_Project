@@ -1,9 +1,80 @@
-import { Bell, Settings } from "lucide-react";
-import React from "react";
-import { useLocation } from "react-router-dom";
+import { Bell, Settings, User, LogOut, ChevronDown, Lock, BarChart3, Shield } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getUserProfile } from "@services/settingsService";
+import { logoutUser } from "@services/authService";
 
 const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const profileDropdownRef = useRef(null);
+  const settingsDropdownRef = useRef(null);
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    profileImage: null,
+  });
+  const [loading, setLoading] = useState(true);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [showSettingsDropdown, setShowSettingsDropdown] = useState(false);
+
+  const settingsTabs = [
+    { id: "profile", label: "Profile", icon: User },
+    { id: "security", label: "Security", icon: Lock },
+    { id: "statistics", label: "Statistics", icon: BarChart3 },
+    { id: "account", label: "Account", icon: Shield },
+  ];
+
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target)) {
+        setShowProfileDropdown(false);
+      }
+      if (settingsDropdownRef.current && !settingsDropdownRef.current.contains(event.target)) {
+        setShowSettingsDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      const response = await getUserProfile();
+      if (response.success) {
+        setUser({
+          username: response.data.username || "",
+          email: response.data.email || "",
+          profileImage: response.data.profileImage,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to fetch user profile:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    setShowProfileDropdown(false);
+    await logoutUser();
+  };
+
+  const handleSettingsClick = () => {
+    setShowProfileDropdown(false);
+    navigate("/Settings");
+  };
+
+  const handleSettingsTabClick = (tabId) => {
+    setShowSettingsDropdown(false);
+    navigate(`/Settings?tab=${tabId}`);
+  };
 
   const getPageTitle = (pathname) => {
     // Handle nested routes
@@ -68,30 +139,114 @@ const Header = () => {
         )}
       </div>
 
-      {/* Rest of your header code remains the same */}
+      {/* Right side */}
       <div className="flex items-center gap-4 py-3">
         <span className="size-9 flex items-center justify-center duration-200 bg-[#384182] hover:bg-[#444c9b]/97 rounded-full group cursor-pointer">
           <Bell className="text-white size-5" />
         </span>
 
-        <span className="size-9 flex items-center justify-center duration-200 bg-[#384182] hover:bg-[#444c9b]/97 rounded-full group cursor-pointer">
-          <Settings className="text-white size-5" />
-        </span>
+        {/* Settings Icon with Dropdown */}
+        <div className="relative" ref={settingsDropdownRef}>
+          <span
+            onClick={() => setShowSettingsDropdown(!showSettingsDropdown)}
+            className="size-9 flex items-center justify-center duration-200 bg-[#384182] hover:bg-[#444c9b]/97 rounded-full group cursor-pointer"
+          >
+            <Settings className="text-white size-5" />
+          </span>
 
-        <div className="flex items-center justify-start gap-3 w-38 cursor-pointer hover:opacity-90 duration-100">
-          <div className="avatar hover:opacity-85 cursor-pointer duration-100">
-            <div className="ring-[#444c9b] ring-offset-base-100 size-9 rounded-full ring-2 ring-offset-2">
-              <img src="https://img.daisyui.com/images/profile/demo/spiderperson@192.webp" />
+          {/* Settings Dropdown */}
+          {showSettingsDropdown && (
+            <div className="absolute right-0 top-full mt-2 w-44 bg-white rounded-xl shadow-lg shadow-slate-200/50 border border-slate-100 overflow-hidden z-50">
+              <div className="py-1.5">
+                {settingsTabs.map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => handleSettingsTabClick(tab.id)}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                    >
+                      <Icon className="w-4 h-4 text-slate-500" />
+                      <span>{tab.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
+          )}
+        </div>
+
+        {/* Profile with Dropdown */}
+        <div className="relative" ref={profileDropdownRef}>
+          <div
+            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+            className="flex items-center gap-2.5 cursor-pointer hover:opacity-90 duration-100 select-none max-w-60"
+          >
+            <div className="avatar flex-shrink-0">
+              <div className="ring-[#444c9b] ring-offset-base-100 size-9 rounded-full ring-2 ring-offset-2 overflow-hidden bg-slate-100">
+                {loading ? (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="w-4 h-4 border-2 border-slate-300 border-t-slate-500 rounded-full animate-spin"></div>
+                  </div>
+                ) : user.profileImage ? (
+                  <img
+                    src={user.profileImage}
+                    alt={user.username}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-light-pink to-purple-500">
+                    <User className="w-5 h-5 text-white" />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="min-w-0 flex-1">
+              {loading ? (
+                <>
+                  <div className="h-4 w-16 bg-slate-200 rounded animate-pulse mb-1"></div>
+                  <div className="h-3 w-24 bg-slate-200 rounded animate-pulse"></div>
+                </>
+              ) : (
+                <>
+                  <h4 className="text-sm font-medium truncate">
+                    {user.username || "User"}
+                  </h4>
+                  <p className="text-xs truncate text-slate-500">
+                    {user.email || "No email"}
+                  </p>
+                </>
+              )}
+            </div>
+            <ChevronDown
+              className={`w-4 h-4 text-slate-400 flex-shrink-0 transition-transform duration-200 ${
+                showProfileDropdown ? "rotate-180" : ""
+              }`}
+            />
           </div>
-          <div className="w-full">
-            <h4 className="text-sm font-medium line-clamp-1">
-              Zain298_
-            </h4>
-            <p className="text-xs line-clamp-1 break-all pt-[0.7px]">
-              Zain@gmail.com
-            </p>
-          </div>
+
+          {/* Profile Dropdown Menu */}
+          {showProfileDropdown && (
+            <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-xl shadow-lg shadow-slate-200/50 border border-slate-100 overflow-hidden z-50">
+              <div className="py-1.5">
+                <button
+                  onClick={handleSettingsClick}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+                >
+                  <Settings className="w-4 h-4 text-slate-500" />
+                  <span>Settings</span>
+                </button>
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                >
+                  <LogOut className="w-4 h-4 text-red-500" />
+                  <span>Logout</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

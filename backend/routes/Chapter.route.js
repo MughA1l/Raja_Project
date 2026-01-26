@@ -25,7 +25,7 @@ router.get(
 
 router.get('/getSingleChapter/:id', chapterController.getChapterById);
 
-router.put('/updateChapter/:id', chapterController.updateChapter);
+router.put('/updateChapter/:id', upload.single('image'), chapterController.updateChapter);
 
 router.delete('/deleteChapter/:id', chapterController.deleteChapter);
 

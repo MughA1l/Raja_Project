@@ -68,13 +68,13 @@ ${ocr}
 };
 
 const ai = new GoogleGenAI({
-  apiKey: 'AIzaSyBMvb7edU7u2Un1Mdt1aaN1ZpI5cKuHQ-Y',
+  apiKey: process.env.GOOGLE_API_KEY,
 });
 
 async function useGemini(ocr) {
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.0-flash-001',
+      model: 'gemini-2.5-flash',
       contents: getPrompt(ocr),
     });
     let jsonString = response.text;

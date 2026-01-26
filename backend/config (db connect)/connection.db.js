@@ -1,5 +1,7 @@
 import ApiError from '../utils ( reusables )/ApiError.js';
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
+import dotenv from "dotenv";
+dotenv.config()
 
 const connectDB = async () => {
   try {
@@ -17,6 +19,7 @@ const connectDB = async () => {
     console.log('connected to db!');
     return connect;
   } catch (e) {
+    console.log(e)
     throw new ApiError(
       500,
       'Failed to connect to mongodb',

@@ -42,10 +42,12 @@ const emitStats = (newStats) => {
 
 const emitNotification = (msg) => {
   if (!io) {
-    console.error('Socket.io not initialized yet');
+    console.error('[Socket.io] Socket.io not initialized yet');
     return;
   }
+  console.log('[Socket.io] Emitting notification:', msg);
   io.emit('notify', msg);
+  console.log('[Socket.io] Notification emitted to all connected clients');
 };
 
 export { io, emitStats, emitNotification, createSocketServer };

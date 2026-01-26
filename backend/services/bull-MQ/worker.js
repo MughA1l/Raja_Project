@@ -25,19 +25,34 @@ export const startWorker = () => {
         const fileName = extractFileName(localPath);
 
         console.log(` Starting job for image: ${fileName}`);
-        emitNotification(`Processing ${fileName} started`);
+        emitNotification({
+          type: 'processing',
+          message: `Started processing "${fileName}"`,
+          fileName,
+          progress: 0
+        });
 
         // Extract text
         await job.updateProgress(10);
         console.log(`[10%] Extracting text from ${fileName}...`);
-        emitNotification(`Processing ${fileName}: 10% done`);
+        emitNotification({
+          type: 'processing',
+          message: `Extracting text from "${fileName}"...`,
+          fileName,
+          progress: 10
+        });
         const extractedText =
           await extractTextFromCloudinaryUrl(localPath);
 
         // Gemini processing
         await job.updateProgress(40);
         console.log(`[40%] Sending ${fileName} text to Gemini...`);
-        emitNotification(`Processing ${fileName}: 40% done`);
+        emitNotification({
+          type: 'processing',
+          message: `AI analyzing "${fileName}"...`,
+          fileName,
+          progress: 40
+        });
         let geminiResult = await useGemini(extractedText);
 
         if (typeof geminiResult === 'string') {
@@ -59,7 +74,12 @@ export const startWorker = () => {
         console.log(
           `[60%] Processing Gemini response for ${fileName}...`
         );
-        emitNotification(`Processing ${fileName}: 60% done`);
+        emitNotification({
+          type: 'processing',
+          message: `Processing AI response for "${fileName}"...`,
+          fileName,
+          progress: 60
+        });
         const ocr = geminiResult[0].ocr;
         const enhancedText = geminiResult[1].enhancedAIExplanation;
         const keywords = geminiResult[2].ytKeywords.join(' ');
@@ -69,7 +89,12 @@ export const startWorker = () => {
         console.log(
           `[80%] Fetching YouTube videos for ${fileName}...`
         );
-        emitNotification(`Processing ${fileName}: 80% done`);
+        emitNotification({
+          type: 'processing',
+          message: `Fetching YouTube videos for "${fileName}"...`,
+          fileName,
+          progress: 80
+        });
         const videos = await searchYouTubeVideos(keywords);
 
         // Save to DB
@@ -77,7 +102,12 @@ export const startWorker = () => {
         console.log(
           `[95%] Saving ${fileName} results to database...`
         );
-        emitNotification(`Processing ${fileName}: 95% done`);
+        emitNotification({
+          type: 'processing',
+          message: `Saving "${fileName}" to database...`,
+          fileName,
+          progress: 95
+        });
         await Image.findByIdAndUpdate(imageId, {
           ocr,
           enhancedText,
@@ -86,9 +116,12 @@ export const startWorker = () => {
 
         await job.updateProgress(100);
         console.log(` [100%] Completed job for image: ${fileName}`);
-        emitNotification(
-          `Processing ${fileName} completed successfully!`
-        );
+        emitNotification({
+          type: 'success',
+          message: `"${fileName}" processed successfully!`,
+          fileName,
+          progress: 100
+        });
         return {
           imageId,
         };
@@ -122,14 +155,22 @@ export const startWorker = () => {
   worker.on('completed', (job) => {
     const fileName = extractFileName(job.data.localPath);
     console.log(`Job completed: ${job.id} (${fileName})`);
-    emitNotification(
-      `Processing ${fileName} completed successfully!`
-    );
+    emitNotification({
+      type: 'success',
+      message: `"${fileName}" completed successfully!`,
+      fileName,
+      progress: 100
+    });
   });
 
   worker.on('failed', (job, err) => {
     const fileName = extractFileName(job?.data?.localPath);
     console.error(`Job failed: ${job?.id} (${fileName})`, err);
-    emitNotification(`Processing ${fileName} failed!`);
+    emitNotification({
+      type: 'error',
+      message: `Processing "${fileName}" failed!`,
+      fileName,
+      error: err.message
+    });
   });
 };

@@ -7,4 +7,8 @@ const router = express.Router();
 
 router.use(auth);
 
+router.put('/updateImage/:id', imageController.updateImage);
+router.delete('/deleteImage/:id', imageController.deleteImage);
+router.get('/getAllImages', imageController.getUserImages);
+
 export default router;

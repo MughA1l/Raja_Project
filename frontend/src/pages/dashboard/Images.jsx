@@ -81,11 +81,7 @@ const Images = () => {
   ];
 
   const handleImageClick = (index) => {
-    // Find absolute index in the original images array to ensure modal navigation works correctly 
-    // across all images, OR pass filtered images to modal.
-    // Usually standard is to show filtered results.
-    // Let's pass filtering context to modal if we want navigation restricted to filtered, 
-    // but for now let's find the image in the main list.
+
     const selectedImg = filteredImages[index];
     const originalIndex = images.findIndex(i => i._id === selectedImg._id);
 
@@ -137,8 +133,10 @@ const Images = () => {
         {/* Content */}
         <div className="pt-10 relative">
           {loading ? (
-            <div className="flex items-center justify-center h-64">
-              <Loader2 className="w-10 h-10 animate-spin text-primary" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {[...Array(8)].map((_, i) => (
+                <ImageCardSkeleton key={i} />
+              ))}
             </div>
           ) : filteredImages.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 px-4">
@@ -189,5 +187,22 @@ const Images = () => {
     </div>
   );
 };
+
+// Skeleton Loading Component
+const ImageCardSkeleton = () => (
+  <div className="bg-white rounded-xl overflow-hidden border border-slate-100 animate-pulse">
+    <div className="aspect-4/3 bg-slate-200"></div>
+    <div className="p-3 space-y-2">
+      <div className="h-4 bg-slate-200 rounded w-3/4"></div>
+      <div className="flex items-center justify-between">
+        <div className="h-3 bg-slate-200 rounded w-1/3"></div>
+        <div className="flex gap-1">
+          <div className="w-6 h-6 bg-slate-200 rounded-full"></div>
+          <div className="w-6 h-6 bg-slate-200 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 export default Images;
