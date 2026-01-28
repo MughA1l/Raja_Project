@@ -1,0 +1,53 @@
+# Koyeb Dual Service Configuration
+
+services:
+  # Backend Service
+  - name: ai-study-sync-backend
+    type: web
+    instance:
+      type: free
+    ports:
+      - port: 3000
+        protocol: http
+    routes:
+      - path: /
+        port: 3000
+    env:
+      - NODE_ENV=production
+      - PORT=3000
+    docker:
+      dockerfile: backend/dockerfile
+    regions:
+      - was
+    healthchecks:
+      - http:
+          path: /api/health
+          port: 3000
+        grace_period: 60
+        interval: 30
+        restart_limit: 3
+        timeout: 10
+
+  # Frontend Service
+  - name: ai-study-sync-frontend
+    type: web
+    instance:
+      type: free
+    ports:
+      - port: 3001
+        protocol: http
+    routes:
+      - path: /
+        port: 3001
+    docker:
+      dockerfile: frontend/dockerfile
+    regions:
+      - was
+    healthchecks:
+      - http:
+          path: /
+          port: 3001
+        grace_period: 30
+        interval: 30
+        restart_limit: 3
+        timeout: 5
