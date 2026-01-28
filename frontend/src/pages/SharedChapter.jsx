@@ -100,27 +100,27 @@ const SharedChapter = () => {
   return (
     <div className="min-h-screen bg-[#F7F7F7]">
       {/* Header */}
-      <div className="bg-white border-b border-black/6 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="p-2 bg-light-blue/10 rounded-xl">
-              <BookOpen size={24} className="text-light-blue" />
+      <div className="bg-white border-b border-black/6 px-4 md:px-6 py-3 md:py-4">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3 md:gap-4 min-w-0 flex-1">
+            <div className="p-2 bg-light-blue/10 rounded-xl flex-shrink-0">
+              <BookOpen size={20} className="md:w-6 md:h-6 text-light-blue" />
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-dark-blue line-clamp-1">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-base md:text-xl font-bold text-dark-blue line-clamp-1">
                 {chapter?.name}
               </h1>
-              <div className="flex items-center gap-4 text-sm text-black/50">
+              <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm text-black/50">
                 <span className="flex items-center gap-1">
-                  <User size={14} />
+                  <User size={12} className="md:w-3.5 md:h-3.5" />
                   {chapter?.userId?.username || "Anonymous"}
                 </span>
                 <span className="flex items-center gap-1">
-                  <Calendar size={14} />
+                  <Calendar size={12} className="md:w-3.5 md:h-3.5" />
                   {formateDate(chapter?.createdAt)}
                 </span>
                 <span className="flex items-center gap-1">
-                  <ImageIcon size={14} />
+                  <ImageIcon size={12} className="md:w-3.5 md:h-3.5" />
                   {chapter?.images?.length || 0} images
                 </span>
               </div>
@@ -128,7 +128,7 @@ const SharedChapter = () => {
           </div>
           <Link
             to="/login"
-            className="px-4 py-2 bg-dark-blue text-white rounded-xl font-medium hover:bg-dark-blue/90 transition-colors text-sm"
+            className="px-3 md:px-4 py-2 bg-dark-blue text-white rounded-xl font-medium hover:bg-dark-blue/90 transition-colors text-xs md:text-sm w-full sm:w-auto text-center"
           >
             Sign In
           </Link>
@@ -136,13 +136,13 @@ const SharedChapter = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto p-5">
+      <div className="max-w-7xl mx-auto p-3 md:p-5">
         {chapter?.images?.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-5">
             {/* Image Viewer */}
             <div className="lg:col-span-2 bg-white rounded-2xl overflow-hidden">
               {/* Image Display */}
-              <div className="relative h-[400px] bg-gray-100">
+              <div className="relative h-64 md:h-[400px] bg-gray-100">
                 <img
                   src={currentImage?.url}
                   alt={currentImage?.name}
@@ -244,9 +244,9 @@ const SharedChapter = () => {
             </div>
 
             {/* Thumbnails Sidebar */}
-            <div className="bg-white rounded-2xl p-4">
-              <h3 className="font-semibold text-dark-blue mb-3">All Images</h3>
-              <div className="grid grid-cols-2 gap-3 max-h-[600px] overflow-y-auto">
+            <div className="bg-white rounded-2xl p-3 md:p-4">
+              <h3 className="font-semibold text-dark-blue mb-3 text-sm md:text-base">All Images</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 gap-2 md:gap-3 max-h-[300px] md:max-h-[600px] overflow-y-auto">
                 {chapter.images.map((image, index) => (
                   <div
                     key={image._id}

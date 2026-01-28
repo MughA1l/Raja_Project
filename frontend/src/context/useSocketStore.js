@@ -7,7 +7,8 @@ const useSocketStore = create((set, get) => ({
   initSocket: () => {
     if (!get().socket) {
       // no socket then create it
-      const socket = io("http://localhost:3000", {
+      const socketUrl = import.meta.env.VITE_SOCKET_URL || "http://localhost:3000";
+      const socket = io(socketUrl, {
         transports: ["websocket"],
       });
       set({ socket });

@@ -6,10 +6,11 @@ import {
   Image,
   Settings,
   LogOut,
+  X,
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
-const Sidebar = () => {
+const Sidebar = ({ onClose }) => {
   const location = useLocation();
 
   // Function to determine the active label based on path
@@ -26,45 +27,58 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="h-screen bg-[#121927] border-r border-white flex flex-col justify-between py-4 px-3 left-0 top-0 w-60 z-50">
+    <div className="h-screen bg-[#121927] border-r border-white flex flex-col justify-between py-4 px-3 w-60">
       {/* Top section */}
       <div>
-        {/* Logo */}
-        <div className="flex items-start justify-center mb-6 w-full relative">
-          <div className="h-16 w-46 absolute -left-1">
+        {/* Logo and Close Button */}
+        <div className="flex items-center justify-between mb-6 w-full">
+          <div className="h-16 w-40">
             <img
               src="/logo-dashboard.png"
               alt="logo"
               className="w-full h-full object-contain"
             />
           </div>
+          {/* Close button for mobile */}
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="md:hidden text-white/60 hover:text-white p-2"
+            >
+              <X size={20} />
+            </button>
+          )}
         </div>
 
         {/* Navigation Items */}
-        <nav className="space-y-2 mt-22">
+        <nav className="space-y-2">
           <SidebarItem
             icon={LayoutDashboard}
             label="Dashboard"
             active={getActiveLabel()}
             url={"/"}
+            onClick={onClose}
           />
           <SidebarItem
             icon={BookOpen}
             label="Books"
             active={getActiveLabel()}
             url={"/Books"}
+            onClick={onClose}
           />
           <SidebarItem
             icon={Layers}
             label="Chapters"
             active={getActiveLabel()}
             url={"/Chapters"}
+            onClick={onClose}
           />
           <SidebarItem
             icon={Image}
             label="Images"
             active={getActiveLabel()}
             url={"/Images"}
+            onClick={onClose}
           />
         </nav>
       </div>
@@ -76,25 +90,28 @@ const Sidebar = () => {
           label="Settings"
           active={getActiveLabel()}
           url={"/Settings"}
+          onClick={onClose}
         />
         <SidebarItem
           icon={LogOut}
           label="Logout"
           active={getActiveLabel()}
           url={"/Logout"}
+          onClick={onClose}
         />
       </div>
     </div>
   );
 };
 
-const SidebarItem = ({ icon: Icon, label, active, url }) => (
+const SidebarItem = ({ icon: Icon, label, active, url, onClick }) => (
   <NavLink
     className={({ isActive }) =>
       `${isActive || label === active ? "text-white bg-[#333A45]" : "text-white/60 hover:bg-[#333A45]/30"} 
             flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm font-medium duration-200`
     }
     to={url !== "/Logout" ? url : "/Logout"}
+    onClick={onClick}
   >
     <Icon className="w-4 h-4" />
     {label}

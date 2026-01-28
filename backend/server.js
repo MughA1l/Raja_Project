@@ -28,7 +28,7 @@ app.use(
 );
 
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true,
   optionsSuccessStatus: 200,
 };
@@ -58,8 +58,18 @@ const startServer = async () => {
     app.use('/api/settings', settingsRoutes);
     app.use('/api/dashboard', dashboardRoutes);
 
+    // Health check endpoint
+    app.get('/api/health', (req, res) => {
+      res.status(200).json({ 
+        status: 'ok', 
+        message: 'Server is running',
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development'
+      });
+    });
+
     app.get('/', (req, res) => {
-      res.send('Home route');
+      res.send('AI-Study-Sync Backend API - Server is running');
     });
 
     // custom errors handling

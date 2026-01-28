@@ -117,7 +117,7 @@ const Images = () => {
 
   return (
     <div className="">
-      <div className="max-h-fit min-h-screen w-full rounded-xl bg-[#F7F7F7] p-5 pt-5">
+      <div className="max-h-fit min-h-screen w-full rounded-xl bg-[#F7F7F7] p-3 md:p-5 pt-3 md:pt-5">
 
         {/* Reusing App Header */}
         <Header
@@ -131,7 +131,7 @@ const Images = () => {
         />
 
         {/* Content */}
-        <div className="pt-10 relative">
+        <div className="pt-6 md:pt-10 relative">
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {[...Array(8)].map((_, i) => (
@@ -139,14 +139,14 @@ const Images = () => {
               ))}
             </div>
           ) : filteredImages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 px-4">
-              <div className="bg-light-pink/10 rounded-full p-6 mb-6">
-                <ImageIcon size={64} className="text-light-pink" strokeWidth={1.5} />
+            <div className="flex flex-col items-center justify-center py-12 md:py-20 px-4">
+              <div className="bg-light-pink/10 rounded-full p-4 md:p-6 mb-4 md:mb-6">
+                <ImageIcon size={48} className="md:w-16 md:h-16 text-light-pink" strokeWidth={1.5} />
               </div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">
                 {filter ? "No matches found" : "No Images Available"}
               </h2>
-              <p className="text-gray-500 text-center max-w-md">
+              <p className="text-sm md:text-base text-gray-500 text-center max-w-md">
                 {filter ? "Try adjusting your search." : "Process chapters to generate images."}
               </p>
             </div>

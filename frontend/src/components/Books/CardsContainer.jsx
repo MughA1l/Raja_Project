@@ -72,14 +72,14 @@ const CardsContainer = ({
   };
 
   return (
-    <div className="pt-10 relative">
+    <div className="pt-6 md:pt-10 relative">
       {/* Show skeleton while loading */}
       {loading ? (
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
           {Array.from({ length: 4 }).map((_, index) => (
             <div
               key={index}
-              className="bg-white col-span-1 rounded-2xl border border-black/6 h-80 p-2 mb-3 relative"
+              className="bg-white rounded-2xl border border-black/6 h-80 p-2 mb-3 relative">
             >
               <div className="h-7/12 w-full rounded-2xl overflow-hidden">
                 <div className="skeleton h-full w-full"></div>
@@ -104,20 +104,20 @@ const CardsContainer = ({
         </div>
       ) : hasLoaded && books.length === 0 ? (
         /* Show empty state only when loaded and confirmed no books */
-        <div className="flex flex-col items-center justify-center py-20 px-4">
-          <div className="bg-light-pink/10 rounded-full p-6 mb-6">
-            <BookMarked size={64} className="text-light-pink" strokeWidth={1.5} />
+        <div className="flex flex-col items-center justify-center py-12 md:py-20 px-4">
+          <div className="bg-light-pink/10 rounded-full p-4 md:p-6 mb-4 md:mb-6">
+            <BookMarked size={48} className="md:w-16 md:h-16 text-light-pink" strokeWidth={1.5} />
           </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-2">
             No Books Available
           </h2>
-          <p className="text-gray-500 text-center max-w-md">
+          <p className="text-sm md:text-base text-gray-500 text-center max-w-md">
             Start your study journey by creating your first book.
           </p>
         </div>
       ) : (
         /* Show books */
-        <div className="grid grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
           {books.map((singleBook, index) => (
             <Card
               key={singleBook._id}

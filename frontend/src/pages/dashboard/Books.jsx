@@ -94,7 +94,7 @@ const Books = () => {
 
   return (
     <div className="">
-      <div className="max-h-fit min-h-screen w-full rounded-xl bg-[#F7F7F7] p-5 pt-5">
+      <div className="max-h-fit min-h-screen w-full rounded-xl bg-[#F7F7F7] p-3 md:p-5 pt-3 md:pt-5">
         {/* header */}
         <Header
           tabOptions={tabOptions}

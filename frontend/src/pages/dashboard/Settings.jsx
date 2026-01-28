@@ -257,14 +257,14 @@ const Settings = () => {
 
   if (initialLoading) {
     return (
-      <div className="min-h-screen w-full rounded-xl bg-[#F7F7F7] p-5">
-        <div className="flex gap-6 h-full">
+      <div className="min-h-screen w-full rounded-xl bg-[#F7F7F7] p-3 md:p-5">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6 h-full">
           {/* Left Sidebar Skeleton */}
-          <div className="w-52 flex-shrink-0">
+          <div className="w-full md:w-52 flex-shrink-0">
             <div className="bg-white rounded-xl p-2 shadow-sm border border-slate-100">
-              <div className="space-y-1">
+              <div className="flex md:flex-col overflow-x-auto md:overflow-x-visible space-x-2 md:space-x-0 md:space-y-1">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="flex items-center gap-3 px-3 py-2.5 animate-pulse">
+                  <div key={i} className="flex items-center gap-3 px-3 py-2.5 animate-pulse whitespace-nowrap">
                     <div className="w-4 h-4 bg-slate-200 rounded"></div>
                     <div className="h-4 bg-slate-200 rounded w-20"></div>
                   </div>
@@ -312,12 +312,12 @@ const Settings = () => {
   }
 
   return (
-    <div className="min-h-screen w-full rounded-xl bg-[#F7F7F7] p-5">
-      <div className="flex gap-6 h-full">
+    <div className="min-h-screen w-full rounded-xl bg-[#F7F7F7] p-3 md:p-5">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 h-full">
         {/* Left Sidebar - Tabs */}
-        <div className="w-52 flex-shrink-0">
+        <div className="w-full md:w-52 flex-shrink-0">
           <div className="bg-white rounded-xl p-2 shadow-sm border border-slate-100">
-            <nav className="space-y-1">
+            <nav className="flex md:flex-col overflow-x-auto md:overflow-x-visible space-x-2 md:space-x-0 md:space-y-1 scrollbar-hide">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -325,7 +325,7 @@ const Settings = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
                       isActive
                         ? "bg-slate-900 text-white"
                         : "text-slate-600 hover:bg-slate-50"
@@ -333,7 +333,7 @@ const Settings = () => {
                   >
                     <Icon className="w-4 h-4" />
                     <span>{tab.label}</span>
-                    {isActive && <ChevronRight className="w-4 h-4 ml-auto" />}
+                    {isActive && <ChevronRight className="w-4 h-4 ml-auto hidden md:block" />}
                   </button>
                 );
               })}
@@ -343,7 +343,7 @@ const Settings = () => {
 
         {/* Right Content */}
         <div className="flex-1 min-w-0">
-          <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6">
+          <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-4 md:p-6">
             {/* Profile Tab */}
             {activeTab === "profile" && (
               <div>

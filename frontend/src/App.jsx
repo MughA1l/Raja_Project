@@ -10,6 +10,7 @@ import ForgotPassword from "@auth/ForgotPassword";
 import CodeVerify from "@auth/Code-verify";
 import ResetPassword from "@auth/Reset-password";
 import Logout from "@auth/Logout.jsx";
+import ProtectedRoute from "@auth/ProtectedRoute.jsx";
 import DashboardLayout from "@dashboard/DashboardLayout.jsx";
 import HomeDashboard from "@dashboard/Home-Dashboard.jsx";
 import NotFound from "@pages/Not-Found.jsx";
@@ -84,7 +85,7 @@ function App() {
           {/* Public shared chapter route - no auth required */}
           <Route path="/shared/:shareToken" element={<SharedChapter />} />
 
-          <Route path="/" element={<DashboardLayout />}>
+          <Route path="/" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
             {/* These are the nested routes. They will be rendered inside the <Outlet /> */}
             <Route index element={<HomeDashboard />} />
             <Route path="/Books" element={<Books />} />

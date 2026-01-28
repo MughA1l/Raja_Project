@@ -136,7 +136,7 @@ const Chapters = () => {
 
   return (
     <div className="">
-      <div className="min-h-screen max-h-fit w-full p-5 pt-5 bg-[#F7F7F7] rounded-xl">
+      <div className="min-h-screen max-h-fit w-full p-3 md:p-5 pt-3 md:pt-5 bg-[#F7F7F7] rounded-xl">
         {/* header */}
         <Header
           filter={filter}

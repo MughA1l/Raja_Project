@@ -50,19 +50,19 @@ const HomeDashboard = () => {
   const recentChapters = dashboardData?.recentChapters || [];
 
   return (
-    <div className="max-h-fit min-h-screen w-full rounded-xl bg-[#F7F7F7] p-5">
+    <div className="max-h-fit min-h-screen w-full rounded-xl bg-[#F7F7F7] p-3 md:p-5">
       {/* Welcome Section */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-dark-blue">
+      <div className="mb-4 md:mb-6">
+        <h1 className="text-xl md:text-2xl font-bold text-dark-blue">
           Welcome to Study Sync
         </h1>
-        <p className="text-black/60 mt-1">
+        <p className="text-sm md:text-base text-black/60 mt-1">
           Track your learning progress and continue where you left off
         </p>
       </div>
 
       {/* Stats Banner */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
         {loading ? (
           <>
             <ProgressCardSkeleton />
@@ -71,7 +71,7 @@ const HomeDashboard = () => {
           </>
         ) : (
           <>
-            {/* Progress Card - takes 2 columns */}
+            {/* Progress Card - takes 2 columns on larger screens */}
             {statistics && <ProgressCard statistics={statistics} />}
 
             {/* Individual stat cards */}
@@ -96,7 +96,7 @@ const HomeDashboard = () => {
       </div>
 
       {/* Secondary Stats Row */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6 md:mb-8">
         {loading ? (
           <>
             <StatCardSkeleton />
@@ -141,32 +141,32 @@ const HomeDashboard = () => {
       </div>
 
       {/* Recent Books Section */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
+      <div className="mb-6 md:mb-8">
+        <div className="flex items-center justify-between mb-3 md:mb-4">
           <div>
-            <h2 className="text-lg font-semibold text-dark-blue">
+            <h2 className="text-base md:text-lg font-semibold text-dark-blue">
               Recent Books
             </h2>
-            <p className="text-sm text-black/50">
+            <p className="text-xs md:text-sm text-black/50">
               Continue where you left off
             </p>
           </div>
           <button
             onClick={() => navigate("/Books")}
-            className="flex items-center gap-1 text-sm font-medium text-light-blue hover:underline"
+            className="flex items-center gap-1 text-xs md:text-sm font-medium text-light-blue hover:underline"
           >
             View All <ArrowRight size={16} />
           </button>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             {[1, 2, 3, 4].map((i) => (
               <RecentCardSkeleton key={i} />
             ))}
           </div>
         ) : recentBooks.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             {recentBooks.map((book) => (
               <RecentBookCard key={book._id} book={book} />
             ))}
@@ -183,32 +183,32 @@ const HomeDashboard = () => {
       </div>
 
       {/* Recent Chapters Section */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
+      <div className="mb-4 md:mb-6">
+        <div className="flex items-center justify-between mb-3 md:mb-4">
           <div>
-            <h2 className="text-lg font-semibold text-dark-blue">
+            <h2 className="text-base md:text-lg font-semibold text-dark-blue">
               Recent Chapters
             </h2>
-            <p className="text-sm text-black/50">
+            <p className="text-xs md:text-sm text-black/50">
               Your recently updated chapters
             </p>
           </div>
           <button
             onClick={() => navigate("/Chapters")}
-            className="flex items-center gap-1 text-sm font-medium text-light-blue hover:underline"
+            className="flex items-center gap-1 text-xs md:text-sm font-medium text-light-blue hover:underline"
           >
             View All <ArrowRight size={16} />
           </button>
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             {[1, 2, 3, 4].map((i) => (
               <RecentCardSkeleton key={i} />
             ))}
           </div>
         ) : recentChapters.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             {recentChapters.map((chapter) => (
               <RecentChapterCard key={chapter._id} chapter={chapter} />
             ))}
