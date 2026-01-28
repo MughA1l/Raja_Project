@@ -1,0 +1,34 @@
+app:
+  name: ai-study-sync-backend
+  
+services:
+  - name: backend
+    type: web
+    build:
+      context: ./backend
+      dockerfile: dockerfile
+    instance_type: free
+    ports:
+      - port: 3000
+        protocol: http
+    env:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+    routes:
+      - path: /
+        port: 3000
+    healthcheck:
+      http:
+        path: /api/health
+        port: 3000
+      grace_period: 30
+      interval: 30
+      restart_limit: 3
+      timeout: 5
+    regions:
+      - was
+    scaling:
+      min: 1
+      max: 1
