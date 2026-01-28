@@ -12,11 +12,10 @@ services:
     env:
       - NODE_ENV=production
       - PORT=3000
-    build:
-      type: buildpack
+    docker:
+      dockerfile: backend/dockerfile
       context: backend
-    run:
-      command: npm start
+      target: ""
     regions:
       - was
     scaling:
@@ -26,7 +25,8 @@ services:
       - http:
           path: /api/health
           port: 3000
-        grace_period: 30
+        grace_period: 40
         interval: 30
         restart_limit: 3
         timeout: 5
+
