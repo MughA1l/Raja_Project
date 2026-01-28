@@ -1,0 +1,21 @@
+{
+  "name": "ai-study-sync",
+  "version": "1.0.0",
+  "description": "AI-powered study companion - Monorepo",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "install": "cd backend && npm install",
+    "dev": "cd backend && npm run dev",
+    "postinstall": "cd backend && npm install"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MughA1l/Raja_Project.git"
+  },
+  "author": "Hassan Manzoor & Syed Hamza Khalil Gardezi",
+  "license": "MIT"
+}

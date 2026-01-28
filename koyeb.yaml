@@ -12,10 +12,10 @@ services:
     env:
       - NODE_ENV=production
       - PORT=3000
-    docker:
-      dockerfile: backend/dockerfile
-      context: backend
-      target: ""
+    build:
+      type: buildpack
+    run:
+      command: cd backend && npm start
     regions:
       - was
     scaling:
