@@ -14,8 +14,9 @@ services:
       - PORT=3000
     build:
       type: buildpack
+      buildCommand: npm run build
     run:
-      command: cd backend && npm start
+      command: npm start
     regions:
       - was
     scaling:
@@ -25,8 +26,8 @@ services:
       - http:
           path: /api/health
           port: 3000
-        grace_period: 40
+        grace_period: 60
         interval: 30
         restart_limit: 3
-        timeout: 5
+        timeout: 10
 

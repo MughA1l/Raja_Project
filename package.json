@@ -4,9 +4,10 @@
   "description": "AI-powered study companion - Monorepo",
   "scripts": {
     "start": "cd backend && npm start",
-    "install": "cd backend && npm install",
+    "build": "cd backend && npm install --production",
     "dev": "cd backend && npm run dev",
-    "postinstall": "cd backend && npm install"
+    "heroku-postbuild": "cd backend && npm install",
+    "postinstall": "cd backend && npm install --production"
   },
   "engines": {
     "node": ">=18.0.0",
@@ -17,5 +18,6 @@
     "url": "https://github.com/MughA1l/Raja_Project.git"
   },
   "author": "Hassan Manzoor & Syed Hamza Khalil Gardezi",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {}
 }
