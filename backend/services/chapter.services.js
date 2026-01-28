@@ -172,3 +172,72 @@ export const chaptersByBook = async (bookId) => {
 
   return chapters;
 };
+
+// Share chapter functions
+export const shareChapter = async (userId, chapterId) => {
+  if (!mongoose.Types.ObjectId.isValid(chapterId)) {
+    throw new ApiError(400, 'Invalid chapter ID', 'VALIDATION_ERROR');
+  }
+
+  const chapter = await chapterRepo.generateShareToken(userId, chapterId);
+
+  if (!chapter) {
+    throw new ApiError(
+      404,
+      'Chapter not found or you do not have permission to share it',
+      'NOT_FOUND'
+    );
+  }
+
+  return chapter;
+};
+
+export const unshareChapter = async (userId, chapterId) => {
+  if (!mongoose.Types.ObjectId.isValid(chapterId)) {
+    throw new ApiError(400, 'Invalid chapter ID', 'VALIDATION_ERROR');
+  }
+
+  const chapter = await chapterRepo.revokeShareToken(userId, chapterId);
+
+  if (!chapter) {
+    throw new ApiError(
+      404,
+      'Chapter not found or you do not have permission to unshare it',
+      'NOT_FOUND'
+    );
+  }
+
+  return chapter;
+};
+
+export const getSharedChapter = async (shareToken) => {
+  if (!shareToken) {
+    throw new ApiError(400, 'Share token is required', 'VALIDATION_ERROR');
+  }
+
+  const chapter = await chapterRepo.findByShareToken(shareToken);
+
+  if (!chapter) {
+    throw new ApiError(
+      404,
+      'Shared chapter not found or link has expired',
+      'NOT_FOUND'
+    );
+  }
+
+  return chapter;
+};
+
+export const getChapterShareInfo = async (userId, chapterId) => {
+  if (!mongoose.Types.ObjectId.isValid(chapterId)) {
+    throw new ApiError(400, 'Invalid chapter ID', 'VALIDATION_ERROR');
+  }
+
+  const chapter = await chapterRepo.getShareInfo(userId, chapterId);
+
+  if (!chapter) {
+    throw new ApiError(404, 'Chapter not found', 'NOT_FOUND');
+  }
+
+  return chapter;
+};

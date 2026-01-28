@@ -18,6 +18,7 @@ import Chapters from "@dashboard/Chapters.jsx";
 import Images from "@dashboard/Images.jsx";
 import Settings from "@dashboard/Settings.jsx";
 import PreviewChapter from "@dashboard/PreviewChapter.jsx";
+import SharedChapter from "@pages/SharedChapter.jsx";
 import useSocketStore from "@context/useSocketStore.js";
 import { showSuccess } from "@utils/toast.js";
 import { toast } from "react-toastify";
@@ -79,6 +80,9 @@ function App() {
           />
           <Route path="/verify-code" element={<CodeVerify />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+
+          {/* Public shared chapter route - no auth required */}
+          <Route path="/shared/:shareToken" element={<SharedChapter />} />
 
           <Route path="/" element={<DashboardLayout />}>
             {/* These are the nested routes. They will be rendered inside the <Outlet /> */}

@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { Worker } from 'bullmq';
 import Image from '../../models/Image.model.js';
 import extractTextFromCloudinaryUrl from '../image-processing/aws.js';
-import useGemini from '../image-processing/gemini-processing.js';
+import { processWithAI, getProviderName } from '../image-processing/ai-provider.js';
 import searchYouTubeVideos from '../image-processing/youtube-data-api.js';
 import { emitNotification } from '../../config (db connect)/socket.io.js';
 import path from 'path';
@@ -44,35 +44,36 @@ export const startWorker = () => {
         const extractedText =
           await extractTextFromCloudinaryUrl(localPath);
 
-        // Gemini processing
+        // AI processing (Gemini or Groq based on AI_PROVIDER env)
         await job.updateProgress(40);
-        console.log(`[40%] Sending ${fileName} text to Gemini...`);
+        const providerName = getProviderName();
+        console.log(`[40%] Sending ${fileName} text to ${providerName}...`);
         emitNotification({
           type: 'processing',
-          message: `AI analyzing "${fileName}"...`,
+          message: `${providerName} analyzing "${fileName}"...`,
           fileName,
           progress: 40
         });
-        let geminiResult = await useGemini(extractedText);
+        let aiResult = await processWithAI(extractedText);
 
-        if (typeof geminiResult === 'string') {
+        if (typeof aiResult === 'string') {
           try {
-            geminiResult = JSON.parse(geminiResult);
+            aiResult = JSON.parse(aiResult);
           } catch (err) {
             console.error(
-              ' Failed to parse Gemini result:',
-              geminiResult
+              ` Failed to parse ${providerName} result:`,
+              aiResult
             );
             throw err;
           }
         }
 
-        console.log(geminiResult);
+        console.log(aiResult);
 
         // Extract structured data
         await job.updateProgress(60);
         console.log(
-          `[60%] Processing Gemini response for ${fileName}...`
+          `[60%] Processing ${providerName} response for ${fileName}...`
         );
         emitNotification({
           type: 'processing',
@@ -80,9 +81,9 @@ export const startWorker = () => {
           fileName,
           progress: 60
         });
-        const ocr = geminiResult[0].ocr;
-        const enhancedText = geminiResult[1].enhancedAIExplanation;
-        const keywords = geminiResult[2].ytKeywords.join(' ');
+        const ocr = aiResult[0].ocr;
+        const enhancedText = aiResult[1].enhancedAIExplanation;
+        const keywords = aiResult[2].ytKeywords.join(' ');
 
         // Search YouTube
         await job.updateProgress(80);

@@ -34,6 +34,15 @@ const chapterSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    isPublic: {
+      type: Boolean,
+      default: false,
+    },
+    shareToken: {
+      type: String,
+      default: null,
+      index: true,
+    },
     images: [
       {
         type: Schema.Types.ObjectId,

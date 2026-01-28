@@ -124,3 +124,78 @@ export const getChaptersByBook = async (bookId) => {
     );
   }
 };
+
+// Share chapter functions
+export const generateShareToken = async (userId, chapterId) => {
+  try {
+    // Generate a unique share token
+    const shareToken = `${chapterId}-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+
+    const chapter = await Chapter.findOneAndUpdate(
+      { _id: chapterId, userId },
+      { $set: { shareToken, isPublic: true } },
+      { new: true }
+    );
+
+    return chapter;
+  } catch (error) {
+    throw new ApiError(
+      500,
+      'Database error while generating share token',
+      'DB_ERROR'
+    );
+  }
+};
+
+export const revokeShareToken = async (userId, chapterId) => {
+  try {
+    const chapter = await Chapter.findOneAndUpdate(
+      { _id: chapterId, userId },
+      { $set: { shareToken: null, isPublic: false } },
+      { new: true }
+    );
+
+    return chapter;
+  } catch (error) {
+    throw new ApiError(
+      500,
+      'Database error while revoking share token',
+      'DB_ERROR'
+    );
+  }
+};
+
+export const findByShareToken = async (shareToken) => {
+  try {
+    const chapter = await Chapter.findOne({ shareToken, isPublic: true })
+      .populate('bookId', 'name')
+      .populate('images')
+      .populate('userId', 'username')
+      .lean();
+
+    return chapter;
+  } catch (error) {
+    throw new ApiError(
+      500,
+      'Database error while fetching shared chapter',
+      'DB_ERROR'
+    );
+  }
+};
+
+export const getShareInfo = async (userId, chapterId) => {
+  try {
+    const chapter = await Chapter.findOne(
+      { _id: chapterId, userId },
+      { shareToken: 1, isPublic: 1, name: 1 }
+    ).lean();
+
+    return chapter;
+  } catch (error) {
+    throw new ApiError(
+      500,
+      'Database error while fetching share info',
+      'DB_ERROR'
+    );
+  }
+};

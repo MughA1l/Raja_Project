@@ -6,6 +6,9 @@ import uploadChapter from '../middleware/multerLocal.js';
 
 const router = express.Router();
 
+// Public route - no auth required (must be before auth middleware)
+router.get('/public/:shareToken', chapterController.getSharedChapter);
+
 // using my auth middleware to protect backend!
 router.use(auth);
 
@@ -28,5 +31,10 @@ router.get('/getSingleChapter/:id', chapterController.getChapterById);
 router.put('/updateChapter/:id', upload.single('image'), chapterController.updateChapter);
 
 router.delete('/deleteChapter/:id', chapterController.deleteChapter);
+
+// Share chapter routes (protected)
+router.post('/share/:id', chapterController.shareChapter);
+router.delete('/share/:id', chapterController.unshareChapter);
+router.get('/share/:id', chapterController.getShareInfo);
 
 export default router;

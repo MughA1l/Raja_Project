@@ -208,3 +208,91 @@ export const getAllChaptersByBook = async (req, res, next) => {
     next(error);
   }
 };
+
+// Share chapter controllers
+export const shareChapter = async (req, res, next) => {
+  try {
+    const userId = req.user?.userId;
+    const chapterId = req.params.id;
+
+    if (!userId) {
+      throw new ApiError(400, 'User ID is required', 'VALIDATION_ERROR');
+    }
+    if (!chapterId) {
+      throw new ApiError(400, 'Chapter ID is required', 'VALIDATION_ERROR');
+    }
+
+    const chapter = await chapterService.shareChapter(userId, chapterId);
+
+    return successResponse(res, {
+      message: 'Chapter shared successfully',
+      shareToken: chapter.shareToken,
+      isPublic: chapter.isPublic,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const unshareChapter = async (req, res, next) => {
+  try {
+    const userId = req.user?.userId;
+    const chapterId = req.params.id;
+
+    if (!userId) {
+      throw new ApiError(400, 'User ID is required', 'VALIDATION_ERROR');
+    }
+    if (!chapterId) {
+      throw new ApiError(400, 'Chapter ID is required', 'VALIDATION_ERROR');
+    }
+
+    const chapter = await chapterService.unshareChapter(userId, chapterId);
+
+    return successResponse(res, {
+      message: 'Chapter sharing revoked successfully',
+      isPublic: chapter.isPublic,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getSharedChapter = async (req, res, next) => {
+  try {
+    const { shareToken } = req.params;
+
+    if (!shareToken) {
+      throw new ApiError(400, 'Share token is required', 'VALIDATION_ERROR');
+    }
+
+    const chapter = await chapterService.getSharedChapter(shareToken);
+
+    return successResponse(res, {
+      chapter,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getShareInfo = async (req, res, next) => {
+  try {
+    const userId = req.user?.userId;
+    const chapterId = req.params.id;
+
+    if (!userId) {
+      throw new ApiError(400, 'User ID is required', 'VALIDATION_ERROR');
+    }
+    if (!chapterId) {
+      throw new ApiError(400, 'Chapter ID is required', 'VALIDATION_ERROR');
+    }
+
+    const shareInfo = await chapterService.getChapterShareInfo(userId, chapterId);
+
+    return successResponse(res, {
+      shareInfo,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
